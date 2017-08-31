@@ -3,6 +3,7 @@ package radonsoft.mireaassistant;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,17 +14,30 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import radonsoft.mireaassistant.fragments.Professors;
+import radonsoft.mireaassistant.fragments.Schedule;
+import radonsoft.mireaassistant.fragments.Settings;
+import radonsoft.mireaassistant.fragments.VRAccess;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    //Fragments
+    Schedule schedule = new Schedule();
+    VRAccess vraccess = new VRAccess();
+    Professors professors = new Professors();
+    Settings settings = new Settings();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setElevation(0);
-
+        //Fragment changer and set default
+        FragmentTransaction ftrans = getSupportFragmentManager().beginTransaction();
+        ftrans.replace(R.id.container, schedule);
+        //Drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -32,6 +46,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        ftrans.commit();
+    }
+
+    //Title
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 
     @Override
@@ -66,19 +86,19 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-
+        FragmentTransaction ftrans = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_schedule) {
-
+            ftrans.replace(R.id.container, schedule);
         } else if (id == R.id.nav_VR_access) {
-
+            ftrans.replace(R.id.container, vraccess);
         } else if (id == R.id.nav_professors) {
-
+            ftrans.replace(R.id.container, professors);
         } else if (id == R.id.nav_tools) {
-
+            ftrans.replace(R.id.container, settings);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
+        ftrans.commit();
         return true;
     }
 }
