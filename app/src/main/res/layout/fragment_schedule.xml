@@ -1,13 +1,99 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="radonsoft.mireaassistant.fragments.Schedule">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:elevation="5dp"
+        android:id="@+id/linearLayout2"
+        android:visibility="visible"
+        android:clickable="true" >
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Monday"
+            android:id="@+id/textViewMonday" />
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="8dp"
+        android:layout_gravity="center_horizontal"
+        android:elevation="5dp"
+        android:id="@+id/linearLayout"
+        android:visibility="visible"
+        android:clickable="true" >
+        <TableLayout
+            android:stretchColumns="*"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal"
+            android:elevation="5dp"
+            android:id="@+id/linearLayout1"
+            android:visibility="visible"
+            android:clickable="true" >
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="#"
+                    android:id="@+id/textView1"
+                    android:layout_column="0"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Time"
+                    android:id="@+id/textView2"
+                    android:layout_column="1"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Name"
+                    android:id="@+id/textView3"
+                    android:layout_column="2"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Map"
+                    android:id="@+id/textView4"
+                    android:layout_column="2"
+                    android:paddingLeft="0dp"
+                    android:paddingRight="0dp" />
+            </TableRow>
+
+        </TableLayout>
+
+    </LinearLayout>
+</LinearLayout>
