@@ -52,7 +52,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
-        android:elevation="5dp"
+        android:elevation="3dp"
         android:id="@+id/linearLayout5"
         android:visibility="visible"
         android:clickable="true"
@@ -88,9 +88,9 @@
                 android:layout_alignParentStart="true"
                 android:textSize="20dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:textColor="#555555" />
+                android:textColor="#555555"
+                android:layout_marginTop="5dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -165,7 +165,8 @@
                 android:id="@+id/linearLayout11"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:paddingTop="3dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -256,7 +257,8 @@
                 android:id="@+id/linearLayout12"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:paddingTop="3dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -347,7 +349,8 @@
                 android:id="@+id/linearLayout9"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:paddingTop="3dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -466,7 +469,8 @@
                 android:id="@+id/linearLayout6"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp"></LinearLayout>
+                android:layout_marginBottom="5dp"
+                android:paddingTop="3dp"></LinearLayout>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -529,7 +533,8 @@
                 android:id="@+id/linearLayout7"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:paddingTop="3dp" />
 
             <TextView
                 android:layout_width="wrap_content"

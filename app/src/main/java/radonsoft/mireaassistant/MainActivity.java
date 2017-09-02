@@ -1,5 +1,7 @@
 package radonsoft.mireaassistant;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -90,7 +92,17 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.ErrorDialogTheme);
+            builder.setTitle("About");
+            builder.setMessage("Sample text");
+            builder.setPositiveButton("Ok",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
             return true;
         }
 

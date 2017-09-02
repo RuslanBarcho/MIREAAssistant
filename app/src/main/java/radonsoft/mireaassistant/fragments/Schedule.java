@@ -39,6 +39,7 @@ public class Schedule extends Fragment {
         addItemsOnSpinner(days, daySelecter);
         setToday();
         daySelecter.setSelection(today);
+        long curTime = System.currentTimeMillis();
         return mRootView;
     }
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
