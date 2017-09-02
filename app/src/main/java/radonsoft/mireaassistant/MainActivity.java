@@ -14,6 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 import radonsoft.mireaassistant.fragments.Professors;
 import radonsoft.mireaassistant.fragments.Schedule;
 import radonsoft.mireaassistant.fragments.Settings;
@@ -26,6 +30,9 @@ public class MainActivity extends AppCompatActivity
     VRAccess vraccess = new VRAccess();
     Professors professors = new Professors();
     Settings settings = new Settings();
+
+    //Public variables
+    public int week;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +54,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ftrans.commit();
+    }
+
+    public void getWeekNumber(Date d) {
+        GregorianCalendar gc = new GregorianCalendar();
+        int day = 0;
+        gc.add(Calendar.DATE, day);
+        week = gc.get(Calendar.WEEK_OF_YEAR);
     }
 
     //Title
