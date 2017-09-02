@@ -2,6 +2,7 @@ package radonsoft.mireaassistant.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
+import radonsoft.mireaassistant.model.Group;
+import radonsoft.mireaassistant.model.RequestWrapper;
+import radonsoft.mireaassistant.model.Response;
+import radonsoft.mireaassistant.network.GroupsService;
+import radonsoft.mireaassistant.network.NetworkSingleton;
 
 
 public class Schedule extends Fragment {
@@ -26,6 +32,7 @@ public class Schedule extends Fragment {
     private TextView test;
     private int today;
     private String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
+    private ArrayList<String> groups = new ArrayList();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +76,20 @@ public class Schedule extends Fragment {
         super.onResume();
         setToday();
         daySelecter.setSelection(today);
+        NetworkSingleton.getRetrofit().create(GroupsService.class)
+                .getGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(RequestWrapper::getResponse)
+                .map(Response::getGroups)
+                .toObservable()
+                .flatMap(Observable::fromIterable)
+                .doOnNext(g -> groups.add(g.getGroup()))
+                .subscribe((Group group) -> {
+                    Log.i("Schedule", group.getGroup());
+                }, error -> {
+                    Log.e("Schedule", error.toString(), error);
+                });
     }
     @Override
     public void onStart() {
