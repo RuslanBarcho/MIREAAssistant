@@ -23,6 +23,7 @@ import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
 import radonsoft.mireaassistant.network.GroupsService;
+import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 
 
@@ -33,6 +34,7 @@ public class Schedule extends Fragment {
     private int today;
     private String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
     private ArrayList<String> groups = new ArrayList();
+    private ArrayList<String> institute = new ArrayList();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +49,8 @@ public class Schedule extends Fragment {
         setToday();
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
+        getGroupList();
+        getInstituteList();
         return mRootView;
     }
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -64,18 +68,8 @@ public class Schedule extends Fragment {
             }
         });
     }
-    public void setToday(){
-        Calendar calendar = Calendar.getInstance();
-        today = (calendar.get(Calendar.DAY_OF_WEEK)) - 2;
-        if (today == -1){
-            today = 0;
-        }
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        setToday();
-        daySelecter.setSelection(today);
+
+    public void getGroupList(){
         NetworkSingleton.getRetrofit().create(GroupsService.class)
                 .getGroups()
                 .subscribeOn(Schedulers.io())
@@ -90,6 +84,40 @@ public class Schedule extends Fragment {
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 });
+    }
+
+    public void getInstituteList(){
+        NetworkSingleton.getRetrofit().create(InstitutesService.class)
+                .getInstitutes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(RequestWrapper::getResponse)
+                .map(Response::getGroups)
+                .toObservable()
+                .flatMap(Observable::fromIterable)
+                .doOnNext(g -> institute.add(String.valueOf(g.getInstitute())))
+                .map(Group::getInstitute)
+                .subscribe((institute) -> {
+
+                }, error -> {
+                    Log.e("inst", error.toString(), error);
+                });
+    }
+
+    public void setToday(){
+        Calendar calendar = Calendar.getInstance();
+        today = (calendar.get(Calendar.DAY_OF_WEEK)) - 2;
+        if (today == -1){
+            today = 0;
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setToday();
+        daySelecter.setSelection(today);
+        getGroupList();
+        getInstituteList();
     }
     @Override
     public void onStart() {

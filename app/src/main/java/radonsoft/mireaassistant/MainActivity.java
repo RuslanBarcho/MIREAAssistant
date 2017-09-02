@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             builder.setTitle("About");
             builder.setMessage("Sample text");
             builder.setPositiveButton("Ok",
-                    new DialogInterface.OnClickListener() {
+                    new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int id) {
                             dialog.cancel();
                         }
