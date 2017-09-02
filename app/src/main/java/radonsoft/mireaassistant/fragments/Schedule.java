@@ -24,6 +24,7 @@ public class Schedule extends Fragment {
     private View mRootView;
     private Spinner daySelecter;
     private TextView test;
+    private int today;
     private String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
 
     @Override
@@ -31,11 +32,13 @@ public class Schedule extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
+        MainActivity ma = new MainActivity();
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         ((MainActivity) getActivity()).setActionBarTitle("Schedule");
         addItemsOnSpinner(days, daySelecter);
-
+        setToday();
+        daySelecter.setSelection(today);
         return mRootView;
     }
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -53,5 +56,23 @@ public class Schedule extends Fragment {
             }
         });
     }
-
+    public void setToday(){
+        Calendar calendar = Calendar.getInstance();
+        today = (calendar.get(Calendar.DAY_OF_WEEK)) - 2;
+        if (today == -1){
+            today = 0;
+        }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        setToday();
+        daySelecter.setSelection(today);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        setToday();
+        daySelecter.setSelection(today);
+    }
 }

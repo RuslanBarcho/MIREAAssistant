@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     VRAccess vraccess = new VRAccess();
     Professors professors = new Professors();
     Settings settings = new Settings();
+    public int today;
 
     //Public variables
     public int week;
@@ -89,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+
             return true;
         }
 
