@@ -3,27 +3,38 @@ package radonsoft.mireaassistant;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
+
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.fragments.Professors;
 import radonsoft.mireaassistant.fragments.Schedule;
 import radonsoft.mireaassistant.fragments.Settings;
 import radonsoft.mireaassistant.fragments.VRAccess;
+import radonsoft.mireaassistant.model.Group;
+import radonsoft.mireaassistant.model.RequestWrapper;
+import radonsoft.mireaassistant.model.Response;
+import radonsoft.mireaassistant.network.GroupsService;
+import radonsoft.mireaassistant.network.NetworkSingleton;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     Professors professors = new Professors();
     Settings settings = new Settings();
     public int today;
+    public ArrayList<String> groups = new ArrayList();
 
     //Public variables
     public int week;
@@ -57,6 +69,23 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ftrans.commit();
+    }
+
+    public void getGroupList(){
+        NetworkSingleton.getRetrofit().create(GroupsService.class)
+                .getGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(RequestWrapper::getResponse)
+                .map(Response::getGroups)
+                .toObservable()
+                .flatMap(Observable::fromIterable)
+                .doOnNext(g -> groups.add(g.getGroup()))
+                .subscribe((Group group) -> {
+                    Log.i("Schedule", group.getGroup());
+                }, error -> {
+                    Log.e("Schedule", error.toString(), error);
+                });
     }
 
     public void getWeekNumber(Date d) {

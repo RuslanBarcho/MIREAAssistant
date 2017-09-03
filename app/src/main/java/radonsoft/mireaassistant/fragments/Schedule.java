@@ -36,12 +36,13 @@ public class Schedule extends Fragment {
     private ArrayList<String> groups = new ArrayList();
     private ArrayList<String> institute = new ArrayList();
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         MainActivity ma = new MainActivity();
+        mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         ((MainActivity) getActivity()).setActionBarTitle("Schedule");
@@ -49,7 +50,7 @@ public class Schedule extends Fragment {
         setToday();
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
-        getGroupList();
+        ma.getGroupList();
         getInstituteList();
         return mRootView;
     }
@@ -114,9 +115,10 @@ public class Schedule extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        MainActivity ma = new MainActivity();
         setToday();
         daySelecter.setSelection(today);
-        getGroupList();
+        ma.getGroupList();
         getInstituteList();
     }
     @Override
