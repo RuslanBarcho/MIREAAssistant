@@ -3,10 +3,8 @@ package radonsoft.mireaassistant;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import android.support.v4.app.FragmentTransaction;
-
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,12 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -46,13 +44,16 @@ public class MainActivity extends AppCompatActivity
     Settings settings = new Settings();
     public int today;
     public ArrayList<String> groups = new ArrayList();
-    private ArrayList<String> institute = new ArrayList();
+    public ArrayList<String> institute = new ArrayList();
+    public String[] groupsString;
 
     //Public variables
     public int week;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getGroupList();
+        getInstituteList();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toolbar
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 });
+        groupsString = groups.toArray(new String[groups.size()]);
     }
 
     public void getInstituteList(){
@@ -153,6 +155,11 @@ public class MainActivity extends AppCompatActivity
             AlertDialog alert = builder.create();
             alert.show();
             return true;
+        } else if (id == R.id.action_refresh_all) {
+            getGroupList();
+            getInstituteList();
+            Toast toast = Toast.makeText(this, "Refreshed",Toast.LENGTH_SHORT);
+            toast.show();
         }
 
         return super.onOptionsItemSelected(item);
