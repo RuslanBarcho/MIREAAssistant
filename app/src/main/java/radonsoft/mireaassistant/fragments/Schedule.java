@@ -2,7 +2,6 @@ package radonsoft.mireaassistant.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,17 +13,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
-import radonsoft.mireaassistant.model.Group;
-import radonsoft.mireaassistant.model.RequestWrapper;
-import radonsoft.mireaassistant.model.Response;
-import radonsoft.mireaassistant.network.GroupsService;
-import radonsoft.mireaassistant.network.InstitutesService;
-import radonsoft.mireaassistant.network.NetworkSingleton;
 
 
 public class Schedule extends Fragment {
@@ -51,7 +41,7 @@ public class Schedule extends Fragment {
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
         ma.getGroupList();
-        getInstituteList();
+        ma.getInstituteList();
         return mRootView;
     }
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -70,41 +60,6 @@ public class Schedule extends Fragment {
         });
     }
 
-    public void getGroupList(){
-        NetworkSingleton.getRetrofit().create(GroupsService.class)
-                .getGroups()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .doOnNext(g -> groups.add(g.getGroup()))
-                .subscribe((Group group) -> {
-                    Log.i("Schedule", group.getGroup());
-                }, error -> {
-                    Log.e("Schedule", error.toString(), error);
-                });
-    }
-
-    public void getInstituteList(){
-        NetworkSingleton.getRetrofit().create(InstitutesService.class)
-                .getInstitutes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .doOnNext(g -> institute.add(String.valueOf(g.getInstitute())))
-                .map(Group::getInstitute)
-                .subscribe((institute) -> {
-
-                }, error -> {
-                    Log.e("inst", error.toString(), error);
-                });
-    }
-
     public void setToday(){
         Calendar calendar = Calendar.getInstance();
         today = (calendar.get(Calendar.DAY_OF_WEEK)) - 2;
@@ -119,7 +74,7 @@ public class Schedule extends Fragment {
         setToday();
         daySelecter.setSelection(today);
         ma.getGroupList();
-        getInstituteList();
+        ma.getInstituteList();
     }
     @Override
     public void onStart() {

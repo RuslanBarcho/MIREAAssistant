@@ -3,6 +3,10 @@
     package="radonsoft.mireaassistant">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk android:minSdkVersion="16"
+        android:targetSdkVersion="21"
+        android:maxSdkVersion="25" />
     
     <application
         android:allowBackup="true"

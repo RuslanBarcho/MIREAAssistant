@@ -33,6 +33,7 @@ import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
 import radonsoft.mireaassistant.network.GroupsService;
+import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     Settings settings = new Settings();
     public int today;
     public ArrayList<String> groups = new ArrayList();
+    private ArrayList<String> institute = new ArrayList();
 
     //Public variables
     public int week;
@@ -85,6 +87,24 @@ public class MainActivity extends AppCompatActivity
                     Log.i("Schedule", group.getGroup());
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
+                });
+    }
+
+    public void getInstituteList(){
+        NetworkSingleton.getRetrofit().create(InstitutesService.class)
+                .getInstitutes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(RequestWrapper::getResponse)
+                .map(Response::getGroups)
+                .toObservable()
+                .flatMap(Observable::fromIterable)
+                .doOnNext(g -> institute.add(String.valueOf(g.getInstitute())))
+                .map(Group::getInstitute)
+                .subscribe((institute) -> {
+
+                }, error -> {
+                    Log.e("inst", error.toString(), error);
                 });
     }
 
