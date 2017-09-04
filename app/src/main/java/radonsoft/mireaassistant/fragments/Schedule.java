@@ -22,7 +22,7 @@ public class Schedule extends Fragment {
     private Spinner daySelecter;
     private TextView test;
     private int today;
-    private String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
+    String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +32,10 @@ public class Schedule extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
-        ((MainActivity) getActivity()).setActionBarTitle("Schedule");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
+
+        days = getResources().getStringArray(R.array.schedule_days);
+
         addItemsOnSpinner(days, daySelecter);
         setToday();
         daySelecter.setSelection(today);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MIREA Assistant</string>
+    <string name="action_settings">Настройки</string>
+    <string name="schedule">Расписание</string>
+
+    <string-array name="schedule_days">
+        <item>Понедельник</item>
+        <item>Вторник</item>
+        <item>Среда</item>
+        <item>Четверг</item>
+        <item>Пятница</item>
+        <item>Суббота</item>
+    </string-array>
+
+</resources>

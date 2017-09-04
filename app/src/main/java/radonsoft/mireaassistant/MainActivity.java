@@ -45,14 +45,17 @@ public class MainActivity extends AppCompatActivity
     public ArrayList<String> groups = new ArrayList();
     public ArrayList<String> institute = new ArrayList();
     public ArrayList<String> instituteCompiled = new ArrayList();
+    public ArrayList<String> groupsCompiled = new ArrayList();
     public String[] groupsString;
     public String[] instituteString;
 
     //Public variables
     public int week;
+    public int instituteID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWeekNumber();
         getGroupList();
         getInstituteList();
         super.onCreate(savedInstanceState);
@@ -90,7 +93,6 @@ public class MainActivity extends AppCompatActivity
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 });
-        groupsString = groups.toArray(new String[groups.size()]);
     }
 
     public void getInstituteList(){
@@ -123,6 +125,16 @@ public class MainActivity extends AppCompatActivity
             }
         }
         instituteString = instituteCompiled.toArray(new String[instituteCompiled.size()]);
+    }
+
+    public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
+        int i;
+        for (i = 0; i < groups.size(); i++){
+            if (fullInstitutesList.get(i).equals(instituteID) & !groupsCompiled.contains(toSort.get(i))){
+                groupsCompiled.add(toSort.get(i));
+            }
+        }
+        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
     }
 
     public void getWeekNumber() {
