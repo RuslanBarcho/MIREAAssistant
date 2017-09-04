@@ -41,6 +41,9 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 //todo: parse institutes and groups via ArrayLists, add SharedPreferences
+                ma.getInstituteList();
+                ma.compileInstituteList(ma.institute);
+                showInstituteChooseDialog();
             }
         });
         return mRootView;
@@ -53,22 +56,20 @@ public class Settings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 valueIDInt = which;
-                switch (valueIDInt){
-                    default:
 
-                        break;
-                    case 0:
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
-                        break;
-                    case 1:
-
-                        break;
-                    case 2:
-
-                        break;
-                    case 3:
-
-                }
+    public void showInstituteChooseDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("choose");
+        builder.setItems(ma.instituteString, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                valueIDInt = which;
 
             }
         });

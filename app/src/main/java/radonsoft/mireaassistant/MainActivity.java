@@ -34,7 +34,6 @@ import radonsoft.mireaassistant.network.GroupsService;
 import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     //Fragments
@@ -45,7 +44,9 @@ public class MainActivity extends AppCompatActivity
     public int today;
     public ArrayList<String> groups = new ArrayList();
     public ArrayList<String> institute = new ArrayList();
+    public ArrayList<String> instituteCompiled = new ArrayList();
     public String[] groupsString;
+    public String[] instituteString;
 
     //Public variables
     public int week;
@@ -110,7 +111,21 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    public void getWeekNumber(Date d) {
+    public void compileInstituteList(ArrayList<String> toCompile){
+        int i;
+        for (i = 0; i < institute.size(); i++){
+            String local = institute.get(i);
+            if (instituteCompiled.contains(local)){
+
+            }
+            else{
+                instituteCompiled.add(local);
+            }
+        }
+        instituteString = instituteCompiled.toArray(new String[instituteCompiled.size()]);
+    }
+
+    public void getWeekNumber() {
         GregorianCalendar gc = new GregorianCalendar();
         int day = 0;
         gc.add(Calendar.DATE, day);

@@ -23,9 +23,6 @@ public class Schedule extends Fragment {
     private TextView test;
     private int today;
     private String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
-    private ArrayList<String> groups = new ArrayList();
-    private ArrayList<String> institute = new ArrayList();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
