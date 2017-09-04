@@ -34,7 +34,7 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 ma.getGroupList();
-            showValueChooseDialog();
+            showGroupChooseDialog();
             }
         });
         chooseInstitute.setOnClickListener(new View.OnClickListener() {
@@ -46,7 +46,7 @@ public class Settings extends Fragment {
         return mRootView;
     }
 
-    public void showValueChooseDialog(){
+    public void showGroupChooseDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("choose");
         builder.setItems(ma.groupsString, new DialogInterface.OnClickListener() {
@@ -55,6 +55,7 @@ public class Settings extends Fragment {
                 valueIDInt = which;
                 switch (valueIDInt){
                     default:
+
                         break;
                     case 0:
 
