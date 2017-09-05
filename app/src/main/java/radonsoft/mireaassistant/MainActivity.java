@@ -50,11 +50,12 @@ public class MainActivity extends AppCompatActivity
     Settings settings = new Settings();
     public int today;
     public ArrayList<String> groups = new ArrayList();
-    public ArrayList<String> institute = new ArrayList();
+    public ArrayList<String> institutes = new ArrayList();
     public ArrayList<String> instituteCompiled = new ArrayList();
     public ArrayList<String> groupsCompiled = new ArrayList();
     public String[] groupsString;
     public String[] instituteString;
+    public String[] instituteStringtestall;
 
     //Public variables
     public int week;
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
-        getInstituteList();getInstituteList();getInstituteList();
-        getGroupList();getGroupList();getGroupList();
+        getInstituteList();
+        getGroupList();
         saveValues();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -113,14 +114,16 @@ public class MainActivity extends AppCompatActivity
                 .map(Response::getGroups)
                 .toObservable()
                 .flatMap(Observable::fromIterable)
-                .doOnNext(g -> institute.add(String.valueOf(g.getInstitute())))
+
                 .map(Group::getInstitute)
                 .subscribe((institute) -> {
-
+                    institutes.add(String.valueOf(institute));
+                    Log.i("inst", String.valueOf(institute));
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 });
-        compileInstituteList(institute);
+        instituteStringtestall = institutes.toArray(new String[institutes.size()]);
+        compileInstituteList(institutes);
     }
 
     public void saveArray(ArrayList<String> toSave, String TAG){
@@ -140,22 +143,22 @@ public class MainActivity extends AppCompatActivity
 
     public void saveValues(){
         saveArray(groups, "GROUPS");
-        saveArray(institute, "INSTITUTE");
+        saveArray(institutes, "INSTITUTE");
         saveArray(instituteCompiled, "INSTITUTE_COMPILED");
         saveArray(groupsCompiled, "GROUPS_COMPILED");
     }
 
     public void getValues(){
         getArray(groups, "GROUPS");
-        getArray(institute, "INSTITUTE");
+        getArray(institutes, "INSTITUTE");
         getArray(instituteCompiled, "INSTITUTE_COMPILED");
         getArray(groupsCompiled, "GROUPS_COMPILED");
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
         int i;
-        for (i = 0; i < institute.size(); i++){
-            String local = institute.get(i);
+        for (i = 0; i < institutes.size(); i++){
+            String local = institutes.get(i);
             if (instituteCompiled.contains(local)){
 
             }

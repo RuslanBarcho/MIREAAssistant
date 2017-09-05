@@ -11,6 +11,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 
 import radonsoft.mireaassistant.MainActivity;
@@ -22,26 +23,24 @@ public class Schedule extends Fragment {
     private Spinner daySelecter;
     private TextView test;
     private int today;
+    MainActivity ma;
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        MainActivity ma = new MainActivity();
+        ma = new MainActivity();
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
-
         days = getResources().getStringArray(R.array.schedule_days);
-
         addItemsOnSpinner(days, daySelecter);
         setToday();
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
-        ma.getGroupList();
-        ma.getInstituteList();
+        test.setText(Arrays.toString(ma.instituteStringtestall));
         return mRootView;
     }
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -67,14 +66,14 @@ public class Schedule extends Fragment {
             today = 0;
         }
     }
+
     @Override
     public void onResume() {
         super.onResume();
         MainActivity ma = new MainActivity();
         setToday();
         daySelecter.setSelection(today);
-        ma.getGroupList();
-        ma.getInstituteList();
+        test.setText(Arrays.toString(ma.instituteStringtestall));
     }
     @Override
     public void onStart() {
