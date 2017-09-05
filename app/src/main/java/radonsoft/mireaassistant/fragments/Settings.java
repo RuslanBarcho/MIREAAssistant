@@ -38,7 +38,7 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 if (changedInstitute) {
-                    ma.getGroupList();
+                    //ma.getGroupList();
                     ma.sortGroups(ma.groups, ma.institute, String.valueOf(ma.instituteID));
                     changedInstitute = false;
                 }
@@ -51,7 +51,10 @@ public class Settings extends Fragment {
                 //todo: parse institutes and groups via ArrayLists, add SharedPreferences
                 ma.groupsCompiled.clear();
                 ma.getInstituteList();
-                ma.compileInstituteList(ma.institute);
+                ma.getInstituteList();
+                //ma.getInstituteList();
+                //ma.compileInstituteList(ma.institute);
+
                 showInstituteChooseDialog();
             }
         });
@@ -65,7 +68,6 @@ public class Settings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 valueIDInt = which;
-
             }
         });
         AlertDialog alert = builder.create();
@@ -95,7 +97,7 @@ public class Settings extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ma.getGroupList();
-        ma.getInstituteList();
+        //ma.getGroupList();
+        //ma.getInstituteList();
     }
 }

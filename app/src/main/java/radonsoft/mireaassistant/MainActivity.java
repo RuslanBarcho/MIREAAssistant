@@ -17,6 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -60,8 +64,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
-        getGroupList();
-        getInstituteList();
+        getInstituteList();getInstituteList();getInstituteList();
+        getGroupList();getGroupList();getGroupList();
+        saveValues();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toolbar
@@ -115,11 +120,36 @@ public class MainActivity extends AppCompatActivity
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 });
+        compileInstituteList(institute);
     }
 
-    public void saveAllArrays(){
+    public void saveArray(ArrayList<String> toSave, String TAG){
         SharedPreferences.Editor editor = sp.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(toSave);
+        editor.putString(TAG, json);
+        editor.commit();
+    }
 
+    public void getArray(ArrayList<String> toGet, String TAG){
+        Gson gson = new Gson();
+        String json = sp.getString(TAG, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        toGet = gson.fromJson(json, type);
+    }
+
+    public void saveValues(){
+        saveArray(groups, "GROUPS");
+        saveArray(institute, "INSTITUTE");
+        saveArray(instituteCompiled, "INSTITUTE_COMPILED");
+        saveArray(groupsCompiled, "GROUPS_COMPILED");
+    }
+
+    public void getValues(){
+        getArray(groups, "GROUPS");
+        getArray(institute, "INSTITUTE");
+        getArray(instituteCompiled, "INSTITUTE_COMPILED");
+        getArray(groupsCompiled, "GROUPS_COMPILED");
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
