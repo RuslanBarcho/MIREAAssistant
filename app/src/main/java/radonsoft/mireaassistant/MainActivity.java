@@ -2,7 +2,9 @@ package radonsoft.mireaassistant;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -17,7 +19,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import io.reactivex.Observable;
@@ -36,6 +37,8 @@ import radonsoft.mireaassistant.network.NetworkSingleton;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    //Shared Preferences
+    SharedPreferences sp;
     //Fragments
     Schedule schedule = new Schedule();
     VRAccess vraccess = new VRAccess();
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
         getGroupList();
         getInstituteList();
@@ -111,6 +115,11 @@ public class MainActivity extends AppCompatActivity
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 });
+    }
+
+    public void saveAllArrays(){
+        SharedPreferences.Editor editor = sp.edit();
+
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
