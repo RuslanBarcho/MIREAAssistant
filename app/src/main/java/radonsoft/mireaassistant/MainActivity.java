@@ -114,16 +114,20 @@ public class MainActivity extends AppCompatActivity
                 .map(Response::getGroups)
                 .toObservable()
                 .flatMap(Observable::fromIterable)
-
                 .map(Group::getInstitute)
                 .subscribe((institute) -> {
                     institutes.add(String.valueOf(institute));
+                    instituteStringtestall = institutes.toArray(new String[institutes.size()]);
+                    compileInstituteList(institutes);
                     Log.i("inst", String.valueOf(institute));
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 });
-        instituteStringtestall = institutes.toArray(new String[institutes.size()]);
-        compileInstituteList(institutes);
+    }
+
+    public void getInstListstwo(){
+        institutes.clear();
+        getInstituteList();
     }
 
     public void saveArray(ArrayList<String> toSave, String TAG){
