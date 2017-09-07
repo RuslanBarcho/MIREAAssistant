@@ -112,6 +112,16 @@ public class Schedule extends Fragment {
                     });
     }
 
+    public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
+        int i;
+        for (i = 0; i < groups.size(); i++){
+            if (fullInstitutesList.get(i).equals(instituteID) & !groupsCompiled.contains(toSort.get(i))){
+                groupsCompiled.add(toSort.get(i));
+            }
+        }
+        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
+    }
+
     public void getGroupList(){
         NetworkSingleton.getRetrofit().create(GroupsService.class)
                 .getGroups()
@@ -123,11 +133,14 @@ public class Schedule extends Fragment {
                 .flatMap(Observable::fromIterable)
                 .subscribe((Group group) -> {
                     Log.i("Schedule", group.getGroup());
-                    groups.add(String.valueOf(group));
+                    groups.add(group.getGroup());
+
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
+                }, () ->{
+                    sortGroups(groups, institutes, String.valueOf(ma.instituteID));
+                    showGroupChooseDialog();
                 });
-
     }
 
     public void showInstituteChooseDialog(){
@@ -145,7 +158,20 @@ public class Schedule extends Fragment {
                     ma.instituteID = 0;
                 }
                 ma.loginStatus = 0;
-                //
+                getGroupList();
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void showGroupChooseDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Choose group");
+        builder.setItems(groupsString, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
             }
         });
         AlertDialog alert = builder.create();
