@@ -60,7 +60,9 @@ public class MainActivity extends AppCompatActivity
     //Public variables
     public int week;
     public static int instituteID;
+    public static String groupID;
     public static int loginStatus;
+    public static int fragmentID;
     public String choosenInstitute;
     public String choosenGroup;
 
@@ -68,9 +70,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
-        getInstituteList();
-        getGroupList();
-        saveValues();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toolbar
@@ -85,6 +84,18 @@ public class MainActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        //return fragment after rotation
+        switch (fragmentID){
+            case 1:
+                ftrans.replace(R.id.container, schedule);
+                break;
+            case 4:
+                ftrans.replace(R.id.container, settings);
+                break;
+            default:
+
+                break;
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);

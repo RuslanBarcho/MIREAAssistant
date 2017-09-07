@@ -53,13 +53,17 @@ public class Schedule extends Fragment {
         // Inflate the layout for this fragment
         ma = new MainActivity();
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
-        getInstituteList();
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
+        //startup part
+        startUp();
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
+
         addItemsOnSpinner(days, daySelecter);
         setToday();
+
+        ma.fragmentID = 1;
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
         return mRootView;
@@ -78,6 +82,17 @@ public class Schedule extends Fragment {
                 //
             }
         });
+    }
+
+    public void startUp(){
+        switch (ma.loginStatus) {
+            case 0:
+                getInstituteList();
+                break;
+            default:
+
+                break;
+        }
     }
 
     public void getInstituteList(){
@@ -101,14 +116,7 @@ public class Schedule extends Fragment {
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 }, () -> {
-                    switch (ma.loginStatus) {
-                        case 0:
                             showInstituteChooseDialog();
-                            break;
-                        default:
-
-                            break;
-                    }
                     });
     }
 
@@ -134,7 +142,6 @@ public class Schedule extends Fragment {
                 .subscribe((Group group) -> {
                     Log.i("Schedule", group.getGroup());
                     groups.add(group.getGroup());
-
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
@@ -145,7 +152,7 @@ public class Schedule extends Fragment {
 
     public void showInstituteChooseDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose institute")
+        builder.setTitle(getString(R.string.choose_institute))
                 .setCancelable(false)
                 .setItems(institutesString, new DialogInterface.OnClickListener() {
             @Override
@@ -166,12 +173,14 @@ public class Schedule extends Fragment {
     }
 
     public void showGroupChooseDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose group");
-        builder.setItems(groupsString, new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setTitle(getString(R.string.choose_group))
+                .setCancelable(false)
+                .setItems(groupsString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
+                ma.loginStatus = 2;
+                ma.groupID = groupsString[which];
             }
         });
         AlertDialog alert = builder.create();
