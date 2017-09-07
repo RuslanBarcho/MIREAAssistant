@@ -17,6 +17,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -46,22 +50,27 @@ public class MainActivity extends AppCompatActivity
     Settings settings = new Settings();
     public int today;
     public ArrayList<String> groups = new ArrayList();
-    public ArrayList<String> institute = new ArrayList();
+    public ArrayList<String> institutes = new ArrayList();
     public ArrayList<String> instituteCompiled = new ArrayList();
     public ArrayList<String> groupsCompiled = new ArrayList();
     public String[] groupsString;
     public String[] instituteString;
+    public String[] instituteStringtestall;
 
     //Public variables
     public int week;
-    public int instituteID;
+    public static int instituteID;
+    public static int loginStatus;
+    public String choosenInstitute;
+    public String choosenGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
-        getGroupList();
         getInstituteList();
+        getGroupList();
+        saveValues();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //Toolbar
@@ -108,24 +117,50 @@ public class MainActivity extends AppCompatActivity
                 .map(Response::getGroups)
                 .toObservable()
                 .flatMap(Observable::fromIterable)
-                .doOnNext(g -> institute.add(String.valueOf(g.getInstitute())))
                 .map(Group::getInstitute)
                 .subscribe((institute) -> {
-
+                    institutes.add(String.valueOf(institute));
+                    instituteStringtestall = institutes.toArray(new String[institutes.size()]);
+                    compileInstituteList(institutes);
+                    Log.i("inst", String.valueOf(institute));
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 });
     }
 
-    public void saveAllArrays(){
+    public void saveArray(ArrayList<String> toSave, String TAG){
         SharedPreferences.Editor editor = sp.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(toSave);
+        editor.putString(TAG, json);
+        editor.commit();
+    }
 
+    public void getArray(ArrayList<String> toGet, String TAG){
+        Gson gson = new Gson();
+        String json = sp.getString(TAG, null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        toGet = gson.fromJson(json, type);
+    }
+
+    public void saveValues(){
+        saveArray(groups, "GROUPS");
+        saveArray(institutes, "INSTITUTE");
+        saveArray(instituteCompiled, "INSTITUTE_COMPILED");
+        saveArray(groupsCompiled, "GROUPS_COMPILED");
+    }
+
+    public void getValues(){
+        getArray(groups, "GROUPS");
+        getArray(institutes, "INSTITUTE");
+        getArray(instituteCompiled, "INSTITUTE_COMPILED");
+        getArray(groupsCompiled, "GROUPS_COMPILED");
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
         int i;
-        for (i = 0; i < institute.size(); i++){
-            String local = institute.get(i);
+        for (i = 0; i < institutes.size(); i++){
+            String local = institutes.get(i);
             if (instituteCompiled.contains(local)){
 
             }

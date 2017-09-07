@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
@@ -19,6 +20,7 @@ public class Settings extends Fragment {
     private FrameLayout chooseGroup;
     private FrameLayout chooseInstitute;
     private FrameLayout chooseWeekType;
+    private TextView instituteViewer;
     public int valueIDInt;
     MainActivity ma;
 
@@ -32,26 +34,34 @@ public class Settings extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle("Settings");
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
+
+        instituteViewer = (TextView) mRootView.findViewById(R.id.textView13);
+
         ma = new MainActivity();
         ma.getWeekNumber();
+
+        instituteViewer.setText(String.valueOf(ma.instituteID));
+
         chooseGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (changedInstitute) {
-                    ma.getGroupList();
-                    ma.sortGroups(ma.groups, ma.institute, String.valueOf(ma.instituteID));
+                    //ma.getGroupList();
+                    ma.sortGroups(ma.groups, ma.institutes, String.valueOf(ma.instituteID));
                     changedInstitute = false;
                 }
             showGroupChooseDialog();
             }
         });
+
         chooseInstitute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo: parse institutes and groups via ArrayLists, add SharedPreferences
                 ma.groupsCompiled.clear();
                 ma.getInstituteList();
-                ma.compileInstituteList(ma.institute);
+                //ma.getInstituteList();
+                ma.compileInstituteList(ma.institutes);
                 showInstituteChooseDialog();
             }
         });
@@ -65,7 +75,6 @@ public class Settings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 valueIDInt = which;
-
             }
         });
         AlertDialog alert = builder.create();
@@ -86,6 +95,7 @@ public class Settings extends Fragment {
                     ma.instituteID = 0;
                 }
                 changedInstitute = true;
+                instituteViewer.setText(String.valueOf(ma.instituteID));
             }
         });
         AlertDialog alert = builder.create();
