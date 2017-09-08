@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity
     public int week;
     public static int instituteID;
     public static String groupID;
-    public static int loginStatus;
     public static int fragmentID;
     public String choosenInstitute;
     public String choosenGroup;
@@ -169,20 +168,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void saveValues(){
-        //saveArray(groups, "GROUPS");
-        //saveArray(institutes, "INSTITUTE");
-        //saveArray(instituteCompiled, "INSTITUTE_COMPILED");
-        //saveArray(groupsCompiled, "GROUPS_COMPILED");
         saveInt(instituteID, "INSTITUTE_ID");
         saveInt(Global.loginID, "LOGIN_STATUS");
         saveString(groupID, "GROUP_ID");
     }
 
     public void getValues(){
-        //getArray(groups, "GROUPS");
-        //getArray(institutes, "INSTITUTE");
-        //getArray(instituteCompiled, "INSTITUTE_COMPILED");
-        //getArray(groupsCompiled, "GROUPS_COMPILED");
         instituteID = sp.getInt("INSTITUTE_ID", 0);
         Global.loginID = sp.getInt("LOGIN_STATUS", 2);
         groupID = sp.getString("GROUP_ID", "");

@@ -44,36 +44,35 @@ public class Schedule extends Fragment {
     public ArrayList<String> groupsCompiled = new ArrayList();
     public String[] groupsString;
 
-    public static int localLoginStatus;
-
     MainActivity ma;
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        //initialize activity
         ma = new MainActivity();
-
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
+        //Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
-        //startup part
+        //initialize elements
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
-
+        //set content
         addItemsOnSpinner(days, daySelecter);
         setToday();
-
+        //start dialog if it's first app running
         if (Global.loginID == 0){
-            startUp();
+            getInstituteList();
         }
-
+        //after content set things
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
         return mRootView;
     }
+
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.spinner_item, toAdd);
@@ -88,17 +87,6 @@ public class Schedule extends Fragment {
                 //
             }
         });
-    }
-
-    public void startUp(){
-        switch (Global.loginID) {
-            case 0:
-                getInstituteList();
-                break;
-            default:
-
-                break;
-        }
     }
 
     public void getInstituteList(){
@@ -205,7 +193,6 @@ public class Schedule extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        MainActivity ma = new MainActivity();
         setToday();
         daySelecter.setSelection(today);
     }
