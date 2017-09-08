@@ -29,7 +29,6 @@ import radonsoft.mireaassistant.network.GroupsService;
 import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 
-
 public class Schedule extends Fragment {
     private View mRootView;
     private Spinner daySelecter;
