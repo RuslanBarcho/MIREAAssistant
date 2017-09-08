@@ -14,7 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 import io.reactivex.Observable;
@@ -22,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
+import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
@@ -44,6 +44,8 @@ public class Schedule extends Fragment {
     public ArrayList<String> groupsCompiled = new ArrayList();
     public String[] groupsString;
 
+    public static int localLoginStatus;
+
     MainActivity ma;
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
 
@@ -52,16 +54,20 @@ public class Schedule extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         ma = new MainActivity();
+
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //startup part
-        startUp();
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
 
         addItemsOnSpinner(days, daySelecter);
         setToday();
+
+        if (Global.loginID == 0){
+            startUp();
+        }
 
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
@@ -85,7 +91,7 @@ public class Schedule extends Fragment {
     }
 
     public void startUp(){
-        switch (ma.loginStatus) {
+        switch (Global.loginID) {
             case 0:
                 getInstituteList();
                 break;
@@ -116,7 +122,9 @@ public class Schedule extends Fragment {
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 }, () -> {
-                            showInstituteChooseDialog();
+                    if (Global.loginID == 0){
+                        showInstituteChooseDialog();
+                    }
                     });
     }
 
@@ -146,7 +154,7 @@ public class Schedule extends Fragment {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
                     sortGroups(groups, institutes, String.valueOf(ma.instituteID));
-                    showGroupChooseDialog();
+                        showGroupChooseDialog();
                 });
     }
 
@@ -164,7 +172,6 @@ public class Schedule extends Fragment {
                 if (ma.instituteID == 6){
                     ma.instituteID = 0;
                 }
-                ma.loginStatus = 0;
                 getGroupList();
             }
         });
@@ -179,7 +186,7 @@ public class Schedule extends Fragment {
                 .setItems(groupsString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ma.loginStatus = 2;
+                Global.loginID = 3;
                 ma.groupID = groupsString[which];
             }
         });

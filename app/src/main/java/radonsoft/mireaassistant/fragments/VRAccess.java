@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.Arrays;
-
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
+import radonsoft.mireaassistant.helpers.Global;
 
 
 public class VRAccess extends Fragment {
@@ -55,8 +54,7 @@ public class VRAccess extends Fragment {
         getInstitutesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ma.getInstListstwo();
-                output.setText(Arrays.toString(institutes));
+                Global.loginID = 3;
             }
         });
 

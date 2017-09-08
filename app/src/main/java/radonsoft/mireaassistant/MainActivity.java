@@ -32,6 +32,7 @@ import radonsoft.mireaassistant.fragments.Professors;
 import radonsoft.mireaassistant.fragments.Schedule;
 import radonsoft.mireaassistant.fragments.Settings;
 import radonsoft.mireaassistant.fragments.VRAccess;
+import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity
         getWeekNumber();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getValues();
         //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity
 
                 break;
         }
+
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -139,6 +142,17 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
+    public void saveString(String toSave, String TAG){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(TAG, toSave).commit();
+    }
+
+    public void saveInt(int toSave, String TAG){
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putInt(TAG, toSave)
+                .commit();
+    }
+
     public void saveArray(ArrayList<String> toSave, String TAG){
         SharedPreferences.Editor editor = sp.edit();
         Gson gson = new Gson();
@@ -155,17 +169,23 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void saveValues(){
-        saveArray(groups, "GROUPS");
-        saveArray(institutes, "INSTITUTE");
-        saveArray(instituteCompiled, "INSTITUTE_COMPILED");
-        saveArray(groupsCompiled, "GROUPS_COMPILED");
+        //saveArray(groups, "GROUPS");
+        //saveArray(institutes, "INSTITUTE");
+        //saveArray(instituteCompiled, "INSTITUTE_COMPILED");
+        //saveArray(groupsCompiled, "GROUPS_COMPILED");
+        saveInt(instituteID, "INSTITUTE_ID");
+        saveInt(Global.loginID, "LOGIN_STATUS");
+        saveString(groupID, "GROUP_ID");
     }
 
     public void getValues(){
-        getArray(groups, "GROUPS");
-        getArray(institutes, "INSTITUTE");
-        getArray(instituteCompiled, "INSTITUTE_COMPILED");
-        getArray(groupsCompiled, "GROUPS_COMPILED");
+        //getArray(groups, "GROUPS");
+        //getArray(institutes, "INSTITUTE");
+        //getArray(instituteCompiled, "INSTITUTE_COMPILED");
+        //getArray(groupsCompiled, "GROUPS_COMPILED");
+        instituteID = sp.getInt("INSTITUTE_ID", 0);
+        Global.loginID = sp.getInt("LOGIN_STATUS", 2);
+        groupID = sp.getString("GROUP_ID", "");
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
@@ -238,6 +258,7 @@ public class MainActivity extends AppCompatActivity
             alert.show();
             return true;
         } else if (id == R.id.action_refresh_all) {
+            Global.loginID = 0;
             getGroupList();
             getInstituteList();
             Toast toast = Toast.makeText(this, "Refreshed",Toast.LENGTH_SHORT);
@@ -265,5 +286,20 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         ftrans.commit();
         return true;
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        saveValues();
+    }
+    @Override
+    protected void onPause(){
+        super.onPause();
+        saveValues();
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        getValues();
     }
 }
