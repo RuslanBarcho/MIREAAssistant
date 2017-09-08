@@ -110,9 +110,7 @@ public class Schedule extends Fragment {
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 }, () -> {
-                    if (Global.loginID == 0){
                         showInstituteChooseDialog();
-                    }
                     });
     }
 

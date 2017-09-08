@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
 
     public void getValues(){
         instituteID = sp.getInt("INSTITUTE_ID", 0);
-        Global.loginID = sp.getInt("LOGIN_STATUS", 2);
+        Global.loginID = sp.getInt("LOGIN_STATUS", 0);
         groupID = sp.getString("GROUP_ID", "");
     }
 
