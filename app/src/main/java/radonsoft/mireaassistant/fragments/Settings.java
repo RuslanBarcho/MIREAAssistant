@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
@@ -19,6 +20,8 @@ public class Settings extends Fragment {
     private FrameLayout chooseGroup;
     private FrameLayout chooseInstitute;
     private FrameLayout chooseWeekType;
+    private TextView instituteViewer;
+    private TextView groupViewer;
     public int valueIDInt;
     MainActivity ma;
 
@@ -32,8 +35,17 @@ public class Settings extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle("Settings");
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
+
+        instituteViewer = (TextView) mRootView.findViewById(R.id.textView13);
+        groupViewer = (TextView) mRootView.findViewById(R.id.textView9);
+
         ma = new MainActivity();
         ma.getWeekNumber();
+        ma.fragmentID = 4;
+
+        instituteViewer.setText(String.valueOf(ma.instituteID));
+        groupViewer.setText(ma.groupID);
+
         chooseGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,6 +57,7 @@ public class Settings extends Fragment {
             showGroupChooseDialog();
             }
         });
+
         chooseInstitute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,6 +99,7 @@ public class Settings extends Fragment {
                     ma.instituteID = 0;
                 }
                 changedInstitute = true;
+                instituteViewer.setText(String.valueOf(ma.instituteID));
             }
         });
         AlertDialog alert = builder.create();
