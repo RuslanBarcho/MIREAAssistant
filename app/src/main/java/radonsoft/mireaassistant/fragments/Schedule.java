@@ -37,6 +37,7 @@ public class Schedule extends Fragment {
 
     public ArrayList<String> institutes = new ArrayList();
     public ArrayList<String> institutesCompiled = new ArrayList();
+    public ArrayList<String> institutesTranslited = new ArrayList();
     public String[] institutesString;
 
     public ArrayList<String> groups = new ArrayList();
@@ -104,6 +105,7 @@ public class Schedule extends Fragment {
 
                     } else{
                         institutesCompiled.add(String.valueOf(institute));
+
                     }
                     institutesString = institutesCompiled.toArray(new String[institutesCompiled.size()]);
                 }, error -> {
