@@ -21,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
+import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
@@ -90,6 +91,7 @@ public class Schedule extends Fragment {
     }
 
     public void getInstituteList(){
+        ConvertStrings stringConverter = new ConvertStrings();
         NetworkSingleton.getRetrofit().create(InstitutesService.class)
                 .getInstitutes()
                 .subscribeOn(Schedulers.io())
@@ -105,13 +107,19 @@ public class Schedule extends Fragment {
 
                     } else{
                         institutesCompiled.add(String.valueOf(institute));
-
                     }
-                    institutesString = institutesCompiled.toArray(new String[institutesCompiled.size()]);
+
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                 }, () -> {
-                        showInstituteChooseDialog();
+                    int i;
+                    for (i = 0; i < institutesCompiled.size(); i++){
+                        stringConverter.instituteNumber = institutesCompiled.get(i);
+                        stringConverter.convertInstitutes();
+                        institutesTranslited.add(stringConverter.instituteOutput);
+                    }
+                    institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
+                    showInstituteChooseDialog();
                     });
     }
 
@@ -153,11 +161,13 @@ public class Schedule extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ma.instituteID = which + 1;
-                if (ma.instituteID == 5){
+                if (ma.instituteID == 6){
                     ma.instituteID = 7;
                 }
-                if (ma.instituteID == 6){
-                    ma.instituteID = 0;
+                else{
+                    if (ma.instituteID == 7){
+                        ma.instituteID = 0;
+                    }
                 }
                 getGroupList();
             }

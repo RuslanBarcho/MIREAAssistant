@@ -92,11 +92,13 @@ public class Settings extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ma.instituteID = which + 1;
-                if (ma.instituteID == 5){
+                if (ma.instituteID == 6){
                     ma.instituteID = 7;
                 }
-                if (ma.instituteID == 6){
-                    ma.instituteID = 0;
+                else{
+                    if (ma.instituteID == 7){
+                        ma.instituteID = 0;
+                    }
                 }
                 changedInstitute = true;
                 instituteViewer.setText(String.valueOf(ma.instituteID));
