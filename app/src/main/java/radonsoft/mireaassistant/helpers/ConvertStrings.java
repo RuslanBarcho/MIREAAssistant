@@ -39,6 +39,7 @@ public class ConvertStrings {
     //метод обратной транслитерации
     public void translitGroups(){
         translitEngine("e`", "Э");
+        translitEngine("yu", "Ю");
         translitEngine("a", "А");
         translitEngine("b", "Б");
         translitEngine("c", "Ц");
@@ -55,6 +56,7 @@ public class ConvertStrings {
         translitEngine("p", "П");
         translitEngine("r", "Р");
         translitEngine("i", "И");
+        translitEngine("v", "В");
         translitOutput = translitInput;
     }
 
