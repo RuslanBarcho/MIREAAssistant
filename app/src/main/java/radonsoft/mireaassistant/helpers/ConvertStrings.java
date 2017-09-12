@@ -1,13 +1,13 @@
 package radonsoft.mireaassistant.helpers;
 
 
-import android.content.res.Resources;
-
-import radonsoft.mireaassistant.R;
-
 public class ConvertStrings {
     public String instituteNumber;
     public String instituteOutput;
+
+    public String translitInput;
+    public String translitOutput;
+    //метод перевода instituteID в строку
     public void convertInstitutes(){
         switch (instituteNumber){
             case "0":
@@ -34,6 +34,36 @@ public class ConvertStrings {
             default:
                 instituteOutput = String.valueOf(instituteNumber);
                 break;
+        }
+    }
+    //метод обратной транслитерации
+    public void translitGroups(){
+        translitEngine("e`", "Э");
+        translitEngine("a", "А");
+        translitEngine("b", "Б");
+        translitEngine("c", "Ц");
+        translitEngine("d", "Д");
+        translitEngine("e", "Е");
+        translitEngine("f", "Ф");
+        translitEngine("g", "Г");
+        translitEngine("j", "Й");
+        translitEngine("k", "К");
+        translitEngine("l", "Л");
+        translitEngine("m", "М");
+        translitEngine("n", "Н");
+        translitEngine("o", "О");
+        translitEngine("p", "П");
+        translitEngine("r", "Р");
+        translitEngine("i", "И");
+        translitOutput = translitInput;
+    }
+
+    public void translitEngine(String first, String second){
+        if (translitInput.contains(first)){
+            translitInput = translitInput.replace(first, second);
+        }
+        else{
+            translitOutput = translitInput;
         }
     }
 }

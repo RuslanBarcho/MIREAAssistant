@@ -6,6 +6,7 @@
 
     <string name="choose_institute">Выбор института</string>
     <string name="choose_group">Выбор группы</string>
+    <string name="choose_week">Тип недели (Определить - долгое нажатие)</string>
 
     <string-array name="schedule_days">
         <item>Понедельник</item>

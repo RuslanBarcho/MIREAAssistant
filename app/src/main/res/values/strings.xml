@@ -9,6 +9,7 @@
 
     <string name="choose_institute">Choose institute</string>
     <string name="choose_group">Choose group</string>
+    <string name="choose_week">Week type (Identify - long press)</string>
 
     //instituteList
     <string name="IT">Институт информационных технологий</string>

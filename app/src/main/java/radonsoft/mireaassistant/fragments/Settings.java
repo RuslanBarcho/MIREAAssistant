@@ -46,6 +46,7 @@ public class Settings extends Fragment {
 
     public ArrayList<String> groups = new ArrayList();
     public ArrayList<String> groupsCompiled = new ArrayList();
+    public ArrayList<String> groupsTranslited = new ArrayList();
     public String[] groupsString;
 
     @Override
@@ -127,9 +128,7 @@ public class Settings extends Fragment {
     }
 
     public void getInstituteList(){
-        institutes.clear();
-        institutesCompiled.clear();
-        institutesTranslited.clear();
+        AllClear();
         ConvertStrings stringConverter = new ConvertStrings();
         NetworkSingleton.getRetrofit().create(InstitutesService.class)
                 .getInstitutes()
@@ -164,11 +163,7 @@ public class Settings extends Fragment {
     }
 
     public void getSoloInstituteList(){
-        institutes.clear();
-        institutesCompiled.clear();
-        institutesTranslited.clear();
-        groupsCompiled.clear();
-        groups.clear();
+        AllClear();
         ConvertStrings stringConverter = new ConvertStrings();
         NetworkSingleton.getRetrofit().create(InstitutesService.class)
                 .getInstitutes()
@@ -217,13 +212,12 @@ public class Settings extends Fragment {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
                     sortGroups(groups, institutes, String.valueOf(ma.instituteID));
+
                     showGroupChooseDialog();
                 });
     }
 
     public void getGroupList(){
-        groupsCompiled.clear();
-        groups.clear();
         NetworkSingleton.getRetrofit().create(GroupsService.class)
                 .getGroups()
                 .subscribeOn(Schedulers.io())
@@ -250,7 +244,13 @@ public class Settings extends Fragment {
                 groupsCompiled.add(toSort.get(i));
             }
         }
-        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
+        ConvertStrings transliter = new ConvertStrings();
+        for (i = 0; i<groupsCompiled.size(); i++){
+            transliter.translitInput =groupsCompiled.get(i);
+            transliter.translitGroups();
+            groupsTranslited.add(transliter.translitOutput);
+        }
+        groupsString = groupsTranslited.toArray(new String[groupsTranslited.size()]);
     }
 
     public void convertInstToString(int input){
@@ -258,6 +258,15 @@ public class Settings extends Fragment {
         stringConverter.instituteNumber = String.valueOf(input);
         stringConverter.convertInstitutes();
         instituteNameTranslited = stringConverter.instituteOutput;
+    }
+
+    public void AllClear(){
+        institutes.clear();
+        institutesCompiled.clear();
+        institutesTranslited.clear();
+        groupsCompiled.clear();
+        groups.clear();
+        groupsTranslited.clear();
     }
 
     @Override
