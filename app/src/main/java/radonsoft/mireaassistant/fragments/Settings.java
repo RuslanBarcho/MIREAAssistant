@@ -54,7 +54,7 @@ public class Settings extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_settings, container, false);
-        ((MainActivity) getActivity()).setActionBarTitle("Settings");
+        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.action_settings));
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
 
