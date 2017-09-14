@@ -2,15 +2,27 @@ package radonsoft.mireaassistant.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.Global;
+import radonsoft.mireaassistant.model.schedule.*;
+import radonsoft.mireaassistant.model.schedule.Schedule;
+import radonsoft.mireaassistant.network.GroupsService;
+import radonsoft.mireaassistant.network.NetworkSingleton;
+import radonsoft.mireaassistant.network.ScheduleService;
 
 
 public class VRAccess extends Fragment {
@@ -19,7 +31,7 @@ public class VRAccess extends Fragment {
     public Button getGroupsBtn;
     public Button clear;
     public TextView output;
-
+    public ArrayList<String> oddNames = new ArrayList();
     MainActivity ma;
 
     public String[] institutes;
