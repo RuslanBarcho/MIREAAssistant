@@ -19,6 +19,7 @@ import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
+import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
@@ -35,6 +36,7 @@ public class Settings extends Fragment {
     private FrameLayout chooseWeekType;
     private TextView instituteViewer;
     private TextView groupViewer;
+    private TextView weekViewer;
     MainActivity ma;
 
     //vars for get data
@@ -57,9 +59,11 @@ public class Settings extends Fragment {
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.action_settings));
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
+        chooseWeekType = (FrameLayout) mRootView.findViewById(R.id.frameLayout3);
 
         instituteViewer = (TextView) mRootView.findViewById(R.id.textView13);
         groupViewer = (TextView) mRootView.findViewById(R.id.textView9);
+        weekViewer = (TextView) mRootView.findViewById(R.id.textView16);
 
         ma = new MainActivity();
         ma.getWeekNumber();
@@ -69,11 +73,23 @@ public class Settings extends Fragment {
         instituteViewer.setText(instituteNameTranslited);
 
         groupViewer.setText(ma.groupID);
+        if (Global.weekNumber % 2 == 0){
+            weekViewer.setText("Четная");
+        } else{
+            weekViewer.setText("Нечетная");
+        }
 
         chooseGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getSoloInstituteList();
+            }
+        });
+
+        chooseWeekType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
 

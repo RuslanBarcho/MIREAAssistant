@@ -207,7 +207,7 @@ public class MainActivity extends AppCompatActivity
         GregorianCalendar gc = new GregorianCalendar();
         int day = 0;
         gc.add(Calendar.DATE, day);
-        week = gc.get(Calendar.WEEK_OF_YEAR);
+        Global.weekNumber = gc.get(Calendar.WEEK_OF_YEAR) - 1;
     }
 
     //Title
