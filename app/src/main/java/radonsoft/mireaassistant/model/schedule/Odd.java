@@ -8,7 +8,7 @@ public class Odd {
 
     @SerializedName("name")
     @Expose
-    private String name;
+    private Object name;
     @SerializedName("type")
     @Expose
     private Object type;
@@ -19,11 +19,18 @@ public class Odd {
     @Expose
     private Object room;
 
-    public String getName() {
+    public Odd(Object name, Object type, Object teacher, Object room) {
+        this.name = name;
+        this.type = type;
+        this.teacher = teacher;
+        this.room = room;
+    }
+
+    public Object getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(Object name) {
         this.name = name;
     }
 
