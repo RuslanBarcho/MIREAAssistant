@@ -201,16 +201,20 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void getValues(){
-        Gson gson = new Gson();
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
-        Global.instituteID = sp.getInt("INSTITUTE_ID", 0);
         Global.loginID = sp.getInt("LOGIN_STATUS", 0);
-        Global.groupID = sp.getString("GROUP_ID", "");
+        if (Global.loginID == 0){
 
-        String json = sp.getString("SCHEDULE_NAME_ODD", null);
-        Global.scheduleNamesOdd = gson.fromJson(json, type);
-        String jsonOne = sp.getString("SCHEDULE_NAME_EVEN", null);
-        Global.scheduleNamesEven = gson.fromJson(jsonOne, type);
+        } else {
+            Gson gson = new Gson();
+            Type type = new TypeToken<ArrayList<String>>() {}.getType();
+            Global.instituteID = sp.getInt("INSTITUTE_ID", 0);
+            Global.groupID = sp.getString("GROUP_ID", "");
+
+            String json = sp.getString("SCHEDULE_NAME_ODD", null);
+            Global.scheduleNamesOdd = gson.fromJson(json, type);
+            String jsonOne = sp.getString("SCHEDULE_NAME_EVEN", null);
+            Global.scheduleNamesEven = gson.fromJson(jsonOne, type);
+        }
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
@@ -325,10 +329,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        if (Global.loginID == 0){
-
-        } else{
-            getValues();
-        }
+        getValues();
     }
 }

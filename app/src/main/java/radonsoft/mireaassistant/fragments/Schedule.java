@@ -99,8 +99,14 @@ public class Schedule extends Fragment {
             getInstituteList();
         } else {
             checkNull = 6;
+            if (Global.weekNumber % 2 == 0){
+                Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
+                sortContentByTodayEven(today);
+            } else{
                 Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                 sortContentByTodayOdd(today);
+            }
+
         }
         //after content set things
         ma.fragmentID = 1;
@@ -120,7 +126,11 @@ public class Schedule extends Fragment {
                 //ToDo change schedule
                 todaySelected = selectedItemPosition;
                 if (checkNull == 6) {
-                    sortContentByTodayOdd(todaySelected);
+                    if (Global.weekNumber % 2 == 0){
+                        sortContentByTodayEven(todaySelected);
+                    } else{
+                        sortContentByTodayOdd(todaySelected);
+                    }
                 }
             }
             public void onNothingSelected(AdapterView<?> parent) {
@@ -235,6 +245,29 @@ public class Schedule extends Fragment {
                 Global.groupID = groupsStringID[which];
                 Global global = new Global();
 
+                global.getScheduleEven(new DisposableObserver<Even>() {
+                    @Override
+                    public void onNext(@NonNull Even even) {
+                        Log.i("Schedule", even.getName().toString());
+                        Global.scheduleNamesEven.add(even.getName().toString());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable error) {
+                        Log.e("Schedule", error.toString(), error);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        if (Global.weekNumber % 2 == 0){
+                            Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
+                            sortContentByTodayOdd(today);
+                            checkNull = 6;
+                            mainlayout.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+
                 global.getScheduleOdd(new DisposableObserver<Odd>() {
                         @Override
                         public void onNext(@NonNull Odd odd) {
@@ -249,10 +282,14 @@ public class Schedule extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            if (Global.weekNumber % 2 == 0){
+
+                            } else{
                                 Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                                 sortContentByTodayOdd(today);
                                 checkNull = 6;
                                 mainlayout.setVisibility(View.VISIBLE);
+                            }
                         }
                     });
             }
