@@ -89,7 +89,23 @@ public class Settings extends Fragment {
         chooseWeekType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (weekViewer.getText().equals("Четная")) {
+                    weekViewer.setText("Нечетная");
+                } else {
+                    weekViewer.setText("Четная");
+                }
+            }
+        });
 
+        chooseWeekType.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (Global.weekNumber % 2 == 0){
+                    weekViewer.setText("Четная");
+                } else{
+                    weekViewer.setText("Нечетная");
+                }
+                return true;
             }
         });
 

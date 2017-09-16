@@ -43,6 +43,8 @@ public class Schedule extends Fragment {
 
     public ArrayList<String> groups = new ArrayList();
     public ArrayList<String> groupsCompiled = new ArrayList();
+    public ArrayList<String> groupsTranslited = new ArrayList();
+    public String[] groupsStringID;
     public String[] groupsString;
 
     MainActivity ma;
@@ -130,7 +132,14 @@ public class Schedule extends Fragment {
                 groupsCompiled.add(toSort.get(i));
             }
         }
-        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
+        ConvertStrings transliter = new ConvertStrings();
+        for (i = 0; i<groupsCompiled.size(); i++){
+            transliter.translitInput =groupsCompiled.get(i);
+            transliter.translitGroups();
+            groupsTranslited.add(transliter.translitOutput);
+        }
+        groupsString = groupsTranslited.toArray(new String[groupsTranslited.size()]);
+        groupsStringID = groupsCompiled.toArray(new String[groupsCompiled.size()]);
     }
 
     public void getGroupList(){
@@ -184,7 +193,7 @@ public class Schedule extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Global.loginID = 3;
-                ma.groupID = groupsString[which];
+                ma.groupID = groupsStringID[which];
             }
         });
         AlertDialog alert = builder.create();
