@@ -1,7 +1,10 @@
 package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -10,8 +13,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,16 +33,23 @@ import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
+import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.network.GroupsService;
 import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 
 public class Schedule extends Fragment {
+    //Views
+    LinearLayout mainlayout;
     private View mRootView;
     private Spinner daySelecter;
     private TextView test;
+    private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
+
     private int today;
+    private int todaySelected;
+    private int checkNull;
 
     public ArrayList<String> institutes = new ArrayList();
     public ArrayList<String> institutesCompiled = new ArrayList();
@@ -63,14 +75,32 @@ public class Schedule extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //initialize elements
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
-        test = (TextView) mRootView.findViewById(R.id.textView48);
+        //test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
+
+        mainlayout = (LinearLayout) mRootView.findViewById(R.id.mainLayout);
+
+        classNameOne = (TextView) mRootView.findViewById(R.id.textView48);
+        classNameTwo = (TextView) mRootView.findViewById(R.id.textView53);
+        classNameThree = (TextView) mRootView.findViewById(R.id.textView58);
+        classNameFour = (TextView) mRootView.findViewById(R.id.textView43);
+        classNameFive = (TextView) mRootView.findViewById(R.id.textView33);
+        classNameSix = (TextView) mRootView.findViewById(R.id.textView38);
+
         //set content
         addItemsOnSpinner(days, daySelecter);
         setToday();
         //start dialog if it's first app running
+
+        ma.getWeekNumber();
+
         if (Global.loginID == 0){
+            mainlayout.setVisibility(View.GONE);
             getInstituteList();
+        } else {
+            checkNull = 6;
+                Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                sortContentByTodayOdd(today);
         }
         //after content set things
         ma.fragmentID = 1;
@@ -88,9 +118,13 @@ public class Schedule extends Fragment {
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
                 //ToDo change schedule
+                todaySelected = selectedItemPosition;
+                if (checkNull == 6) {
+                    sortContentByTodayOdd(todaySelected);
+                }
             }
             public void onNothingSelected(AdapterView<?> parent) {
-                //
+                //nothing to do
             }
         });
     }
@@ -116,6 +150,7 @@ public class Schedule extends Fragment {
 
                 }, error -> {
                     Log.e("inst", error.toString(), error);
+                    errorMessage();
                 }, () -> {
                     int i;
                     for (i = 0; i < institutesCompiled.size(); i++){
@@ -160,7 +195,7 @@ public class Schedule extends Fragment {
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
-                    sortGroups(groups, institutes, String.valueOf(ma.instituteID));
+                    sortGroups(groups, institutes, String.valueOf(Global.instituteID));
                         showGroupChooseDialog();
                 });
     }
@@ -172,13 +207,13 @@ public class Schedule extends Fragment {
                 .setItems(institutesString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ma.instituteID = which + 1;
-                if (ma.instituteID == 6){
-                    ma.instituteID = 7;
+                Global.instituteID = which + 1;
+                if (Global.instituteID == 6){
+                    Global.instituteID = 7;
                 }
                 else{
-                    if (ma.instituteID == 7){
-                        ma.instituteID = 0;
+                    if (Global.instituteID == 7){
+                        Global.instituteID = 0;
                     }
                 }
                 getGroupList();
@@ -195,30 +230,147 @@ public class Schedule extends Fragment {
                 .setItems(groupsString, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                Global.scheduleNamesOdd.clear();
                 Global.loginID = 3;
-                ma.groupID = groupsStringID[which];
+                Global.groupID = groupsStringID[which];
                 Global global = new Global();
+
                 global.getScheduleOdd(new DisposableObserver<Odd>() {
-                    @Override
-                    public void onNext(@NonNull Odd odd) {
-                    Log.i("Schedule", odd.getName().toString());
-                    }
+                        @Override
+                        public void onNext(@NonNull Odd odd) {
+                            Log.i("Schedule", odd.getName().toString());
+                            Global.scheduleNamesOdd.add(odd.getName().toString());
+                        }
 
-                    @Override
-                    public void onError(@NonNull Throwable error) {
-                    Log.e("Schedule", error.toString(), error);
+                        @Override
+                        public void onError(@NonNull Throwable error) {
+                            Log.e("Schedule", error.toString(), error);
+                        }
 
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+                        @Override
+                        public void onComplete() {
+                                Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                                sortContentByTodayOdd(today);
+                                checkNull = 6;
+                                mainlayout.setVisibility(View.VISIBLE);
+                        }
+                    });
             }
         });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public void errorMessage(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
+        builder.setTitle("Error");
+        builder.setMessage("No connection to the server");
+        builder.setPositiveButton("Try again",
+                new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dialog, int id) {
+                        getInstituteList();
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void updateSchedule(){
+        Global.scheduleNamesOddBackup = Global.scheduleNamesOdd;
+        Global.scheduleNamesOdd.clear();
+        Global global = new Global();
+        global.getScheduleOdd(new DisposableObserver<Odd>() {
+            @Override
+            public void onNext(@NonNull Odd odd) {
+                Log.i("Schedule", odd.getName().toString());
+                Global.scheduleNamesOdd.add(odd.getName().toString());
+            }
+
+            @Override
+            public void onError(@NonNull Throwable error) {
+                Log.e("Schedule", error.toString(), error);
+                Global.scheduleNamesOdd = Global.scheduleNamesOddBackup;
+                Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                sortContentByTodayOdd(today);
+            }
+
+            @Override
+            public void onComplete() {
+                Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                sortContentByTodayOdd(today);
+            }
+        });
+    }
+
+    public void setContentOdd(int first, int second, int third, int fourth, int fifth, int sixth){
+        classNameOne.setText(Global.scheduleNamesOddString[first]);
+        classNameTwo.setText(Global.scheduleNamesOddString[second]);
+        classNameThree.setText(Global.scheduleNamesOddString[third]);
+        classNameFour.setText(Global.scheduleNamesOddString[fourth]);
+        classNameFive.setText(Global.scheduleNamesOddString[fifth]);
+        classNameSix.setText(Global.scheduleNamesOddString[sixth]);
+    }
+
+    public void sortContentByTodayOdd(int day){
+        switch (day){
+            case 0:
+                setContentOdd(0,1,2,3,4,5);
+                break;
+            case 1:
+                setContentOdd(6,7,8,9,10,11);
+                break;
+            case 2:
+                setContentOdd(12,13,14,15,16,17);
+                break;
+            case 3:
+                setContentOdd(18,19,20,21,22,23);
+                break;
+            case 4:
+                setContentOdd(24,25,26,27,28,29);
+                break;
+            case 5:
+                setContentOdd(30,31,32,33,34,35);
+                break;
+            default:
+                setContentOdd(0,1,2,3,4,5);
+                break;
+        }
+    }
+
+    public void setContentEven(int first, int second, int third, int fourth, int fifth, int sixth){
+        classNameOne.setText(Global.scheduleNamesEvenString[first]);
+        classNameTwo.setText(Global.scheduleNamesEvenString[second]);
+        classNameThree.setText(Global.scheduleNamesEvenString[third]);
+        classNameFour.setText(Global.scheduleNamesEvenString[fourth]);
+        classNameFive.setText(Global.scheduleNamesEvenString[fifth]);
+        classNameSix.setText(Global.scheduleNamesEvenString[sixth]);
+    }
+
+    public void sortContentByTodayEven(int day){
+        switch (day){
+            case 0:
+                setContentEven(0,1,2,3,4,5);
+                break;
+            case 1:
+                setContentEven(6,7,8,9,10,11);
+                break;
+            case 2:
+                setContentEven(12,13,14,15,16,17);
+                break;
+            case 3:
+                setContentEven(18,19,20,21,22,23);
+                break;
+            case 4:
+                setContentEven(24,25,26,27,28,29);
+                break;
+            case 5:
+                setContentEven(30,31,32,33,34,35);
+                break;
+            default:
+                setContentEven(0,1,2,3,4,5);
+                break;
+        }
     }
 
     public void setToday(){
@@ -241,7 +393,6 @@ public class Schedule extends Fragment {
         super.onStart();
         setToday();
         daySelecter.setSelection(today);
-
     }
 
 }

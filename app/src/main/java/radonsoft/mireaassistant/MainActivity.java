@@ -1,8 +1,11 @@
 package radonsoft.mireaassistant;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -102,6 +105,28 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ftrans.commit();
+
+    }
+
+    public static boolean hasConnection(final Context context)
+    {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getActiveNetworkInfo();
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        return false;
     }
 
     public void getGroupList(){
@@ -168,15 +193,24 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void saveValues(){
-        saveInt(instituteID, "INSTITUTE_ID");
+        saveInt(Global.instituteID, "INSTITUTE_ID");
         saveInt(Global.loginID, "LOGIN_STATUS");
-        saveString(groupID, "GROUP_ID");
+        saveString(Global.groupID, "GROUP_ID");
+        saveArray(Global.scheduleNamesOdd, "SCHEDULE_NAME_ODD");
+        saveArray(Global.scheduleNamesEven, "SCHEDULE_NAME_EVEN");
     }
 
     public void getValues(){
-        instituteID = sp.getInt("INSTITUTE_ID", 0);
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Global.instituteID = sp.getInt("INSTITUTE_ID", 0);
         Global.loginID = sp.getInt("LOGIN_STATUS", 0);
-        groupID = sp.getString("GROUP_ID", "");
+        Global.groupID = sp.getString("GROUP_ID", "");
+
+        String json = sp.getString("SCHEDULE_NAME_ODD", null);
+        Global.scheduleNamesOdd = gson.fromJson(json, type);
+        String jsonOne = sp.getString("SCHEDULE_NAME_EVEN", null);
+        Global.scheduleNamesEven = gson.fromJson(jsonOne, type);
     }
 
     public void compileInstituteList(ArrayList<String> toCompile){
@@ -291,6 +325,10 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        getValues();
+        if (Global.loginID == 0){
+
+        } else{
+            getValues();
+        }
     }
 }

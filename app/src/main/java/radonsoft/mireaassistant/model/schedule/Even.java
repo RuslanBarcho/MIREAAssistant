@@ -19,6 +19,13 @@ public class Even {
     @Expose
     private Object room;
 
+    public Even(Object name, Object type, Object teacher, Object room) {
+        this.name = name;
+        this.type = type;
+        this.teacher = teacher;
+        this.room = room;
+    }
+
     public Object getName() {
         return name;
     }

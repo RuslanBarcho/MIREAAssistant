@@ -69,10 +69,10 @@ public class Settings extends Fragment {
         ma.getWeekNumber();
         ma.fragmentID = 4;
 
-        convertInstToString(ma.instituteID);
+        convertInstToString(Global.instituteID);
         instituteViewer.setText(instituteNameTranslited);
 
-        groupViewer.setText(ma.groupID);
+        groupViewer.setText(Global.groupID);
         if (Global.weekNumber % 2 == 0){
             weekViewer.setText("Четная");
         } else{
@@ -126,8 +126,8 @@ public class Settings extends Fragment {
                 .setItems(groupsString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ma.groupID = groupsString[which];
-                        groupViewer.setText(ma.groupID);
+                        Global.groupID = groupsString[which];
+                        groupViewer.setText(Global.groupID);
                     }
                 });
         AlertDialog alert = builder.create();
@@ -141,16 +141,16 @@ public class Settings extends Fragment {
                 .setItems(institutesString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        ma.instituteID = which + 1;
-                        if (ma.instituteID == 6){
-                            ma.instituteID = 7;
+                        Global.instituteID = which + 1;
+                        if (Global.instituteID == 6){
+                            Global.instituteID = 7;
                         }
                         else{
-                            if (ma.instituteID == 7){
-                                ma.instituteID = 0;
+                            if (Global.instituteID == 7){
+                                Global.instituteID = 0;
                             }
                         }
-                        convertInstToString(ma.instituteID);
+                        convertInstToString(Global.instituteID);
                         instituteViewer.setText(instituteNameTranslited);
                         getGroupList();
                     }
@@ -243,7 +243,7 @@ public class Settings extends Fragment {
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
-                    sortGroups(groups, institutes, String.valueOf(ma.instituteID));
+                    sortGroups(groups, institutes, String.valueOf(Global.instituteID));
 
                     showGroupChooseDialog();
                 });
@@ -264,7 +264,7 @@ public class Settings extends Fragment {
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
-                    sortGroups(groups, institutes, String.valueOf(ma.instituteID));
+                    sortGroups(groups, institutes, String.valueOf(Global.instituteID));
                     showGroupChooseDialog();
                 });
     }
@@ -284,6 +284,7 @@ public class Settings extends Fragment {
         }
         groupsString = groupsTranslited.toArray(new String[groupsTranslited.size()]);
     }
+
 
     public void convertInstToString(int input){
         ConvertStrings stringConverter = new ConvertStrings();

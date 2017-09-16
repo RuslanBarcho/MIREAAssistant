@@ -6,7 +6,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:id="@+id/mainLayout">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -126,12 +127,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView49"
-                android:layout_below="@+id/textView46"
                 android:layout_toRightOf="@+id/linearLayout10"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/textView48" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -142,10 +143,10 @@
                 android:layout_below="@+id/textView49"
                 android:layout_toRightOf="@+id/linearLayout10"
                 android:layout_toEndOf="@+id/linearLayout10"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_alignStart="@id/textView49" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -218,12 +219,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView54"
-                android:layout_below="@+id/textView51"
                 android:layout_toRightOf="@+id/linearLayout11"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/textView53" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -310,12 +311,13 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView61"
-                android:layout_below="@+id/textView56"
                 android:layout_toRightOf="@+id/linearLayout12"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_alignParentStart="false"
+                android:layout_below="@+id/textView58" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -326,10 +328,10 @@
                 android:layout_below="@+id/textView61"
                 android:layout_toRightOf="@+id/linearLayout12"
                 android:layout_toEndOf="@+id/linearLayout12"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_alignStart="@id/textView61" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -402,12 +404,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView44"
-                android:layout_below="@+id/textView41"
                 android:layout_toRightOf="@+id/linearLayout9"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/textView43" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -494,12 +496,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView34"
-                android:layout_below="@+id/textView31"
                 android:layout_toRightOf="@+id/linearLayout6"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/textView33" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -586,12 +588,12 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="Small Text"
                 android:id="@+id/textView39"
-                android:layout_below="@+id/textView36"
                 android:layout_toRightOf="@+id/linearLayout7"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:layout_below="@+id/textView38" />
 
             <TextView
                 android:layout_width="wrap_content"

@@ -53,7 +53,9 @@ public class VRAccess extends Fragment {
         getGroupsBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getSchedule();
+                //Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                //output.setText(String.valueOf(Global.scheduleNamesOdd));
+                output.setText(String.valueOf(Global.weekNumber));
             }
         });
 
