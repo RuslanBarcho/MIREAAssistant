@@ -99,17 +99,10 @@ public class VRAccess extends Fragment {
                     }
                 })
                 .subscribe((Odd odd) ->{
-                    if (odd.getName().toString() == null){
-                        Log.e("Schedule", "---");
-                    }
-                    else{
-                        Log.i("Schedule", odd.getName().toString());
-                    }
+                    Log.i("Schedule", odd.getName().toString());
                 } , error -> {
                     Log.e("Schedule", error.toString(), error);
                 });
-
-
     }
 
 }

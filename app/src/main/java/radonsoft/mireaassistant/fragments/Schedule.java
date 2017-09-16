@@ -18,6 +18,8 @@ import java.util.Calendar;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
@@ -26,6 +28,7 @@ import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
+import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.network.GroupsService;
 import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
@@ -194,6 +197,24 @@ public class Schedule extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 Global.loginID = 3;
                 ma.groupID = groupsStringID[which];
+                Global global = new Global();
+                global.getScheduleOdd(new DisposableObserver<Odd>() {
+                    @Override
+                    public void onNext(@NonNull Odd odd) {
+                    Log.i("Schedule", odd.getName().toString());
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable error) {
+                    Log.e("Schedule", error.toString(), error);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
             }
         });
         AlertDialog alert = builder.create();
