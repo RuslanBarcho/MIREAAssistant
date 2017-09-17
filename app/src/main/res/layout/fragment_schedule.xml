@@ -143,10 +143,10 @@
                 android:layout_below="@+id/textView49"
                 android:layout_toRightOf="@+id/linearLayout10"
                 android:layout_toEndOf="@+id/linearLayout10"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_alignStart="@id/textView49" />
+                android:layout_alignStart="@id/textView49"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -236,9 +236,9 @@
                 android:layout_toRightOf="@+id/linearLayout11"
                 android:layout_toEndOf="@+id/linearLayout11"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -328,10 +328,10 @@
                 android:layout_below="@+id/textView61"
                 android:layout_toRightOf="@+id/linearLayout12"
                 android:layout_toEndOf="@+id/linearLayout12"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="5dp"
-                android:layout_alignStart="@id/textView61" />
+                android:layout_alignStart="@id/textView61"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -421,9 +421,9 @@
                 android:layout_toRightOf="@+id/linearLayout9"
                 android:layout_toEndOf="@+id/linearLayout9"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -513,9 +513,9 @@
                 android:layout_toRightOf="@+id/linearLayout6"
                 android:layout_toEndOf="@+id/linearLayout6"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -605,9 +605,9 @@
                 android:layout_toRightOf="@+id/linearLayout7"
                 android:layout_toEndOf="@+id/linearLayout7"
                 android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginRight="5dp"
-                android:layout_marginBottom="5dp" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="2dp" />
         </RelativeLayout>
     </LinearLayout>
 

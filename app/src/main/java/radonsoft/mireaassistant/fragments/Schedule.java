@@ -97,12 +97,17 @@ public class Schedule extends Fragment {
         classRoomFive = (TextView) mRootView.findViewById(R.id.textView34);
         classRoomSix = (TextView) mRootView.findViewById(R.id.textView39);
 
+        classTeacherOne = (TextView) mRootView.findViewById(R.id.textView50);
+        classTeacherTwo = (TextView) mRootView.findViewById(R.id.textView55);
+        classTeacherThree = (TextView) mRootView.findViewById(R.id.textView62);
+        classTeacherFour = (TextView) mRootView.findViewById(R.id.textView45);
+        classTeacherFive = (TextView) mRootView.findViewById(R.id.textView35);
+        classTeacherSix = (TextView) mRootView.findViewById(R.id.textView40);
+
         //set content
         addItemsOnSpinner(days, daySelecter);
         setToday();
         //start dialog if it's first app running
-
-        ma.getWeekNumber();
 
         if (Global.loginID == 0){
             mainlayout.setVisibility(View.GONE);
@@ -112,10 +117,14 @@ public class Schedule extends Fragment {
             if (Global.weekNumber % 2 == 0){
                 Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
                 Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
+                Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
+                Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
                 sortContentByTodayEven(today);
             } else{
                 Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                 Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
+                Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
+                Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
                 sortContentByTodayOdd(today);
             }
         }
@@ -265,9 +274,19 @@ public class Schedule extends Fragment {
                                     Log.i("Schedule", even.getName().toString());
                                     Global.scheduleNamesEven.add(even.getName().toString());
                                     if (even.getRoom() == null) {
-                                        Global.scheduleRoomsEven.add("-");
+                                        Global.scheduleRoomsEven.add("―");
                                     } else {
                                         Global.scheduleRoomsEven.add(even.getRoom().toString());
+                                    }
+                                    if (even.getTeacher() == null) {
+                                        Global.scheduleTeachersEven.add("―");
+                                    } else {
+                                        Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                                    }
+                                    if (even.getType() == null) {
+                                        Global.scheduleTypeEven.add("―");
+                                    } else {
+                                        Global.scheduleTypeEven.add(even.getType().toString());
                                     }
                                 }
 
@@ -281,6 +300,8 @@ public class Schedule extends Fragment {
                                     if (Global.weekNumber % 2 == 0) {
                                         Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
                                         Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
+                                        Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
+                                        Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
                                         sortContentByTodayOdd(today);
                                         checkNull = 6;
                                         mainlayout.setVisibility(View.VISIBLE);
@@ -294,9 +315,19 @@ public class Schedule extends Fragment {
                                     Log.i("Schedule", odd.getName().toString());
                                     Global.scheduleNamesOdd.add(odd.getName().toString());
                                     if (odd.getRoom() == null) {
-                                        Global.scheduleRoomsOdd.add("-");
+                                        Global.scheduleRoomsOdd.add("―");
                                     } else {
                                         Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                                    }
+                                    if (odd.getTeacher() == null) {
+                                        Global.scheduleTeachersOdd.add("―");
+                                    } else {
+                                        Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                    }
+                                    if (odd.getType() == null) {
+                                        Global.scheduleTypeOdd.add("―");
+                                    } else {
+                                        Global.scheduleTypeOdd.add(odd.getType().toString());
                                     }
                                 }
 
@@ -312,6 +343,8 @@ public class Schedule extends Fragment {
                                     } else {
                                         Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                                         Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
+                                        Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
+                                        Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
                                         sortContentByTodayOdd(today);
                                         checkNull = 6;
                                         mainlayout.setVisibility(View.VISIBLE);
@@ -342,13 +375,39 @@ public class Schedule extends Fragment {
         }
     }
 
+    public void setName(TextView field, String[] className, String[] classType, int number){
+        if (classType[number].equals("―")){
+            field.setText(className[number]);
+        } else {
+            String type;
+            switch (classType[number]){
+                case "12.0":
+                    type = "ПР + ЛАБ";
+                    break;
+                case "0.0":
+                    type = "ЛК";
+                    break;
+                case "1.0":
+                    type = "ПР";
+                    break;
+                case "2.0":
+                    type = "ЛАБ";
+                    break;
+                default:
+                    type = classType[number];
+                    break;
+            }
+            field.setText(className[number] + ", " + type);
+        }
+    }
+
     public void setContentOdd(int first, int second, int third, int fourth, int fifth, int sixth){
-        classNameOne.setText(Global.scheduleNamesOddString[first]);
-        classNameTwo.setText(Global.scheduleNamesOddString[second]);
-        classNameThree.setText(Global.scheduleNamesOddString[third]);
-        classNameFour.setText(Global.scheduleNamesOddString[fourth]);
-        classNameFive.setText(Global.scheduleNamesOddString[fifth]);
-        classNameSix.setText(Global.scheduleNamesOddString[sixth]);
+        setName(classNameOne, Global.scheduleNamesOddString, Global.scheduleTypeOddString, first);
+        setName(classNameTwo, Global.scheduleNamesOddString, Global.scheduleTypeOddString, second);
+        setName(classNameThree, Global.scheduleNamesOddString, Global.scheduleTypeOddString, third);
+        setName(classNameFour, Global.scheduleNamesOddString, Global.scheduleTypeOddString, fourth);
+        setName(classNameFive, Global.scheduleNamesOddString, Global.scheduleTypeOddString, fifth);
+        setName(classNameSix, Global.scheduleNamesOddString, Global.scheduleTypeOddString, sixth);
 
         classRoomOne.setText(Global.scheduleRoomsOddString[first]);
         classRoomTwo.setText(Global.scheduleRoomsOddString[second]);
@@ -356,6 +415,13 @@ public class Schedule extends Fragment {
         classRoomFour.setText(Global.scheduleRoomsOddString[fourth]);
         classRoomFive.setText(Global.scheduleRoomsOddString[fifth]);
         classRoomSix.setText(Global.scheduleRoomsOddString[sixth]);
+
+        classTeacherOne.setText(Global.scheduleTeachersOddString[first]);
+        classTeacherTwo.setText(Global.scheduleTeachersOddString[second]);
+        classTeacherThree.setText(Global.scheduleTeachersOddString[third]);
+        classTeacherFour.setText(Global.scheduleTeachersOddString[fourth]);
+        classTeacherFive.setText(Global.scheduleTeachersOddString[fifth]);
+        classTeacherSix.setText(Global.scheduleTeachersOddString[sixth]);
     }
 
     public void sortContentByTodayOdd(int day){
@@ -385,12 +451,12 @@ public class Schedule extends Fragment {
     }
 
     public void setContentEven(int first, int second, int third, int fourth, int fifth, int sixth){
-        classNameOne.setText(Global.scheduleNamesEvenString[first]);
-        classNameTwo.setText(Global.scheduleNamesEvenString[second]);
-        classNameThree.setText(Global.scheduleNamesEvenString[third]);
-        classNameFour.setText(Global.scheduleNamesEvenString[fourth]);
-        classNameFive.setText(Global.scheduleNamesEvenString[fifth]);
-        classNameSix.setText(Global.scheduleNamesEvenString[sixth]);
+        setName(classNameOne, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, first);
+        setName(classNameTwo, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, second);
+        setName(classNameThree, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, third);
+        setName(classNameFour, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, fourth);
+        setName(classNameFive, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, fifth);
+        setName(classNameSix, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, sixth);
 
         classRoomOne.setText(Global.scheduleRoomsEvenString[first]);
         classRoomTwo.setText(Global.scheduleRoomsEvenString[second]);
@@ -398,6 +464,13 @@ public class Schedule extends Fragment {
         classRoomFour.setText(Global.scheduleRoomsEvenString[fourth]);
         classRoomFive.setText(Global.scheduleRoomsEvenString[fifth]);
         classRoomSix.setText(Global.scheduleRoomsEvenString[sixth]);
+
+        classTeacherOne.setText(Global.scheduleTeachersEvenString[first]);
+        classTeacherTwo.setText(Global.scheduleTeachersEvenString[second]);
+        classTeacherThree.setText(Global.scheduleTeachersEvenString[third]);
+        classTeacherFour.setText(Global.scheduleTeachersEvenString[fourth]);
+        classTeacherFive.setText(Global.scheduleTeachersEvenString[fifth]);
+        classTeacherSix.setText(Global.scheduleTeachersEvenString[sixth]);
     }
 
     public void sortContentByTodayEven(int day){

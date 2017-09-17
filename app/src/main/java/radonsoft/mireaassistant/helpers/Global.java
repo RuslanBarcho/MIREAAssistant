@@ -28,16 +28,22 @@ public class Global {
     public static ArrayList<String> scheduleNamesOdd = new ArrayList<>();
     public static ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
     public static ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+    public static ArrayList<String> scheduleTypeOdd = new ArrayList<>();
 
     public static ArrayList<String> scheduleNamesEven = new ArrayList<>();
     public static ArrayList<String> scheduleRoomsEven = new ArrayList<>();
     public static ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+    public static ArrayList<String> scheduleTypeEven = new ArrayList<>();
 
     public static String[] scheduleNamesOddString;
     public static String[] scheduleRoomsOddString;
+    public static String[] scheduleTeachersOddString;
+    public static String[] scheduleTypeOddString;
 
     public static String[] scheduleNamesEvenString;
     public static String[] scheduleRoomsEvenString;
+    public static String[] scheduleTeachersEvenString;
+    public static String[] scheduleTypeEvenString;
 
     public void getScheduleOdd(Observer<Odd> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
@@ -54,7 +60,7 @@ public class Global {
                     if (odd.getName() != null) {
                         return odd;
                     } else {
-                        char dash = '-';
+                        char dash = '―';
                         return new Odd(dash, dash, dash, dash);
                     }
                 })
@@ -81,7 +87,7 @@ public class Global {
                     if (even.getName() != null) {
                         return even;
                     } else {
-                        char dash = '-';
+                        char dash = '―';
                         return new Even(dash, dash, dash, dash);
                     }
                 })

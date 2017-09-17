@@ -66,7 +66,6 @@ public class Settings extends Fragment {
         weekViewer = (TextView) mRootView.findViewById(R.id.textView16);
 
         ma = new MainActivity();
-        ma.getWeekNumber();
         ma.fragmentID = 4;
 
         convertInstToString(Global.instituteID);
@@ -90,8 +89,10 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 if (weekViewer.getText().equals("Четная")) {
+                    Global.weekNumber = Global.weekNumber +1;
                     weekViewer.setText("Нечетная");
                 } else {
+                    Global.weekNumber = Global.weekNumber -1;
                     weekViewer.setText("Четная");
                 }
             }
@@ -100,6 +101,7 @@ public class Settings extends Fragment {
         chooseWeekType.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                ma.getWeekNumber();
                 if (Global.weekNumber % 2 == 0){
                     weekViewer.setText("Четная");
                 } else{

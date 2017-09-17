@@ -204,7 +204,11 @@ public class MainActivity extends AppCompatActivity
         saveArray(Global.scheduleNamesOdd, "SCHEDULE_NAME_ODD");
         saveArray(Global.scheduleNamesEven, "SCHEDULE_NAME_EVEN");
         saveArray(Global.scheduleRoomsOdd, "SCHEDULE_ROOM_ODD");
+        saveArray(Global.scheduleTeachersOdd, "SCHEDULE_TEACHER_ODD");
         saveArray(Global.scheduleRoomsEven, "SCHEDULE_ROOM_EVEN");
+        saveArray(Global.scheduleTeachersEven, "SCHEDULE_TEACHER_EVEN");
+        saveArray(Global.scheduleTypeEven, "SCHEDULE_TYPE_EVEN");
+        saveArray(Global.scheduleTypeOdd, "SCHEDULE_TYPE_ODD");
     }
 
     public void getValues(){
@@ -225,6 +229,14 @@ public class MainActivity extends AppCompatActivity
             Global.scheduleRoomsOdd = gson.fromJson(jsonTwo, type);
             String jsonThree = sp.getString("SCHEDULE_ROOM_EVEN", null);
             Global.scheduleRoomsEven = gson.fromJson(jsonThree, type);
+            String jsonFour = sp.getString("SCHEDULE_TEACHER_ODD", null);
+            Global.scheduleTeachersOdd = gson.fromJson(jsonFour, type);
+            String jsonFive = sp.getString("SCHEDULE_TEACHER_EVEN", null);
+            Global.scheduleTeachersEven = gson.fromJson(jsonFive, type);
+            String jsonSix = sp.getString("SCHEDULE_TYPE_ODD", null);
+            Global.scheduleTypeOdd = gson.fromJson(jsonSix, type);
+            String jsonSeven = sp.getString("SCHEDULE_TYPE_EVEN", null);
+            Global.scheduleTypeEven = gson.fromJson(jsonSeven, type);
         }
     }
 
