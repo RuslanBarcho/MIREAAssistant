@@ -11,9 +11,27 @@
     <string name="choose_group">Choose group</string>
     <string name="choose_week">Week type (Identify - long press)</string>
 
+    <string name="about_title">About</string>
+    <string name="about_body">Show info about app</string>
+    <string name="about_close">Close</string>
+
     <string name="error_title">Error</string>
     <string name="error_body">No connection to the server</string>
     <string name="error_try_again">Try again</string>
+
+    <string name="about_content">
+        MIREA Assistant 1.0 BETA 1 \n
+        \n
+        MIREA Assistant сделан для предоставления студентам различной информации об Университете в удобном виде. \n
+        \n
+        MIREA Assistant является open source проектом, рекомендуем посетить репозиторий проекта, если у вас есть идеи по его улучшению. \n
+        \n
+        Если расписание вашей группы/института отсутствует или оно не совпадает с действительностью, обратитесь к авторам проекта. \n
+        \n
+        Авторы: \n
+        Ruslan Vinter - mobile development \n
+        feed4rz - WEB development \n
+    </string>
 
     //instituteList
     <string name="IT">Институт информационных технологий</string>

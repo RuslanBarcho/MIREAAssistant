@@ -34,6 +34,7 @@ public class Settings extends Fragment {
     private FrameLayout chooseGroup;
     private FrameLayout chooseInstitute;
     private FrameLayout chooseWeekType;
+    private FrameLayout about;
     private TextView instituteViewer;
     private TextView groupViewer;
     private TextView weekViewer;
@@ -60,6 +61,7 @@ public class Settings extends Fragment {
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
         chooseWeekType = (FrameLayout) mRootView.findViewById(R.id.frameLayout3);
+        about = (FrameLayout) mRootView.findViewById(R.id.frameLayout4);
 
         instituteViewer = (TextView) mRootView.findViewById(R.id.textView13);
         groupViewer = (TextView) mRootView.findViewById(R.id.textView9);
@@ -116,6 +118,13 @@ public class Settings extends Fragment {
             public void onClick(View v) {
                 //todo: parse institutes and groups via ArrayLists, add SharedPreferences
                 getInstituteList();
+            }
+        });
+
+        about.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                aboutMessage();
             }
         });
         return mRootView;
@@ -302,6 +311,23 @@ public class Settings extends Fragment {
         groupsCompiled.clear();
         groups.clear();
         groupsTranslited.clear();
+    }
+
+    public void aboutMessage(){
+        if (getActivity() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
+            builder.setTitle(getString(R.string.about_title));
+            builder.setMessage(getString(R.string.about_content));
+            builder.setPositiveButton(getString(R.string.about_close),
+                    new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     @Override

@@ -12,6 +12,10 @@
     <string name="error_body">Отсутствует соединение с сервером</string>
     <string name="error_try_again">Повторное соединение</string>
 
+    <string name="about_title">О программе</string>
+    <string name="about_body">Показаить информацию о приложении</string>
+    <string name="about_close">Закрыть</string>
+
     <string-array name="schedule_days">
         <item>Понедельник</item>
         <item>Вторник</item>

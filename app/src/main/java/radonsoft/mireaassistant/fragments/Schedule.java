@@ -360,7 +360,8 @@ public class Schedule extends Fragment {
 
     public void errorMessage(){
         if (getActivity() != null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme)
+                .setCancelable(false);
             builder.setTitle(getString(R.string.error_title));
             builder.setMessage(getString(R.string.error_body));
             builder.setPositiveButton(getString(R.string.error_try_again),
