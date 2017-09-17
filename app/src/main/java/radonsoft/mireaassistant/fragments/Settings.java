@@ -1,7 +1,10 @@
 package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -142,78 +145,83 @@ public class Settings extends Fragment {
                 .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Global.groupID = groupsString[which];
-                        groupViewer.setText(Global.groupID);
-                        scheduleClear();
-                        Global global = new Global();
+                        if (hasConnection(getContext())) {
+                            Global.groupID = groupsString[which];
+                            groupViewer.setText(Global.groupID);
+                            scheduleClear();
+                            Global global = new Global();
 
-                        global.getScheduleEven(new DisposableObserver<Even>() {
-                            @Override
-                            public void onNext(@NonNull Even even) {
-                                Log.i("Schedule", even.getName().toString());
-                                Global.scheduleNamesEven.add(even.getName().toString());
-                                if (even.getRoom() == null) {
-                                    Global.scheduleRoomsEven.add("―");
-                                } else {
-                                    Global.scheduleRoomsEven.add(even.getRoom().toString());
+                            global.getScheduleEven(new DisposableObserver<Even>() {
+                                @Override
+                                public void onNext(@NonNull Even even) {
+                                    Log.i("Schedule", even.getName().toString());
+                                    Global.scheduleNamesEven.add(even.getName().toString());
+                                    if (even.getRoom() == null) {
+                                        Global.scheduleRoomsEven.add("―");
+                                    } else {
+                                        Global.scheduleRoomsEven.add(even.getRoom().toString());
+                                    }
+                                    if (even.getTeacher() == null) {
+                                        Global.scheduleTeachersEven.add("―");
+                                    } else {
+                                        Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                                    }
+                                    if (even.getType() == null) {
+                                        Global.scheduleTypeEven.add("―");
+                                    } else {
+                                        Global.scheduleTypeEven.add(even.getType().toString());
+                                    }
                                 }
-                                if (even.getTeacher() == null) {
-                                    Global.scheduleTeachersEven.add("―");
-                                } else {
-                                    Global.scheduleTeachersEven.add(even.getTeacher().toString());
+
+                                @Override
+                                public void onError(@NonNull Throwable error) {
+                                    Log.e("Schedule", error.toString(), error);
                                 }
-                                if (even.getType() == null) {
-                                    Global.scheduleTypeEven.add("―");
-                                } else {
-                                    Global.scheduleTypeEven.add(even.getType().toString());
+
+                                @Override
+                                public void onComplete() {
+
                                 }
-                            }
+                            });
 
-                            @Override
-                            public void onError(@NonNull Throwable error) {
-                                Log.e("Schedule", error.toString(), error);
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
-
-                        global.getScheduleOdd(new DisposableObserver<Odd>() {
-                            @Override
-                            public void onNext(@NonNull Odd odd) {
-                                Log.i("Schedule", odd.getName().toString());
-                                Global.scheduleNamesOdd.add(odd.getName().toString());
-                                if (odd.getRoom() == null) {
-                                    Global.scheduleRoomsOdd.add("―");
-                                } else {
-                                    Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                            global.getScheduleOdd(new DisposableObserver<Odd>() {
+                                @Override
+                                public void onNext(@NonNull Odd odd) {
+                                    Log.i("Schedule", odd.getName().toString());
+                                    Global.scheduleNamesOdd.add(odd.getName().toString());
+                                    if (odd.getRoom() == null) {
+                                        Global.scheduleRoomsOdd.add("―");
+                                    } else {
+                                        Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                                    }
+                                    if (odd.getTeacher() == null) {
+                                        Global.scheduleTeachersOdd.add("―");
+                                    } else {
+                                        Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                    }
+                                    if (odd.getType() == null) {
+                                        Global.scheduleTypeOdd.add("―");
+                                    } else {
+                                        Global.scheduleTypeOdd.add(odd.getType().toString());
+                                    }
                                 }
-                                if (odd.getTeacher() == null) {
-                                    Global.scheduleTeachersOdd.add("―");
-                                } else {
-                                    Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+
+                                @Override
+                                public void onError(@NonNull Throwable error) {
+                                    Log.e("Schedule", error.toString(), error);
                                 }
-                                if (odd.getType() == null) {
-                                    Global.scheduleTypeOdd.add("―");
-                                } else {
-                                    Global.scheduleTypeOdd.add(odd.getType().toString());
+
+                                @Override
+                                public void onComplete() {
+
                                 }
-                            }
+                            });
+                        } else{
 
-                            @Override
-                            public void onError(@NonNull Throwable error) {
-                                Log.e("Schedule", error.toString(), error);
-                            }
-
-                            @Override
-                            public void onComplete() {
-
-                            }
-                        });
+                        }
                     }
                 });
+
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -396,6 +404,27 @@ public class Settings extends Fragment {
         Global.scheduleRoomsEven.clear();
         Global.scheduleTypeOdd.clear();
         Global.scheduleTypeEven.clear();
+    }
+
+    public static boolean hasConnection(final Context context)
+    {
+        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        wifiInfo = cm.getActiveNetworkInfo();
+        if (wifiInfo != null && wifiInfo.isConnected())
+        {
+            return true;
+        }
+        return false;
     }
 
     public void aboutMessage(){

@@ -3,6 +3,7 @@
     package="radonsoft.mireaassistant">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk android:minSdkVersion="16"
         android:targetSdkVersion="21"
