@@ -305,12 +305,13 @@ public class Schedule extends Fragment {
 
                                 @Override
                                 public void onComplete() {
+                                    ma.getWeekNumber();
                                     if (Global.weekNumber % 2 == 0) {
                                         Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
                                         Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
                                         Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
                                         Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
-                                        sortContentByTodayOdd(today);
+                                        sortContentByTodayEven(today);
                                         checkNull = 6;
                                         mainlayout.setVisibility(View.VISIBLE);
                                     }
@@ -346,6 +347,7 @@ public class Schedule extends Fragment {
 
                                 @Override
                                 public void onComplete() {
+                                    ma.getWeekNumber();
                                     if (Global.weekNumber % 2 == 0) {
 
                                     } else {

@@ -282,7 +282,6 @@ public class Settings extends Fragment {
                     }
                     institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
                     showInstituteChooseDialog();
-
                 });
     }
 

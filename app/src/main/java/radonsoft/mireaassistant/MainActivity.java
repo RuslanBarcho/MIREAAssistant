@@ -310,10 +310,10 @@ public class MainActivity extends AppCompatActivity
             alert.show();
             return true;
         } else if (id == R.id.action_refresh_all) {
-            Global.loginID = 0;
-            getGroupList();
-            getInstituteList();
-            Toast toast = Toast.makeText(this, "Refreshed",Toast.LENGTH_SHORT);
+            //Global.loginID = 0;
+            //getGroupList();
+            //getInstituteList();
+            Toast toast = Toast.makeText(this, "Обновление пока не работает, обязательно заработает в следующей сборке :)",Toast.LENGTH_SHORT);
             toast.show();
         }
 
