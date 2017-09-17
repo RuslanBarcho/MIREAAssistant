@@ -26,13 +26,18 @@ public class Global {
     public static String groupID;
 
     public static ArrayList<String> scheduleNamesOdd = new ArrayList<>();
-    public static ArrayList<String> scheduleNamesOddBackup = new ArrayList<>();
+    public static ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+    public static ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
 
-    public static ArrayList<String> scheduleNamesEven = new ArrayList();
-    public static ArrayList<String> scheduleNames = new ArrayList<>();
+    public static ArrayList<String> scheduleNamesEven = new ArrayList<>();
+    public static ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+    public static ArrayList<String> scheduleTeachersEven = new ArrayList<>();
 
     public static String[] scheduleNamesOddString;
+    public static String[] scheduleRoomsOddString;
+
     public static String[] scheduleNamesEvenString;
+    public static String[] scheduleRoomsEvenString;
 
     public void getScheduleOdd(Observer<Odd> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)

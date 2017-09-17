@@ -1,11 +1,13 @@
 package radonsoft.mireaassistant;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
@@ -62,15 +64,18 @@ public class MainActivity extends AppCompatActivity
     public String[] instituteStringtestall;
 
     //Public variables
-    public int week;
-    public static int instituteID;
-    public static String groupID;
     public static int fragmentID;
     public String choosenInstitute;
     public String choosenGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), null , getResources().getColor(R.color.colorPrimaryDark));
+            this.setTaskDescription(taskDesc);
+        }
+
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
         super.onCreate(savedInstanceState);
@@ -198,6 +203,8 @@ public class MainActivity extends AppCompatActivity
         saveString(Global.groupID, "GROUP_ID");
         saveArray(Global.scheduleNamesOdd, "SCHEDULE_NAME_ODD");
         saveArray(Global.scheduleNamesEven, "SCHEDULE_NAME_EVEN");
+        saveArray(Global.scheduleRoomsOdd, "SCHEDULE_ROOM_ODD");
+        saveArray(Global.scheduleRoomsEven, "SCHEDULE_ROOM_EVEN");
     }
 
     public void getValues(){
@@ -214,6 +221,10 @@ public class MainActivity extends AppCompatActivity
             Global.scheduleNamesOdd = gson.fromJson(json, type);
             String jsonOne = sp.getString("SCHEDULE_NAME_EVEN", null);
             Global.scheduleNamesEven = gson.fromJson(jsonOne, type);
+            String jsonTwo = sp.getString("SCHEDULE_ROOM_ODD", null);
+            Global.scheduleRoomsOdd = gson.fromJson(jsonTwo, type);
+            String jsonThree = sp.getString("SCHEDULE_ROOM_EVEN", null);
+            Global.scheduleRoomsEven = gson.fromJson(jsonThree, type);
         }
     }
 

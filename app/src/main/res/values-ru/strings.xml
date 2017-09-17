@@ -8,6 +8,10 @@
     <string name="choose_group">Выбор группы</string>
     <string name="choose_week">Тип недели (Определить - долгое нажатие)</string>
 
+    <string name="error_title">Ошибка</string>
+    <string name="error_body">Отсутствует соединение с сервером</string>
+    <string name="error_try_again">Повторное соединение</string>
+
     <string-array name="schedule_days">
         <item>Понедельник</item>
         <item>Вторник</item>

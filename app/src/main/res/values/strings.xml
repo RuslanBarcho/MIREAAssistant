@@ -11,6 +11,10 @@
     <string name="choose_group">Choose group</string>
     <string name="choose_week">Week type (Identify - long press)</string>
 
+    <string name="error_title">Error</string>
+    <string name="error_body">No connection to the server</string>
+    <string name="error_try_again">Try again</string>
+
     //instituteList
     <string name="IT">Институт информационных технологий</string>
 
