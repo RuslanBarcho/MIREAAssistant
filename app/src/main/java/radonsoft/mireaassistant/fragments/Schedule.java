@@ -264,8 +264,16 @@ public class Schedule extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Global.scheduleNamesOdd.clear();
+                            Global.scheduleNamesEven.clear();
+                            Global.scheduleTeachersOdd.clear();
+                            Global.scheduleTeachersEven.clear();
+                            Global.scheduleRoomsOdd.clear();
+                            Global.scheduleRoomsEven.clear();
+                            Global.scheduleTypeOdd.clear();
+                            Global.scheduleTypeEven.clear();
                             Global.loginID = 3;
                             Global.groupID = groupsStringID[which];
+
                             Global global = new Global();
 
                             global.getScheduleEven(new DisposableObserver<Even>() {

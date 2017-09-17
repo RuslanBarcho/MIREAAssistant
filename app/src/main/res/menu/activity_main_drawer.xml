@@ -6,14 +6,7 @@
             android:id="@+id/nav_schedule"
             android:icon="@drawable/ic_assignment_black_36dp"
             android:title="@string/schedule" />
-        <item
-            android:id="@+id/nav_VR_access"
-            android:icon="@drawable/ic_playlist_add_check_black_36dp"
-            android:title="Access to VR lab" />
-        <item
-            android:id="@+id/nav_professors"
-            android:icon="@drawable/ic_perm_identity_black_36dp"
-            android:title="Professors" />
+
         <item
             android:id="@+id/nav_tools"
             android:icon="@drawable/ic_menu_manage"

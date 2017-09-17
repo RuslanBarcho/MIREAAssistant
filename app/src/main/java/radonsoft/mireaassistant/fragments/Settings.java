@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
@@ -23,6 +25,8 @@ import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
+import radonsoft.mireaassistant.model.schedule.Even;
+import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.network.GroupsService;
 import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
@@ -51,6 +55,7 @@ public class Settings extends Fragment {
     public ArrayList<String> groupsCompiled = new ArrayList();
     public ArrayList<String> groupsTranslited = new ArrayList();
     public String[] groupsString;
+    public String[] groupsStringTranslited;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,11 +139,79 @@ public class Settings extends Fragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle(getString(R.string.choose_group))
                 .setCancelable(false)
-                .setItems(groupsString, new DialogInterface.OnClickListener() {
+                .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Global.groupID = groupsString[which];
                         groupViewer.setText(Global.groupID);
+                        scheduleClear();
+                        Global global = new Global();
+
+                        global.getScheduleEven(new DisposableObserver<Even>() {
+                            @Override
+                            public void onNext(@NonNull Even even) {
+                                Log.i("Schedule", even.getName().toString());
+                                Global.scheduleNamesEven.add(even.getName().toString());
+                                if (even.getRoom() == null) {
+                                    Global.scheduleRoomsEven.add("―");
+                                } else {
+                                    Global.scheduleRoomsEven.add(even.getRoom().toString());
+                                }
+                                if (even.getTeacher() == null) {
+                                    Global.scheduleTeachersEven.add("―");
+                                } else {
+                                    Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                                }
+                                if (even.getType() == null) {
+                                    Global.scheduleTypeEven.add("―");
+                                } else {
+                                    Global.scheduleTypeEven.add(even.getType().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable error) {
+                                Log.e("Schedule", error.toString(), error);
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
+
+                        global.getScheduleOdd(new DisposableObserver<Odd>() {
+                            @Override
+                            public void onNext(@NonNull Odd odd) {
+                                Log.i("Schedule", odd.getName().toString());
+                                Global.scheduleNamesOdd.add(odd.getName().toString());
+                                if (odd.getRoom() == null) {
+                                    Global.scheduleRoomsOdd.add("―");
+                                } else {
+                                    Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                                }
+                                if (odd.getTeacher() == null) {
+                                    Global.scheduleTeachersOdd.add("―");
+                                } else {
+                                    Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                }
+                                if (odd.getType() == null) {
+                                    Global.scheduleTypeOdd.add("―");
+                                } else {
+                                    Global.scheduleTypeOdd.add(odd.getType().toString());
+                                }
+                            }
+
+                            @Override
+                            public void onError(@NonNull Throwable error) {
+                                Log.e("Schedule", error.toString(), error);
+                            }
+
+                            @Override
+                            public void onComplete() {
+
+                            }
+                        });
                     }
                 });
         AlertDialog alert = builder.create();
@@ -293,7 +366,8 @@ public class Settings extends Fragment {
             transliter.translitGroups();
             groupsTranslited.add(transliter.translitOutput);
         }
-        groupsString = groupsTranslited.toArray(new String[groupsTranslited.size()]);
+        groupsStringTranslited = groupsTranslited.toArray(new String[groupsTranslited.size()]);
+        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
     }
 
 
@@ -311,6 +385,17 @@ public class Settings extends Fragment {
         groupsCompiled.clear();
         groups.clear();
         groupsTranslited.clear();
+    }
+
+    public void scheduleClear(){
+        Global.scheduleNamesOdd.clear();
+        Global.scheduleNamesEven.clear();
+        Global.scheduleTeachersOdd.clear();
+        Global.scheduleTeachersEven.clear();
+        Global.scheduleRoomsOdd.clear();
+        Global.scheduleRoomsEven.clear();
+        Global.scheduleTypeOdd.clear();
+        Global.scheduleTypeEven.clear();
     }
 
     public void aboutMessage(){
