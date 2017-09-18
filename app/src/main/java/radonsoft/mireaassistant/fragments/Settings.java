@@ -48,6 +48,7 @@ public class Settings extends Fragment {
     MainActivity ma;
 
     private boolean groupsSolo = false;
+    private boolean institutesSolo = false;
 
     //vars for get data
     public ArrayList<String> institutes = new ArrayList<>();
@@ -295,6 +296,7 @@ public class Settings extends Fragment {
 
                 }, error -> {
                     Log.e("inst", error.toString(), error);
+                    errorMessage();
                 }, () -> {
                     int i;
                     for (i = 0; i < institutesCompiled.size(); i++){
@@ -329,6 +331,8 @@ public class Settings extends Fragment {
 
                 }, error -> {
                     Log.e("inst", error.toString(), error);
+                    institutesSolo = true;
+                    errorMessage();
                 }, () -> {
                     int i;
                     for (i = 0; i < institutesCompiled.size(); i++){
@@ -479,6 +483,33 @@ public class Settings extends Fragment {
                             dialog.cancel();
                         }
                     });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
+    }
+
+    public void errorMessage(){
+        if (getActivity() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme)
+                    .setCancelable(false)
+                    .setTitle(getString(R.string.error_title))
+                    .setMessage(getString(R.string.error_body))
+                    .setPositiveButton(getString(R.string.error_try_again),
+                    new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dialog, int id) {
+                            if (institutesSolo){
+                                getSoloInstituteList();
+                                institutesSolo = false;
+                            } else {
+                                getInstituteList();
+                            }
+                            dialog.cancel();
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        } });
             AlertDialog alert = builder.create();
             alert.show();
         }
