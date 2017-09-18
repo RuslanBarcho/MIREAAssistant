@@ -47,18 +47,29 @@ public class Settings extends Fragment {
     private TextView weekViewer;
     MainActivity ma;
 
+    private boolean groupsSolo = false;
+
     //vars for get data
-    public ArrayList<String> institutes = new ArrayList();
-    public ArrayList<String> institutesCompiled = new ArrayList();
-    public ArrayList<String> institutesTranslited = new ArrayList();
+    public ArrayList<String> institutes = new ArrayList<>();
+    public ArrayList<String> institutesCompiled = new ArrayList<>();
+    public ArrayList<String> institutesTranslited = new ArrayList<>();
     public String instituteNameTranslited;
     public String[] institutesString;
 
-    public ArrayList<String> groups = new ArrayList();
-    public ArrayList<String> groupsCompiled = new ArrayList();
-    public ArrayList<String> groupsTranslited = new ArrayList();
+    public ArrayList<String> groups = new ArrayList<>();
+    public ArrayList<String> groupsCompiled = new ArrayList<>();
+    public ArrayList<String> groupsTranslited = new ArrayList<>();
     public String[] groupsString;
     public String[] groupsStringTranslited;
+
+    //backup vars
+    public ArrayList<String> institutesBackup = new ArrayList<>();
+    public ArrayList<String> institutesCompiledBackup = new ArrayList<>();
+    public ArrayList<String> institutesTranslitedBackup = new ArrayList<>();
+
+    public ArrayList<String> groupsBackup = new ArrayList<>();
+    public ArrayList<String> groupsCompiledBackup = new ArrayList<>();
+    public ArrayList<String> groupsTranslitedBackup = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -140,9 +151,16 @@ public class Settings extends Fragment {
 
     public void showGroupChooseDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.choose_group))
-                .setCancelable(false)
-                .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
+                .setTitle(getString(R.string.choose_group));
+                if (!groupsSolo){
+                    builder.setCancelable(false);
+                } else {
+                    builder.setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        } });
+                }
+                builder.setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (hasConnection(getContext())) {
@@ -229,7 +247,7 @@ public class Settings extends Fragment {
     public void showInstituteChooseDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.choose_institute))
-                .setCancelable(false)
+                //.setCancelable(false)
                 .setItems(institutesString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -246,7 +264,11 @@ public class Settings extends Fragment {
                         instituteViewer.setText(instituteNameTranslited);
                         getGroupList();
                     }
-                });
+                })
+            .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+            } });
         AlertDialog alert = builder.create();
         alert.show();
     }
@@ -335,7 +357,7 @@ public class Settings extends Fragment {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
                     sortGroups(groups, institutes, String.valueOf(Global.instituteID));
-
+                    groupsSolo = true;
                     showGroupChooseDialog();
                 });
     }
@@ -356,6 +378,7 @@ public class Settings extends Fragment {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
                     sortGroups(groups, institutes, String.valueOf(Global.instituteID));
+                    groupsSolo = false;
                     showGroupChooseDialog();
                 });
     }
@@ -383,6 +406,24 @@ public class Settings extends Fragment {
         stringConverter.instituteNumber = String.valueOf(input);
         stringConverter.convertInstitutes();
         instituteNameTranslited = stringConverter.instituteOutput;
+    }
+
+    public void AllBackup(){
+        institutesBackup = institutes;
+        institutesCompiledBackup = institutesCompiled;
+        institutesTranslitedBackup = institutesTranslited;
+        groupsCompiledBackup = groupsCompiled;
+        groupsBackup = groups;
+        groupsTranslitedBackup = groupsTranslited;
+    }
+
+    public void AllReturnFromBackup(){
+        institutes = institutesBackup;
+        institutesCompiled = institutesCompiledBackup;
+        institutesTranslited = institutesTranslitedBackup;
+        groupsCompiled = groupsCompiledBackup;
+        groups = groupsBackup;
+        groupsTranslited = groupsTranslitedBackup;
     }
 
     public void AllClear(){
