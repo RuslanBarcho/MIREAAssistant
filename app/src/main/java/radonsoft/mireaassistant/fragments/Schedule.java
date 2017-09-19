@@ -43,7 +43,7 @@ import radonsoft.mireaassistant.network.NetworkSingleton;
 public class Schedule extends Fragment {
     //Views
     LinearLayout mainlayout;
-    private View mRootView;
+    View mRootView;
     private Spinner daySelecter;
     private TextView test;
     private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
@@ -54,14 +54,14 @@ public class Schedule extends Fragment {
     private int todaySelected;
     private int checkNull;
 
-    public ArrayList<String> institutes = new ArrayList();
-    public ArrayList<String> institutesCompiled = new ArrayList();
-    public ArrayList<String> institutesTranslited = new ArrayList();
+    public ArrayList<String> institutes = new ArrayList<>();
+    public ArrayList<String> institutesCompiled = new ArrayList<>();
+    public ArrayList<String> institutesTranslited = new ArrayList<>();
     public String[] institutesString;
 
-    public ArrayList<String> groups = new ArrayList();
-    public ArrayList<String> groupsCompiled = new ArrayList();
-    public ArrayList<String> groupsTranslited = new ArrayList();
+    public ArrayList<String> groups = new ArrayList<>();
+    public ArrayList<String> groupsCompiled = new ArrayList<>();
+    public ArrayList<String> groupsTranslited = new ArrayList<>();
     public String[] groupsStringID;
     public String[] groupsString;
 
@@ -71,7 +71,7 @@ public class Schedule extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        identifyClass();
+        //identifyClass();
         setRetainInstance(true);
         //initialize activity
         ma = new MainActivity();
@@ -135,20 +135,6 @@ public class Schedule extends Fragment {
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
         return mRootView;
-    }
-
-    public void identifyClass(){
-        Timer timer = new Timer();
-        GregorianCalendar firstClass = new GregorianCalendar();
-        GregorianCalendar setToday = new GregorianCalendar();
-        firstClass.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 16, 05, 0);
-        Date date = firstClass.getTime();
-        MyTimerTask task = new MyTimerTask();
-        try {
-            timer.schedule(task,date);
-        } catch (NullPointerException e){
-
-        }
     }
 
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -531,6 +517,26 @@ public class Schedule extends Fragment {
         today = (calendar.get(Calendar.DAY_OF_WEEK)) - 2;
         if (today == -1){
             today = 0;
+        }
+    }
+
+    public void identifyClass() {
+        Timer timer = new Timer();
+        MyTimerTask task = new MyTimerTask();
+
+        GregorianCalendar setToday = new GregorianCalendar();
+
+        GregorianCalendar firstClassStart = new GregorianCalendar();
+        firstClassStart.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
+        GregorianCalendar firstClassEnd = new GregorianCalendar();
+        firstClassStart.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
+
+        GregorianCalendar secondClass = new GregorianCalendar();
+        secondClass.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
+        Date fclass = firstClassStart.getTime();
+        Date toCompare = setToday.getTime();
+        if (fclass.compareTo(toCompare) > 0){
+            timer.schedule(task, fclass);
         }
     }
 

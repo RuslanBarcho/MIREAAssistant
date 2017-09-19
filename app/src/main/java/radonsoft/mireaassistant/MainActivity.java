@@ -54,19 +54,9 @@ public class MainActivity extends AppCompatActivity
     VRAccess vraccess = new VRAccess();
     Professors professors = new Professors();
     Settings settings = new Settings();
-    public int today;
-    public ArrayList<String> groups = new ArrayList();
-    public ArrayList<String> institutes = new ArrayList();
-    public ArrayList<String> instituteCompiled = new ArrayList();
-    public ArrayList<String> groupsCompiled = new ArrayList();
-    public String[] groupsString;
-    public String[] instituteString;
-    public String[] instituteStringtestall;
 
     //Public variables
     public static int fragmentID;
-    public String choosenInstitute;
-    public String choosenGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +65,6 @@ public class MainActivity extends AppCompatActivity
             ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), null , getResources().getColor(R.color.colorPrimaryDark));
             this.setTaskDescription(taskDesc);
         }
-
         sp = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         getWeekNumber();
         super.onCreate(savedInstanceState);
@@ -105,70 +94,9 @@ public class MainActivity extends AppCompatActivity
 
                 break;
         }
-
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ftrans.commit();
-
-    }
-
-    public static boolean hasConnection(final Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm.getActiveNetworkInfo();
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public void getGroupList(){
-        NetworkSingleton.getRetrofit().create(GroupsService.class)
-                .getGroups()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .doOnNext(g -> groups.add(g.getGroup()))
-                .subscribe((Group group) -> {
-                    Log.i("Schedule", group.getGroup());
-                }, error -> {
-                    Log.e("Schedule", error.toString(), error);
-                });
-    }
-
-    public void getInstituteList(){
-        NetworkSingleton.getRetrofit().create(InstitutesService.class)
-                .getInstitutes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .map(Group::getInstitute)
-                .subscribe((institute) -> {
-                    institutes.add(String.valueOf(institute));
-                    instituteStringtestall = institutes.toArray(new String[institutes.size()]);
-                    compileInstituteList(institutes);
-                    Log.i("inst", String.valueOf(institute));
-                }, error -> {
-                    Log.e("inst", error.toString(), error);
-                });
     }
 
     public void saveString(String toSave, String TAG){
@@ -238,30 +166,6 @@ public class MainActivity extends AppCompatActivity
             String jsonSeven = sp.getString("SCHEDULE_TYPE_EVEN", null);
             Global.scheduleTypeEven = gson.fromJson(jsonSeven, type);
         }
-    }
-
-    public void compileInstituteList(ArrayList<String> toCompile){
-        int i;
-        for (i = 0; i < institutes.size(); i++){
-            String local = institutes.get(i);
-            if (instituteCompiled.contains(local)){
-
-            }
-            else{
-                instituteCompiled.add(local);
-            }
-        }
-        instituteString = instituteCompiled.toArray(new String[instituteCompiled.size()]);
-    }
-
-    public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
-        int i;
-        for (i = 0; i < groups.size(); i++){
-            if (fullInstitutesList.get(i).equals(instituteID) & !groupsCompiled.contains(toSort.get(i))){
-                groupsCompiled.add(toSort.get(i));
-            }
-        }
-        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
     }
 
     public void getWeekNumber() {

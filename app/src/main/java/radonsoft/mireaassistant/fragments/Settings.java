@@ -64,13 +64,12 @@ public class Settings extends Fragment {
     public String[] groupsStringTranslited;
 
     //backup vars
-    public ArrayList<String> institutesBackup = new ArrayList<>();
-    public ArrayList<String> institutesCompiledBackup = new ArrayList<>();
-    public ArrayList<String> institutesTranslitedBackup = new ArrayList<>();
-
-    public ArrayList<String> groupsBackup = new ArrayList<>();
-    public ArrayList<String> groupsCompiledBackup = new ArrayList<>();
-    public ArrayList<String> groupsTranslitedBackup = new ArrayList<>();
+    //public ArrayList<String> institutesBackup = new ArrayList<>();
+    //public ArrayList<String> institutesCompiledBackup = new ArrayList<>();
+    //public ArrayList<String> institutesTranslitedBackup = new ArrayList<>();
+    //public ArrayList<String> groupsBackup = new ArrayList<>();
+    //public ArrayList<String> groupsCompiledBackup = new ArrayList<>();
+    //public ArrayList<String> groupsTranslitedBackup = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -410,24 +409,6 @@ public class Settings extends Fragment {
         stringConverter.instituteNumber = String.valueOf(input);
         stringConverter.convertInstitutes();
         instituteNameTranslited = stringConverter.instituteOutput;
-    }
-
-    public void AllBackup(){
-        institutesBackup = institutes;
-        institutesCompiledBackup = institutesCompiled;
-        institutesTranslitedBackup = institutesTranslited;
-        groupsCompiledBackup = groupsCompiled;
-        groupsBackup = groups;
-        groupsTranslitedBackup = groupsTranslited;
-    }
-
-    public void AllReturnFromBackup(){
-        institutes = institutesBackup;
-        institutesCompiled = institutesCompiledBackup;
-        institutesTranslited = institutesTranslitedBackup;
-        groupsCompiled = groupsCompiledBackup;
-        groups = groupsBackup;
-        groupsTranslited = groupsTranslitedBackup;
     }
 
     public void AllClear(){

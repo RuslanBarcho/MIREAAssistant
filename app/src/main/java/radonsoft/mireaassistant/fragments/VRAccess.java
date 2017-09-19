@@ -81,11 +81,6 @@ public class VRAccess extends Fragment {
         return mRootView;
     }
 
-    public void getInsts(){
-        ma.getInstituteList();
-        institutes = ma.instituteStringtestall;
-    }
-
     public void getSchedule() {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
                 .getScheduleName(new ScheduleForm(172, 0, "ikbo-02-17"))
