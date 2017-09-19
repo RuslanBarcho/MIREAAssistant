@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -69,7 +71,10 @@ public class VRAccess extends Fragment {
         getInstitutesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Global.loginID = 3;
+                Date date = new Date();
+                output.setText(date.toString().substring(30, 34));
+                Calendar calendar = Calendar.getInstance();
+                output.setText(String.valueOf(calendar.get(Calendar.YEAR)));
             }
         });
 

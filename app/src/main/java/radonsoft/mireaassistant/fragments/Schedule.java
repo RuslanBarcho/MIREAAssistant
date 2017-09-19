@@ -1,10 +1,7 @@
 package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -20,6 +17,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -70,6 +71,7 @@ public class Schedule extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        identifyClass();
         setRetainInstance(true);
         //initialize activity
         ma = new MainActivity();
@@ -133,6 +135,20 @@ public class Schedule extends Fragment {
         daySelecter.setSelection(today);
         long curTime = System.currentTimeMillis();
         return mRootView;
+    }
+
+    public void identifyClass(){
+        Timer timer = new Timer();
+        GregorianCalendar firstClass = new GregorianCalendar();
+        GregorianCalendar setToday = new GregorianCalendar();
+        firstClass.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 16, 05, 0);
+        Date date = firstClass.getTime();
+        MyTimerTask task = new MyTimerTask();
+        try {
+            timer.schedule(task,date);
+        } catch (NullPointerException e){
+
+        }
     }
 
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -538,4 +554,20 @@ public class Schedule extends Fragment {
 
     }
 
+    class MyTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            try {
+                ma.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast toast = Toast.makeText(getActivity(), "Works!",Toast.LENGTH_SHORT);
+                        toast.show();
+                    }
+                });
+            }catch (NullPointerException e){
+
+            }
+        }
+    }
 }
