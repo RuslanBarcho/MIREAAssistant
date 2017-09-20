@@ -48,6 +48,7 @@ public class Schedule extends Fragment {
     LinearLayout mainlayout;
     View mRootView;
     private Spinner daySelecter;
+    private Spinner weekSelecter;
     private TextView test;
     private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
     private TextView classRoomOne, classRoomTwo, classRoomThree, classRoomFour, classRoomFive, classRoomSix;
@@ -72,6 +73,7 @@ public class Schedule extends Fragment {
 
     MainActivity ma;
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
+    String[] weeks = {"Even", "Odd"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,8 +88,10 @@ public class Schedule extends Fragment {
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //initialize elements
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
+        weekSelecter = (Spinner) mRootView.findViewById(R.id.spinner1);
         //test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
+        weeks = getResources().getStringArray(R.array.schedule_weeks);
 
         mainlayout = (LinearLayout) mRootView.findViewById(R.id.mainLayout);
 
@@ -113,33 +117,43 @@ public class Schedule extends Fragment {
         classTeacherSix = (TextView) mRootView.findViewById(R.id.textView40);
 
         //set content
+
         addItemsOnSpinner(days, daySelecter);
+        addWeeksOnSpinner(weeks, weekSelecter);
         setToday();
         //start dialog if it's first app running
-
         if (Global.loginID == 0){
             mainlayout.setVisibility(View.GONE);
             getInstituteList();
         } else {
             checkNull = 6;
-            if (Global.weekNumber % 2 == 0){
-                Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
-                Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
-                Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
-                Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
-                sortContentByTodayEven(today);
-            } else{
-                Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-                Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
-                Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
-                Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
-                sortContentByTodayOdd(today);
-            }
+            setSchedule();
         }
         //after content set things
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
+        if (Global.weekNumber % 2 == 0){
+            weekSelecter.setSelection(0);
+        } else{
+            weekSelecter.setSelection(1);
+        }
         return mRootView;
+    }
+
+    public void setSchedule(){
+        if (Global.weekNumber % 2 == 0){
+            Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
+            Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
+            Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
+            Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
+            sortContentByTodayEven(today);
+        } else{
+            Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+            Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
+            Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
+            Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
+            sortContentByTodayOdd(today);
+        }
     }
 
     public void addItemsOnSpinner(final String[] toAdd, Spinner toAddIn){
@@ -150,15 +164,48 @@ public class Schedule extends Fragment {
         toAddIn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent,
                                        View itemSelected, int selectedItemPosition, long selectedId) {
-                //ToDo change schedule
-                todaySelected = selectedItemPosition;
+                today = selectedItemPosition;
                 if (checkNull == 6) {
                     if (Global.weekNumber % 2 == 0){
-                        sortContentByTodayEven(todaySelected);
+                        sortContentByTodayEven(today);
                     } else{
-                        sortContentByTodayOdd(todaySelected);
+                        sortContentByTodayOdd(today);
                     }
                 }
+            }
+            public void onNothingSelected(AdapterView<?> parent) {
+                //nothing to do
+            }
+        });
+    }
+
+    public void addWeeksOnSpinner(final String[] toAdd, Spinner toAddIn){
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.spinner_item, toAdd);
+        dataAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item);
+        toAddIn.setAdapter(dataAdapter);
+        toAddIn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent,
+                                       View itemSelected, int selectedItemPosition, long selectedId) {
+                switch (selectedItemPosition){
+                    case 0:
+                        if (Global.weekNumber % 2 == 0){
+                            setSchedule();
+                        } else {
+                            Global.weekNumber = Global.weekNumber +1;
+                            setSchedule();
+                        }
+                        break;
+                    case 1:
+                        if (Global.weekNumber % 2 == 0){
+                            Global.weekNumber = Global.weekNumber -1;
+                            setSchedule();
+                        } else {
+                            setSchedule();
+                        }
+                        break;
+                }
+
             }
             public void onNothingSelected(AdapterView<?> parent) {
                 //nothing to do
@@ -569,6 +616,11 @@ public class Schedule extends Fragment {
         super.onResume();
         setToday();
         daySelecter.setSelection(today);
+        if (Global.weekNumber % 2 == 0){
+            weekSelecter.setSelection(0);
+        } else{
+            weekSelecter.setSelection(1);
+        }
     }
 
     @Override
@@ -576,6 +628,11 @@ public class Schedule extends Fragment {
         super.onStart();
         setToday();
         daySelecter.setSelection(today);
+        if (Global.weekNumber % 2 == 0){
+            weekSelecter.setSelection(0);
+        } else{
+            weekSelecter.setSelection(1);
+        }
     }
 
     @Override

@@ -57,7 +57,7 @@ public class VRAccess extends Fragment {
             public void onClick(View v) {
                 //Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                 //output.setText(String.valueOf(Global.scheduleNamesOdd));
-                output.setText(String.valueOf(Global.scheduleRoomsOdd));
+                output.setText(String.valueOf(Global.weekNumber));
             }
         });
 
