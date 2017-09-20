@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -54,6 +57,8 @@ public class Schedule extends Fragment {
     private int todaySelected;
     private int checkNull;
 
+    private boolean optionBar = false;
+
     public ArrayList<String> institutes = new ArrayList<>();
     public ArrayList<String> institutesCompiled = new ArrayList<>();
     public ArrayList<String> institutesTranslited = new ArrayList<>();
@@ -71,6 +76,7 @@ public class Schedule extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         //identifyClass();
         setRetainInstance(true);
         //initialize activity
@@ -133,7 +139,6 @@ public class Schedule extends Fragment {
         //after content set things
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
-        long curTime = System.currentTimeMillis();
         return mRootView;
     }
 
@@ -275,99 +280,118 @@ public class Schedule extends Fragment {
                             Global.scheduleTypeEven.clear();
                             Global.loginID = 3;
                             Global.groupID = groupsStringID[which];
-
-                            Global global = new Global();
-
-                            global.getScheduleEven(new DisposableObserver<Even>() {
-                                @Override
-                                public void onNext(@NonNull Even even) {
-                                    Log.i("Schedule", even.getName().toString());
-                                    Global.scheduleNamesEven.add(even.getName().toString());
-                                    if (even.getRoom() == null) {
-                                        Global.scheduleRoomsEven.add("―");
-                                    } else {
-                                        Global.scheduleRoomsEven.add(even.getRoom().toString());
-                                    }
-                                    if (even.getTeacher() == null) {
-                                        Global.scheduleTeachersEven.add("―");
-                                    } else {
-                                        Global.scheduleTeachersEven.add(even.getTeacher().toString());
-                                    }
-                                    if (even.getType() == null) {
-                                        Global.scheduleTypeEven.add("―");
-                                    } else {
-                                        Global.scheduleTypeEven.add(even.getType().toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(@NonNull Throwable error) {
-                                    Log.e("Schedule", error.toString(), error);
-                                }
-
-                                @Override
-                                public void onComplete() {
-                                    ma.getWeekNumber();
-                                    if (Global.weekNumber % 2 == 0) {
-                                        Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
-                                        Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
-                                        Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
-                                        Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
-                                        sortContentByTodayEven(today);
-                                        checkNull = 6;
-                                        mainlayout.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            });
-
-                            global.getScheduleOdd(new DisposableObserver<Odd>() {
-                                @Override
-                                public void onNext(@NonNull Odd odd) {
-                                    Log.i("Schedule", odd.getName().toString());
-                                    Global.scheduleNamesOdd.add(odd.getName().toString());
-                                    if (odd.getRoom() == null) {
-                                        Global.scheduleRoomsOdd.add("―");
-                                    } else {
-                                        Global.scheduleRoomsOdd.add(odd.getRoom().toString());
-                                    }
-                                    if (odd.getTeacher() == null) {
-                                        Global.scheduleTeachersOdd.add("―");
-                                    } else {
-                                        Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
-                                    }
-                                    if (odd.getType() == null) {
-                                        Global.scheduleTypeOdd.add("―");
-                                    } else {
-                                        Global.scheduleTypeOdd.add(odd.getType().toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(@NonNull Throwable error) {
-                                    Log.e("Schedule", error.toString(), error);
-                                }
-
-                                @Override
-                                public void onComplete() {
-                                    ma.getWeekNumber();
-                                    if (Global.weekNumber % 2 == 0) {
-
-                                    } else {
-                                        Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-                                        Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
-                                        Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
-                                        Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
-                                        sortContentByTodayOdd(today);
-                                        checkNull = 6;
-                                        mainlayout.setVisibility(View.VISIBLE);
-                                    }
-                                }
-                            });
+                            getAndSortSchedule();
                         }
                     });
             AlertDialog alert = builder.create();
             alert.show();
         }
+    }
+
+    public void getAndSortSchedule(){
+        Global global = new Global();
+        global.getScheduleEven(new DisposableObserver<Even>() {
+            @Override
+            public void onNext(@NonNull Even even) {
+                Log.i("Schedule", even.getName().toString());
+                Global.scheduleNamesEven.add(even.getName().toString());
+                if (even.getRoom() == null) {
+                    Global.scheduleRoomsEven.add("―");
+                } else {
+                    Global.scheduleRoomsEven.add(even.getRoom().toString());
+                }
+                if (even.getTeacher() == null) {
+                    Global.scheduleTeachersEven.add("―");
+                } else {
+                    Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                }
+                if (even.getType() == null) {
+                    Global.scheduleTypeEven.add("―");
+                } else {
+                    Global.scheduleTypeEven.add(even.getType().toString());
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable error) {
+                Log.e("Schedule", error.toString(), error);
+                if (optionBar){
+                    Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
+                    toast.show();
+                    optionBar = false;
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                ma.getWeekNumber();
+                if (Global.weekNumber % 2 == 0) {
+                    Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
+                    Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
+                    Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
+                    Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
+                    sortContentByTodayEven(today);
+                    checkNull = 6;
+                    mainlayout.setVisibility(View.VISIBLE);
+                    if (optionBar){
+                        Toast toast = Toast.makeText(getActivity(), getString(R.string.refreshed),Toast.LENGTH_SHORT);
+                        toast.show();
+                        optionBar = false;
+                    }
+                }
+            }
+        });
+        global.getScheduleOdd(new DisposableObserver<Odd>() {
+            @Override
+            public void onNext(@NonNull Odd odd) {
+                Log.i("Schedule", odd.getName().toString());
+                Global.scheduleNamesOdd.add(odd.getName().toString());
+                if (odd.getRoom() == null) {
+                    Global.scheduleRoomsOdd.add("―");
+                } else {
+                    Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                }
+                if (odd.getTeacher() == null) {
+                    Global.scheduleTeachersOdd.add("―");
+                } else {
+                    Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                }
+                if (odd.getType() == null) {
+                    Global.scheduleTypeOdd.add("―");
+                } else {
+                    Global.scheduleTypeOdd.add(odd.getType().toString());
+                }
+            }
+
+            @Override
+            public void onError(@NonNull Throwable error) {
+                Log.e("Schedule", error.toString(), error);
+                if (optionBar){
+                    Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
+                    toast.show();
+                    optionBar = false;
+                }
+            }
+
+            @Override
+            public void onComplete() {
+                ma.getWeekNumber();
+                if (Global.weekNumber % 2 != 0) {
+                    Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                    Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
+                    Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
+                    Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
+                    sortContentByTodayOdd(today);
+                    checkNull = 6;
+                    mainlayout.setVisibility(View.VISIBLE);
+                    if (optionBar){
+                        Toast toast = Toast.makeText(getActivity(), getString(R.string.refreshed),Toast.LENGTH_SHORT);
+                        toast.show();
+                        optionBar = false;
+                    }
+                }
+            }
+        });
     }
 
     public void errorMessage(){
@@ -557,7 +581,23 @@ public class Schedule extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+    }
 
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case (R.id.action_refresh_all):
+                getAndSortSchedule();
+                optionBar = true;
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     class MyTimerTask extends TimerTask {

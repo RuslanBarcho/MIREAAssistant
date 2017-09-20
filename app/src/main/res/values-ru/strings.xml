@@ -3,6 +3,7 @@
     <string name="app_name">MIREA Assistant</string>
     <string name="action_settings">Настройки</string>
     <string name="schedule">Расписание</string>
+    <string name="refreshed">Расписание обновлено</string>
 
     <string name="choose_institute">Выбор института</string>
     <string name="choose_group">Выбор группы</string>

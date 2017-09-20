@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -37,11 +39,11 @@ import radonsoft.mireaassistant.network.NetworkSingleton;
 
 public class Settings extends Fragment {
 
-    private View mRootView;
-    private FrameLayout chooseGroup;
-    private FrameLayout chooseInstitute;
-    private FrameLayout chooseWeekType;
-    private FrameLayout about;
+    View mRootView;
+    FrameLayout chooseGroup;
+    FrameLayout chooseInstitute;
+    FrameLayout chooseWeekType;
+    FrameLayout about;
     private TextView instituteViewer;
     private TextView groupViewer;
     private TextView weekViewer;
@@ -74,6 +76,7 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_settings, container, false);
         ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.action_settings));
@@ -92,7 +95,11 @@ public class Settings extends Fragment {
         convertInstToString(Global.instituteID);
         instituteViewer.setText(instituteNameTranslited);
 
-        groupViewer.setText(Global.groupID);
+        ConvertStrings converter = new ConvertStrings();
+        converter.translitInput = Global.groupID;
+        converter.translitGroups();
+        groupViewer.setText(converter.translitOutput);
+
         if (Global.weekNumber % 2 == 0){
             weekViewer.setText("Четная");
         } else{
@@ -165,7 +172,10 @@ public class Settings extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         if (hasConnection(getContext())) {
                             Global.groupID = groupsString[which];
-                            groupViewer.setText(Global.groupID);
+                            ConvertStrings converter = new ConvertStrings();
+                            converter.translitInput = Global.groupID;
+                            converter.translitGroups();
+                            groupViewer.setText(converter.translitOutput);
                             scheduleClear();
                             Global global = new Global();
 
@@ -494,6 +504,12 @@ public class Settings extends Fragment {
             AlertDialog alert = builder.create();
             alert.show();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(
+            Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.settings_menu, menu);
     }
 
     @Override
