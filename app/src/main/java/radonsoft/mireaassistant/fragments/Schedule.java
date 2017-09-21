@@ -614,8 +614,8 @@ public class Schedule extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setToday();
-        daySelecter.setSelection(today);
+        //setToday();
+        //daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{
@@ -626,8 +626,8 @@ public class Schedule extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        setToday();
-        daySelecter.setSelection(today);
+        //setToday();
+        //daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{

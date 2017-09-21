@@ -4,5 +4,7 @@
     <color name="colorPrimaryDark">#008f89</color>
     <color name="colorAccent">#00b5ad</color>
     <color name="colorTransparent">#00ffffff</color>
+    <color name="colorShadow">#e700716c</color>
+    <color name="colorShadowOne">#004643</color>
     <color name="colorSemiTransparent">#cea5a5a5</color>
 </resources>

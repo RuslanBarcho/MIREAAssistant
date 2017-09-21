@@ -22,13 +22,16 @@
     <string name="error_try_again">Try again</string>
 
     <string name="about_content">
-        MIREA Assistant 1.0 BETA (сборка 2 \n
+        MIREA Assistant 1.0 BETA (сборка 3) \n
         \n
         MIREA Assistant сделан для предоставления студентам различной информации об Университете в удобном виде. \n
         \n
         MIREA Assistant является open source проектом, рекомендуем посетить репозиторий проекта, если у вас есть идеи по его улучшению. \n
         \n
         Если расписание вашей группы/института отсутствует или оно не совпадает с действительностью, обратитесь к авторам проекта. \n
+        \n
+        Сайт: \n
+        http://mirea.feed4rz.ru/ \n
         \n
         Авторы: \n
         Ruslan Vinter - mobile development \n
