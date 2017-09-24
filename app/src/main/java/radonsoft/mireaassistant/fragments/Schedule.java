@@ -600,7 +600,7 @@ public class Schedule extends Fragment {
         GregorianCalendar firstClassStart = new GregorianCalendar();
         firstClassStart.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
         GregorianCalendar firstClassEnd = new GregorianCalendar();
-        firstClassStart.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
+        firstClassEnd.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 10, 30, 0);
 
         GregorianCalendar secondClass = new GregorianCalendar();
         secondClass.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
