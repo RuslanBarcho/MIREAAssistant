@@ -7,4 +7,9 @@
     <color name="colorShadow">#e700716c</color>
     <color name="colorShadowOne">#004643</color>
     <color name="colorSemiTransparent">#cea5a5a5</color>
+
+    <color name="refresh_progress_1">@color/colorPrimary</color>
+    <color name="refresh_progress_2">@color/colorPrimaryDark</color>
+    <color name="refresh_progress_3">#006661</color>
+
 </resources>
