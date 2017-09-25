@@ -22,8 +22,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,6 +34,7 @@ import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
+import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.Response;
@@ -65,6 +64,7 @@ public class Schedule extends Fragment {
     public ArrayList<String> institutesCompiled = new ArrayList<>();
     public ArrayList<String> institutesTranslited = new ArrayList<>();
     public String[] institutesString;
+    public String[] institutesStringIntegers;
 
     public ArrayList<String> groups = new ArrayList<>();
     public ArrayList<String> groupsCompiled = new ArrayList<>();
@@ -81,6 +81,7 @@ public class Schedule extends Fragment {
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         //identifyClass();
+        startTimers();
         setRetainInstance(true);
         //initialize activity
         ma = new MainActivity();
@@ -238,11 +239,18 @@ public class Schedule extends Fragment {
                     errorMessage();
                 }, () -> {
                     int i;
+                    Collections.sort(institutesCompiled, new Comparator<String>() {
+                        @Override
+                        public int compare(String s1, String s2) {
+                            return s1.compareToIgnoreCase(s2);
+                        }
+                    });
                     for (i = 0; i < institutesCompiled.size(); i++){
                         stringConverter.instituteNumber = institutesCompiled.get(i);
                         stringConverter.convertInstitutes();
                         institutesTranslited.add(stringConverter.instituteOutput);
                     }
+                    institutesStringIntegers = institutesCompiled.toArray(new String[institutesCompiled.size()]);
                     institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
                     showInstituteChooseDialog();
                     });
@@ -299,15 +307,7 @@ public class Schedule extends Fragment {
                     .setItems(institutesString, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Global.instituteID = which + 1;
-                            if (Global.instituteID == 6){
-                                Global.instituteID = 7;
-                            }
-                            else{
-                                if (Global.instituteID == 7){
-                                    Global.instituteID = 0;
-                                }
-                            }
+                            Global.instituteID = Integer.valueOf(institutesStringIntegers[which]);
                             getGroupList();
                         }
                     });
@@ -598,23 +598,16 @@ public class Schedule extends Fragment {
         }
     }
 
-    public void identifyClass() {
+    public void startTimers(){
         Timer timer = new Timer();
         MyTimerTask task = new MyTimerTask();
 
-        GregorianCalendar setToday = new GregorianCalendar();
+        TimeManager manager = new TimeManager();
+        manager.setTime();
+        manager.createDates();
 
-        GregorianCalendar firstClassStart = new GregorianCalendar();
-        firstClassStart.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
-        GregorianCalendar firstClassEnd = new GregorianCalendar();
-        firstClassEnd.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 10, 30, 0);
-
-        GregorianCalendar secondClass = new GregorianCalendar();
-        secondClass.set(setToday.get(Calendar.YEAR), setToday.get(Calendar.MONTH), setToday.get(Calendar.DAY_OF_MONTH), 9, 0, 0);
-        Date fclass = firstClassStart.getTime();
-        Date toCompare = setToday.getTime();
-        if (fclass.compareTo(toCompare) > 0){
-            timer.schedule(task, fclass);
+        if (manager.interval(TimeManager.setToday, TimeManager.firstClassStart)){
+            timer.schedule(task, TimeManager.firstClassStartDate);
         }
     }
 

@@ -19,6 +19,8 @@ import radonsoft.mireaassistant.network.ScheduleService;
  * Created by Ruslan on 08.09.17.
  */
 public class Global {
+    public static int settingsDialogResume;
+
     public static int loginID = 0;
     public static int weekNumber;
 
@@ -44,6 +46,18 @@ public class Global {
     public static String[] scheduleRoomsEvenString;
     public static String[] scheduleTeachersEvenString;
     public static String[] scheduleTypeEvenString;
+
+    public static ArrayList<String> institutes = new ArrayList<>();
+    public static ArrayList<String> institutesCompiled = new ArrayList<>();
+    public static ArrayList<String> institutesTranslited = new ArrayList<>();
+    public static String instituteNameTranslited;
+    public static String[] institutesString;
+
+    public static ArrayList<String> groups = new ArrayList<>();
+    public static ArrayList<String> groupsCompiled = new ArrayList<>();
+    public static ArrayList<String> groupsTranslited = new ArrayList<>();
+    public static String[] groupsString;
+    public static String[] groupsStringTranslited;
 
     public void getScheduleOdd(Observer<Odd> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)

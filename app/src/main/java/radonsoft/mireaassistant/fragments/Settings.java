@@ -60,20 +60,13 @@ public class Settings extends Fragment {
     public ArrayList<String> institutesTranslited = new ArrayList<>();
     public String instituteNameTranslited;
     public String[] institutesString;
+    public String[] institutesStringIntegers;
 
     public ArrayList<String> groups = new ArrayList<>();
     public ArrayList<String> groupsCompiled = new ArrayList<>();
     public ArrayList<String> groupsTranslited = new ArrayList<>();
     public String[] groupsString;
     public String[] groupsStringTranslited;
-
-    //backup vars
-    //public ArrayList<String> institutesBackup = new ArrayList<>();
-    //public ArrayList<String> institutesCompiledBackup = new ArrayList<>();
-    //public ArrayList<String> institutesTranslitedBackup = new ArrayList<>();
-    //public ArrayList<String> groupsBackup = new ArrayList<>();
-    //public ArrayList<String> groupsCompiledBackup = new ArrayList<>();
-    //public ArrayList<String> groupsTranslitedBackup = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -263,15 +256,7 @@ public class Settings extends Fragment {
                 .setItems(institutesString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Global.instituteID = which + 1;
-                        if (Global.instituteID == 6){
-                            Global.instituteID = 7;
-                        }
-                        else{
-                            if (Global.instituteID == 7){
-                                Global.instituteID = 0;
-                            }
-                        }
+                        Global.instituteID = Integer.valueOf(institutesStringIntegers[which]);
                         convertInstToString(Global.instituteID);
                         instituteViewer.setText(instituteNameTranslited);
                         getGroupList();
@@ -304,17 +289,23 @@ public class Settings extends Fragment {
                     } else{
                         institutesCompiled.add(String.valueOf(institute));
                     }
-
                 }, error -> {
                     Log.e("inst", error.toString(), error);
                     errorMessage();
                 }, () -> {
                     int i;
+                    Collections.sort(institutesCompiled, new Comparator<String>() {
+                        @Override
+                        public int compare(String s1, String s2) {
+                            return s1.compareToIgnoreCase(s2);
+                        }
+                    });
                     for (i = 0; i < institutesCompiled.size(); i++){
                         stringConverter.instituteNumber = institutesCompiled.get(i);
                         stringConverter.convertInstitutes();
                         institutesTranslited.add(stringConverter.instituteOutput);
                     }
+                    institutesStringIntegers = institutesCompiled.toArray(new String[institutesCompiled.size()]);
                     institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
                     showInstituteChooseDialog();
                 });
@@ -375,6 +366,7 @@ public class Settings extends Fragment {
                     sortGroups(groups, institutes, String.valueOf(Global.instituteID));
                     groupsSolo = true;
                     showGroupChooseDialog();
+                    Global.settingsDialogResume = 1;
                 });
     }
 

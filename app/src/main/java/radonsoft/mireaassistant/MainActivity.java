@@ -194,6 +194,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         saveValues();
@@ -208,4 +213,13 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         getValues();
     }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+
+
+
 }
