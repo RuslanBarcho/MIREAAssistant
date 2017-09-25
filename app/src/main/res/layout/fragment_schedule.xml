@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -6,64 +13,54 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="10dp"
-    android:id="@+id/mainLayout">
-    <TableLayout
+    android:id="@+id/mainLayout"
+    android:gravity="start|end">
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="6dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:layout_marginStart="4dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="2"
+            android:gravity="start" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner1"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="5dp"
+            android:foregroundGravity="right"
+            android:layout_weight="2"
+            android:gravity="end" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="2dp"
         android:layout_marginBottom="3dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/linearLayout4"
+        android:id="@+id/linearLayout8"
         android:visibility="visible"
-        android:clickable="true" >
+        android:clickable="true"
+        android:background="@drawable/drawable_background_light_green">
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner"
-                android:layout_marginLeft="4dp"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="left" />
-            <Spinner
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner1"
-                android:layout_marginRight="4dp"
-                android:layout_marginBottom="5dp"
-                android:foregroundGravity="right"
-                android:layout_gravity="right" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/drawable_background_light_green"
-            android:layout_marginTop="3dp">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="0dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/linearLayout8"
-                android:visibility="visible"
-                android:clickable="true"
-                android:background="@drawable/drawable_background_light_green">
-
-            </LinearLayout>
-        </TableRow>
-    </TableLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -643,3 +640,4 @@
 
 </LinearLayout>
 </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>

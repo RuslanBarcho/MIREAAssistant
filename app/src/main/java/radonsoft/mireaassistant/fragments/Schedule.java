@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,8 +23,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Handler;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -58,6 +61,8 @@ public class Schedule extends Fragment {
     private int today;
     private int checkNull;
 
+    public SwipeRefreshLayout mSwipeRefreshLayout;
+
     private boolean optionBar = false;
 
     public ArrayList<String> institutes = new ArrayList<>();
@@ -80,8 +85,7 @@ public class Schedule extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        //identifyClass();
-        startTimers();
+        //startTimers();
         setRetainInstance(true);
         //initialize activity
         ma = new MainActivity();
@@ -89,6 +93,7 @@ public class Schedule extends Fragment {
         //Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //initialize elements
+        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swiperefresh);
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         weekSelecter = (Spinner) mRootView.findViewById(R.id.spinner1);
         //test = (TextView) mRootView.findViewById(R.id.textView48);
@@ -132,6 +137,17 @@ public class Schedule extends Fragment {
             setSchedule();
         }
         //after content set things
+        mSwipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        mSwipeRefreshLayout.setRefreshing(true);
+                        getAndSortSchedule();
+                        optionBar = true;
+                    }
+                }
+        );
+
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
@@ -176,7 +192,6 @@ public class Schedule extends Fragment {
                 }
             }
             public void onNothingSelected(AdapterView<?> parent) {
-                //nothing to do
             }
         });
     }
@@ -373,6 +388,7 @@ public class Schedule extends Fragment {
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                     toast.show();
                     optionBar = false;
+                    mSwipeRefreshLayout.setEnabled(false);
                 }
             }
 
@@ -391,6 +407,7 @@ public class Schedule extends Fragment {
                         Toast toast = Toast.makeText(getActivity(), getString(R.string.refreshed),Toast.LENGTH_SHORT);
                         toast.show();
                         optionBar = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
             }
@@ -424,6 +441,7 @@ public class Schedule extends Fragment {
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                     toast.show();
                     optionBar = false;
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
 
@@ -442,6 +460,7 @@ public class Schedule extends Fragment {
                         Toast toast = Toast.makeText(getActivity(), getString(R.string.refreshed),Toast.LENGTH_SHORT);
                         toast.show();
                         optionBar = false;
+                        mSwipeRefreshLayout.setRefreshing(false);
                     }
                 }
             }
@@ -643,8 +662,10 @@ public class Schedule extends Fragment {
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.settings_menu, menu);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
