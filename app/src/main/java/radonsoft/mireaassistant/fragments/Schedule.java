@@ -20,6 +20,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Timer;
@@ -55,7 +57,6 @@ public class Schedule extends Fragment {
     private TextView classTeacherOne, classTeacherTwo, classTeacherThree, classTeacherFour, classTeacherFive, classTeacherSix;
 
     private int today;
-    private int todaySelected;
     private int checkNull;
 
     private boolean optionBar = false;
@@ -254,6 +255,12 @@ public class Schedule extends Fragment {
                 groupsCompiled.add(toSort.get(i));
             }
         }
+        Collections.sort(groupsCompiled, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
         ConvertStrings transliter = new ConvertStrings();
         for (i = 0; i<groupsCompiled.size(); i++){
             transliter.translitInput =groupsCompiled.get(i);

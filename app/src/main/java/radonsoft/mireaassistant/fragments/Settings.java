@@ -17,6 +17,8 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -369,6 +371,7 @@ public class Settings extends Fragment {
                 }, error -> {
                     Log.e("Schedule", error.toString(), error);
                 }, () ->{
+
                     sortGroups(groups, institutes, String.valueOf(Global.instituteID));
                     groupsSolo = true;
                     showGroupChooseDialog();
@@ -403,6 +406,12 @@ public class Settings extends Fragment {
                 groupsCompiled.add(toSort.get(i));
             }
         }
+        Collections.sort(groupsCompiled, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        });
         ConvertStrings transliter = new ConvertStrings();
         for (i = 0; i<groupsCompiled.size(); i++){
             transliter.translitInput =groupsCompiled.get(i);
