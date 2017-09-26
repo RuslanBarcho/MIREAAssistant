@@ -15,11 +15,14 @@ import java.util.Date;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.forms.ScheduleForm;
 import radonsoft.mireaassistant.helpers.Global;
+import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.model.schedule.Response;
 import radonsoft.mireaassistant.model.schedule.Schedule;
@@ -57,7 +60,23 @@ public class VRAccess extends Fragment {
             public void onClick(View v) {
                 //Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                 //output.setText(String.valueOf(Global.scheduleNamesOdd));
-                output.setText(String.valueOf(Global.weekNumber));
+                Global global = new Global();
+
+                global.getGroupsAndInsts(new DisposableObserver<Group>() {
+                    @Override
+                    public void onNext(@NonNull Group group) {
+                        Log.i("Group", group.getGroup());
+                        Log.i("Institute", String.valueOf(group.getInstitute()));
+                    }
+                    @Override
+                    public void onError(@NonNull Throwable error) {
+                        Log.e("Schedule", error.toString(), error);
+                    }
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
             }
         });
 

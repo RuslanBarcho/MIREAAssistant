@@ -23,29 +23,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
 import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
-import radonsoft.mireaassistant.model.RequestWrapper;
-import radonsoft.mireaassistant.model.Response;
 import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
-import radonsoft.mireaassistant.network.GroupsService;
-import radonsoft.mireaassistant.network.InstitutesService;
-import radonsoft.mireaassistant.network.NetworkSingleton;
 
 public class Schedule extends Fragment {
     //Views
@@ -61,21 +51,21 @@ public class Schedule extends Fragment {
     private int today;
     private int checkNull;
 
-    public SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private boolean optionBar = false;
-
     public ArrayList<String> institutes = new ArrayList<>();
     public ArrayList<String> institutesCompiled = new ArrayList<>();
     public ArrayList<String> institutesTranslited = new ArrayList<>();
+    public String instituteNameTranslited;
     public String[] institutesString;
     public String[] institutesStringIntegers;
-
     public ArrayList<String> groups = new ArrayList<>();
     public ArrayList<String> groupsCompiled = new ArrayList<>();
     public ArrayList<String> groupsTranslited = new ArrayList<>();
-    public String[] groupsStringID;
     public String[] groupsString;
+    public String[] groupsStringTranslited;
+
+    public SwipeRefreshLayout mSwipeRefreshLayout;
+
+    private boolean optionBar = false;
 
     MainActivity ma;
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
@@ -129,9 +119,11 @@ public class Schedule extends Fragment {
         addWeeksOnSpinner(weeks, weekSelecter);
         setToday();
         //start dialog if it's first app running
+        AllClear();
         if (Global.loginID == 0){
             mainlayout.setVisibility(View.GONE);
-            getInstituteList();
+            AllClear();
+            getInstitutesAndGroups();
         } else {
             checkNull = 6;
             setSchedule();
@@ -235,45 +227,45 @@ public class Schedule extends Fragment {
         });
     }
 
-    public void getInstituteList(){
+    public void getInstitutesAndGroups(){
+        AllClear();
         ConvertStrings stringConverter = new ConvertStrings();
-        NetworkSingleton.getRetrofit().create(InstitutesService.class)
-                .getInstitutes()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .map(Group::getInstitute)
-                .subscribe((institute) -> {
-                    institutes.add(String.valueOf(institute));
-                    if (institutesCompiled.contains(String.valueOf(institute))){
-
-                    } else{
-                        institutesCompiled.add(String.valueOf(institute));
+        Global global = new Global();
+        global.getGroupsAndInsts(new DisposableObserver<Group>() {
+            @Override
+            public void onNext(@NonNull Group group) {
+                Log.i("Group", group.getGroup());
+                Log.i("Institute", String.valueOf(group.getInstitute()));
+                institutes.add(String.valueOf(group.getInstitute()));
+                groups.add(group.getGroup());
+                if (!institutesCompiled.contains(String.valueOf(group.getInstitute()))){
+                    institutesCompiled.add(String.valueOf(group.getInstitute()));
+                }
+            }
+            @Override
+            public void onError(@NonNull Throwable error) {
+                Log.e("Schedule", error.toString(), error);
+                errorMessage();
+            }
+            @Override
+            public void onComplete() {
+                int i;
+                Collections.sort(institutesCompiled, new Comparator<String>() {
+                    @Override
+                    public int compare(String s1, String s2) {
+                        return s1.compareToIgnoreCase(s2);
                     }
-
-                }, error -> {
-                    Log.e("inst", error.toString(), error);
-                    errorMessage();
-                }, () -> {
-                    int i;
-                    Collections.sort(institutesCompiled, new Comparator<String>() {
-                        @Override
-                        public int compare(String s1, String s2) {
-                            return s1.compareToIgnoreCase(s2);
-                        }
-                    });
-                    for (i = 0; i < institutesCompiled.size(); i++){
-                        stringConverter.instituteNumber = institutesCompiled.get(i);
-                        stringConverter.convertInstitutes();
-                        institutesTranslited.add(stringConverter.instituteOutput);
-                    }
-                    institutesStringIntegers = institutesCompiled.toArray(new String[institutesCompiled.size()]);
-                    institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
-                    showInstituteChooseDialog();
-                    });
+                        });
+                for (i = 0; i < institutesCompiled.size(); i++){
+                    stringConverter.instituteNumber = institutesCompiled.get(i);
+                    stringConverter.convertInstitutes();
+                    institutesTranslited.add(stringConverter.instituteOutput);
+                }
+                institutesStringIntegers = institutesCompiled.toArray(new String[institutesCompiled.size()]);
+                institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
+                showInstituteChooseDialog();
+            }
+        });
     }
 
     public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
@@ -295,28 +287,8 @@ public class Schedule extends Fragment {
             transliter.translitGroups();
             groupsTranslited.add(transliter.translitOutput);
         }
-        groupsString = groupsTranslited.toArray(new String[groupsTranslited.size()]);
-        groupsStringID = groupsCompiled.toArray(new String[groupsCompiled.size()]);
-    }
-
-    public void getGroupList(){
-        NetworkSingleton.getRetrofit().create(GroupsService.class)
-                .getGroups()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(RequestWrapper::getResponse)
-                .map(Response::getGroups)
-                .toObservable()
-                .flatMap(Observable::fromIterable)
-                .subscribe((Group group) -> {
-                    Log.i("Schedule", group.getGroup());
-                    groups.add(group.getGroup());
-                }, error -> {
-                    Log.e("Schedule", error.toString(), error);
-                }, () ->{
-                    sortGroups(groups, institutes, String.valueOf(Global.instituteID));
-                        showGroupChooseDialog();
-                });
+        groupsStringTranslited = groupsTranslited.toArray(new String[groupsTranslited.size()]);
+        groupsString = groupsCompiled.toArray(new String[groupsCompiled.size()]);
     }
 
     public void showInstituteChooseDialog(){
@@ -328,7 +300,8 @@ public class Schedule extends Fragment {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Global.instituteID = Integer.valueOf(institutesStringIntegers[which]);
-                            getGroupList();
+                            sortGroups(groups, institutes, String.valueOf(Global.instituteID));
+                            showGroupChooseDialog();
                         }
                     });
             AlertDialog alert = builder.create();
@@ -341,7 +314,7 @@ public class Schedule extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.choose_group))
                     .setCancelable(false)
-                    .setItems(groupsString, new DialogInterface.OnClickListener() {
+                    .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Global.scheduleNamesOdd.clear();
@@ -353,7 +326,7 @@ public class Schedule extends Fragment {
                             Global.scheduleTypeOdd.clear();
                             Global.scheduleTypeEven.clear();
                             Global.loginID = 3;
-                            Global.groupID = groupsStringID[which];
+                            Global.groupID = groupsString[which];
                             getAndSortSchedule();
                         }
                     });
@@ -393,7 +366,7 @@ public class Schedule extends Fragment {
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                     toast.show();
                     optionBar = false;
-                    mSwipeRefreshLayout.setEnabled(false);
+                    mSwipeRefreshLayout.setRefreshing(false);
                 }
             }
 
@@ -481,7 +454,7 @@ public class Schedule extends Fragment {
             builder.setPositiveButton(getString(R.string.error_try_again),
                     new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int id) {
-                            getInstituteList();
+                            getInstitutesAndGroups();
                             dialog.cancel();
                         }
                     });
@@ -622,6 +595,15 @@ public class Schedule extends Fragment {
         }
     }
 
+    public void AllClear(){
+        Global.institutes.clear();
+        Global.institutesCompiled.clear();
+        Global.institutesTranslited.clear();
+        Global.groupsCompiled.clear();
+        Global.groups.clear();
+        Global.groupsTranslited.clear();
+    }
+
     public void startTimers(){
         Timer timer = new Timer();
         MyTimerTask task = new MyTimerTask();
@@ -646,7 +628,6 @@ public class Schedule extends Fragment {
             weekSelecter.setSelection(1);
         }
     }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -658,20 +639,21 @@ public class Schedule extends Fragment {
             weekSelecter.setSelection(1);
         }
     }
-
     @Override
     public void onPause() {
         super.onPause();
+        AllClear();
     }
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        AllClear();
+    }
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.settings_menu, menu);
     }
-
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){

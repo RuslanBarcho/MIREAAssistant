@@ -7,11 +7,14 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import radonsoft.mireaassistant.forms.ScheduleForm;
+import radonsoft.mireaassistant.model.Group;
+import radonsoft.mireaassistant.model.RequestWrapper;
 import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.model.schedule.Response;
 import radonsoft.mireaassistant.model.schedule.Schedule;
 import radonsoft.mireaassistant.model.schedule.Schedule_;
+import radonsoft.mireaassistant.network.InstitutesService;
 import radonsoft.mireaassistant.network.NetworkSingleton;
 import radonsoft.mireaassistant.network.ScheduleService;
 
@@ -52,7 +55,7 @@ public class Global {
     public static ArrayList<String> institutesTranslited = new ArrayList<>();
     public static String instituteNameTranslited;
     public static String[] institutesString;
-
+    public static String[] institutesStringIntegers;
     public static ArrayList<String> groups = new ArrayList<>();
     public static ArrayList<String> groupsCompiled = new ArrayList<>();
     public static ArrayList<String> groupsTranslited = new ArrayList<>();
@@ -84,6 +87,18 @@ public class Global {
 //                } , error -> {
 //                    Log.e("Schedule", error.toString(), error);
 //                });
+    }
+
+    public void getGroupsAndInsts(Observer<Group> observer){
+        NetworkSingleton.getRetrofit().create(InstitutesService.class)
+                .getInstitutes()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(RequestWrapper::getResponse)
+                .map(radonsoft.mireaassistant.model.Response::getGroups)
+                .toObservable()
+                .flatMap(Observable::fromIterable)
+                .subscribeWith(observer);
     }
 
     public void getScheduleEven(Observer<Even> observer) {
