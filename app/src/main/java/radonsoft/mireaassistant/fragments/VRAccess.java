@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.microedition.khronos.opengles.GL11ExtensionPack;
+
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
@@ -90,10 +92,8 @@ public class VRAccess extends Fragment {
         getInstitutesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date date = new Date();
-                output.setText(date.toString().substring(30, 34));
-                Calendar calendar = Calendar.getInstance();
-                output.setText(String.valueOf(calendar.get(Calendar.YEAR)));
+                Global global = new Global();
+                output.setText(String.valueOf(global.term()));
             }
         });
 

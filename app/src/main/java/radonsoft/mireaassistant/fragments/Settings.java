@@ -45,7 +45,6 @@ public class Settings extends Fragment {
     private boolean groupsSolo = false;
 
     private int buttonClicked;
-    private int restartDialog;
 
     //vars
     public String instituteNameTranslited;
@@ -132,7 +131,17 @@ public class Settings extends Fragment {
                 aboutMessage();
             }
         });
-        return mRootView;
+        if (savedInstanceState != null & getActivity() != null){
+            switch (Global.settingsDialogResume){
+                case 1:
+                    showInstituteChooseDialog();
+                    break;
+                case 2:
+                    showGroupChooseDialog();
+                    break;
+            }
+        }
+            return mRootView;
     }
 
     public void getInstitutesAndGroups(){
@@ -204,7 +213,6 @@ public class Settings extends Fragment {
                 })
                 .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                    restartDialog = 0;
                     } });
         AlertDialog alert = builder.create();
         alert.show();
@@ -426,5 +434,6 @@ public class Settings extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
     }
 }

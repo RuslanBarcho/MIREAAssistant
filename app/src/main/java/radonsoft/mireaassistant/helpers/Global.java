@@ -1,6 +1,9 @@
 package radonsoft.mireaassistant.helpers;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -62,9 +65,26 @@ public class Global {
     public static String[] groupsString;
     public static String[] groupsStringTranslited;
 
+    public int term(){
+        String construct;
+        GregorianCalendar calendar = new GregorianCalendar();
+        GregorianCalendar toCompare = new GregorianCalendar();
+        toCompare.set(calendar.get(Calendar.YEAR), Calendar.AUGUST, 15, 9, 0, 0);
+        construct = String.valueOf(calendar.get(Calendar.YEAR));
+        construct = construct.substring(2,4);
+        Date dateOne = calendar.getTime();
+        Date dateTwo = toCompare.getTime();
+        if (dateOne.compareTo(dateTwo) > 0){
+            construct = construct + "2";
+        } else {
+            construct = construct + "1";
+        }
+        return Integer.valueOf(construct);
+    }
+
     public void getScheduleOdd(Observer<Odd> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
-                .getScheduleName(new ScheduleForm(172, instituteID, groupID))
+                .getScheduleName(new ScheduleForm(term(), instituteID, groupID))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(Schedule::getResponse)
@@ -103,7 +123,7 @@ public class Global {
 
     public void getScheduleEven(Observer<Even> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
-                .getScheduleName(new ScheduleForm(172, instituteID, groupID))
+                .getScheduleName(new ScheduleForm(term(), instituteID, groupID))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(Schedule::getResponse)
