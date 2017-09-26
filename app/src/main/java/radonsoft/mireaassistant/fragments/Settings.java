@@ -45,6 +45,7 @@ public class Settings extends Fragment {
     private boolean groupsSolo = false;
 
     private int buttonClicked;
+    private int restartDialog;
 
     //vars
     public String instituteNameTranslited;
@@ -185,6 +186,7 @@ public class Settings extends Fragment {
     }
 
     public void showInstituteChooseDialog(){
+        Global.settingsDialogResume= 1;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.choose_institute))
                 //.setCancelable(false)
@@ -196,12 +198,13 @@ public class Settings extends Fragment {
                         instituteViewer.setText(instituteNameTranslited);
                         sortGroups(Global.groups, Global.institutes, String.valueOf(Global.instituteID));
                         groupsSolo = false;
+                        Global.settingsDialogResume= 0;
                         showGroupChooseDialog();
                     }
                 })
                 .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                    restartDialog = 0;
                     } });
         AlertDialog alert = builder.create();
         alert.show();
@@ -231,97 +234,100 @@ public class Settings extends Fragment {
     }
 
     public void showGroupChooseDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle(getString(R.string.choose_group));
-                if (!groupsSolo){
-                    builder.setCancelable(false);
-                } else {
-                    builder.setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        } });
-                }
-                builder.setItems(Global.groupsStringTranslited, new DialogInterface.OnClickListener() {
-                    @Override
+        if (getActivity() != null) {
+            Global.settingsDialogResume = 2;
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setTitle(getString(R.string.choose_group));
+            if (!groupsSolo) {
+                builder.setCancelable(false);
+            } else {
+                builder.setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        if (hasConnection(getContext())) {
-                            Global.groupID = Global.groupsString[which];
-                            ConvertStrings converter = new ConvertStrings();
-                            converter.translitInput = Global.groupID;
-                            converter.translitGroups();
-                            groupViewer.setText(converter.translitOutput);
-                            scheduleClear();
-                            Global global = new Global();
-                            global.getScheduleEven(new DisposableObserver<Even>() {
-                                @Override
-                                public void onNext(@NonNull Even even) {
-                                    Log.i("Schedule", even.getName().toString());
-                                    Global.scheduleNamesEven.add(even.getName().toString());
-                                    if (even.getRoom() == null) {
-                                        Global.scheduleRoomsEven.add("―");
-                                    } else {
-                                        Global.scheduleRoomsEven.add(even.getRoom().toString());
-                                    }
-                                    if (even.getTeacher() == null) {
-                                        Global.scheduleTeachersEven.add("―");
-                                    } else {
-                                        Global.scheduleTeachersEven.add(even.getTeacher().toString());
-                                    }
-                                    if (even.getType() == null) {
-                                        Global.scheduleTypeEven.add("―");
-                                    } else {
-                                        Global.scheduleTypeEven.add(even.getType().toString());
-                                    }
-                                }
 
-                                @Override
-                                public void onError(@NonNull Throwable error) {
-                                    Log.e("Schedule", error.toString(), error);
-                                }
-
-                                @Override
-                                public void onComplete() {
-
-                                }
-                            });
-
-                            global.getScheduleOdd(new DisposableObserver<Odd>() {
-                                @Override
-                                public void onNext(@NonNull Odd odd) {
-                                    Log.i("Schedule", odd.getName().toString());
-                                    Global.scheduleNamesOdd.add(odd.getName().toString());
-                                    if (odd.getRoom() == null) {
-                                        Global.scheduleRoomsOdd.add("―");
-                                    } else {
-                                        Global.scheduleRoomsOdd.add(odd.getRoom().toString());
-                                    }
-                                    if (odd.getTeacher() == null) {
-                                        Global.scheduleTeachersOdd.add("―");
-                                    } else {
-                                        Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
-                                    }
-                                    if (odd.getType() == null) {
-                                        Global.scheduleTypeOdd.add("―");
-                                    } else {
-                                        Global.scheduleTypeOdd.add(odd.getType().toString());
-                                    }
-                                }
-
-                                @Override
-                                public void onError(@NonNull Throwable error) {
-                                    Log.e("Schedule", error.toString(), error);
-                                }
-
-                                @Override
-                                public void onComplete() {
-
-                                }
-                            });
-                        }
                     }
                 });
-        AlertDialog alert = builder.create();
-        alert.show();
+            }
+            builder.setItems(Global.groupsStringTranslited, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Global.settingsDialogResume = 0;
+                    Global.groupID = Global.groupsString[which];
+                    ConvertStrings converter = new ConvertStrings();
+                    converter.translitInput = Global.groupID;
+                    converter.translitGroups();
+                    groupViewer.setText(converter.translitOutput);
+                    scheduleClear();
+                    Global global = new Global();
+                    global.getScheduleEven(new DisposableObserver<Even>() {
+                        @Override
+                        public void onNext(@NonNull Even even) {
+                            Log.i("Schedule", even.getName().toString());
+                            Global.scheduleNamesEven.add(even.getName().toString());
+                            if (even.getRoom() == null) {
+                                Global.scheduleRoomsEven.add("―");
+                            } else {
+                                Global.scheduleRoomsEven.add(even.getRoom().toString());
+                            }
+                            if (even.getTeacher() == null) {
+                                Global.scheduleTeachersEven.add("―");
+                            } else {
+                                Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                            }
+                            if (even.getType() == null) {
+                                Global.scheduleTypeEven.add("―");
+                            } else {
+                                Global.scheduleTypeEven.add(even.getType().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable error) {
+                            Log.e("Schedule", error.toString(), error);
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+
+                    global.getScheduleOdd(new DisposableObserver<Odd>() {
+                        @Override
+                        public void onNext(@NonNull Odd odd) {
+                            Log.i("Schedule", odd.getName().toString());
+                            Global.scheduleNamesOdd.add(odd.getName().toString());
+                            if (odd.getRoom() == null) {
+                                Global.scheduleRoomsOdd.add("―");
+                            } else {
+                                Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                            }
+                            if (odd.getTeacher() == null) {
+                                Global.scheduleTeachersOdd.add("―");
+                            } else {
+                                Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                            }
+                            if (odd.getType() == null) {
+                                Global.scheduleTypeOdd.add("―");
+                            } else {
+                                Global.scheduleTypeOdd.add(odd.getType().toString());
+                            }
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable error) {
+                            Log.e("Schedule", error.toString(), error);
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+                }
+            });
+            AlertDialog alert = builder.create();
+            alert.show();
+        }
     }
 
     public void convertInstToString(int input){
