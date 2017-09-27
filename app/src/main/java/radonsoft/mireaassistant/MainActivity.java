@@ -219,8 +219,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (Global.loginID == 0){
-        }
     }
 
     @Override
