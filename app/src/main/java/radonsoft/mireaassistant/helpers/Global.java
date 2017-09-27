@@ -27,6 +27,8 @@ import radonsoft.mireaassistant.network.ScheduleService;
 public class Global {
     public static int settingsDialogResume;
 
+    public static boolean groupsSolo = false;
+
     public static int loginID = 0;
     public static int weekNumber;
 

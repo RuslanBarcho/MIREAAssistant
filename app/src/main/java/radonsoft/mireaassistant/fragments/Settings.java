@@ -1,6 +1,7 @@
 package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.net.ConnectivityManager;
@@ -33,6 +34,11 @@ import radonsoft.mireaassistant.model.schedule.Odd;
 public class Settings extends Fragment {
 
     View mRootView;
+    ProgressDialog progressDialog;
+    AlertDialog.Builder builder;
+    AlertDialog instituteDialog;
+    AlertDialog groupDialog;
+
     FrameLayout chooseGroup;
     FrameLayout chooseInstitute;
     FrameLayout chooseWeekType;
@@ -41,8 +47,6 @@ public class Settings extends Fragment {
     private TextView groupViewer;
     private TextView weekViewer;
     MainActivity ma;
-
-    private boolean groupsSolo = false;
 
     private int buttonClicked;
 
@@ -131,16 +135,7 @@ public class Settings extends Fragment {
                 aboutMessage();
             }
         });
-        if (savedInstanceState != null & getActivity() != null){
-            switch (Global.settingsDialogResume){
-                case 1:
-                    showInstituteChooseDialog();
-                    break;
-                case 2:
-                    showGroupChooseDialog();
-                    break;
-            }
-        }
+
             return mRootView;
     }
 
@@ -186,7 +181,7 @@ public class Settings extends Fragment {
                         break;
                     case 1:
                         sortGroups(Global.groups, Global.institutes, String.valueOf(Global.instituteID));
-                        groupsSolo = true;
+                        Global.groupsSolo = true;
                         showGroupChooseDialog();
                         break;
                 }
@@ -196,7 +191,7 @@ public class Settings extends Fragment {
 
     public void showInstituteChooseDialog(){
         Global.settingsDialogResume= 1;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(getString(R.string.choose_institute))
                 //.setCancelable(false)
                 .setItems(Global.institutesString, new DialogInterface.OnClickListener() {
@@ -206,16 +201,18 @@ public class Settings extends Fragment {
                         convertInstToString(Global.instituteID);
                         instituteViewer.setText(instituteNameTranslited);
                         sortGroups(Global.groups, Global.institutes, String.valueOf(Global.instituteID));
-                        groupsSolo = false;
+                        Global.groupsSolo = false;
                         Global.settingsDialogResume= 0;
+                        instituteDialog.dismiss();
                         showGroupChooseDialog();
                     }
                 })
                 .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
+                        Global.settingsDialogResume = 0;
                     } });
-        AlertDialog alert = builder.create();
-        alert.show();
+        instituteDialog = builder.create();
+        instituteDialog.show();
     }
 
     public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
@@ -244,20 +241,21 @@ public class Settings extends Fragment {
     public void showGroupChooseDialog(){
         if (getActivity() != null) {
             Global.settingsDialogResume = 2;
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+            builder = new AlertDialog.Builder(getActivity())
                     .setTitle(getString(R.string.choose_group));
-            if (!groupsSolo) {
+            if (!Global.groupsSolo) {
                 builder.setCancelable(false);
             } else {
                 builder.setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                        Global.settingsDialogResume = 0;
                     }
                 });
             }
             builder.setItems(Global.groupsStringTranslited, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    showProgressDialog();
                     Global.settingsDialogResume = 0;
                     Global.groupID = Global.groupsString[which];
                     ConvertStrings converter = new ConvertStrings();
@@ -291,11 +289,12 @@ public class Settings extends Fragment {
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
+                            progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
-
+                            progressDialog.dismiss();
                         }
                     });
 
@@ -324,17 +323,18 @@ public class Settings extends Fragment {
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
+                            progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
-
+                            progressDialog.dismiss();
                         }
                     });
                 }
             });
-            AlertDialog alert = builder.create();
-            alert.show();
+            groupDialog = builder.create();
+            groupDialog.show();
         }
     }
 
@@ -425,6 +425,14 @@ public class Settings extends Fragment {
         }
     }
 
+    public void showProgressDialog(){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMax(100);
+        progressDialog.setMessage("Идет загрузка расписания");
+        progressDialog.setTitle("Загрузка");
+        progressDialog.show();
+    }
+
     @Override
     public void onCreateOptionsMenu(
             Menu menu, MenuInflater inflater) {
@@ -434,6 +442,39 @@ public class Settings extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+    }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        if (getActivity() != null){
+            switch (Global.settingsDialogResume){
+                case 1:
+                    showInstituteChooseDialog();
+                    break;
+                case 2:
+                    showGroupChooseDialog();
+                    break;
+                default:
+                    try {
+                        instituteDialog.dismiss();
+                        groupDialog.dismiss();
+                    } catch (NullPointerException e){
+
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        try {
+            instituteDialog.dismiss();
+            groupDialog.dismiss();
+        } catch (NullPointerException e){
+
+        }
     }
 }
