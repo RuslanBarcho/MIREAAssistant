@@ -113,9 +113,7 @@ public class Schedule extends Fragment {
         classTeacherFour = (TextView) mRootView.findViewById(R.id.textView45);
         classTeacherFive = (TextView) mRootView.findViewById(R.id.textView35);
         classTeacherSix = (TextView) mRootView.findViewById(R.id.textView40);
-
         //set content
-
         addItemsOnSpinner(days, daySelecter);
         addWeeksOnSpinner(weeks, weekSelecter);
         setToday();

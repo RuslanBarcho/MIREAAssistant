@@ -58,7 +58,6 @@ public class Global {
     public static ArrayList<String> institutes = new ArrayList<>();
     public static ArrayList<String> institutesCompiled = new ArrayList<>();
     public static ArrayList<String> institutesTranslited = new ArrayList<>();
-    public static String instituteNameTranslited;
     public static String[] institutesString;
     public static String[] institutesStringIntegers;
     public static ArrayList<String> groups = new ArrayList<>();

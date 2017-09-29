@@ -42,6 +42,16 @@ public class VRAccess extends Fragment {
     public ArrayList<String> oddNames = new ArrayList();
     MainActivity ma;
 
+    ArrayList<String> scheduleNamesOddBackup = new ArrayList<>();
+    ArrayList<String> scheduleRoomsOddBackup = new ArrayList<>();
+    ArrayList<String> scheduleTeachersOddBackup = new ArrayList<>();
+    ArrayList<String> scheduleTypeOddBackup = new ArrayList<>();
+
+    ArrayList<String> scheduleNamesEvenBackup = new ArrayList<>();
+    ArrayList<String> scheduleRoomsEvenBackup = new ArrayList<>();
+    ArrayList<String> scheduleTeachersEvenBackup = new ArrayList<>();
+    ArrayList<String> scheduleTypeEvenBackup = new ArrayList<>();
+
     public String[] institutes;
 
     @Override
@@ -85,15 +95,13 @@ public class VRAccess extends Fragment {
         clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                output.setText("");
             }
         });
 
         getInstitutesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Global global = new Global();
-                output.setText(String.valueOf(global.term()));
+                output.setText(String.valueOf(Global.scheduleNamesEven));
             }
         });
 

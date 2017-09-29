@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.StringJoiner;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
@@ -49,6 +50,21 @@ public class Settings extends Fragment {
     MainActivity ma;
 
     private int buttonClicked;
+
+    private String groupIDBackup;
+    private int instituteIDBackup;
+    private int localInstituteID;
+
+    public ArrayList<String> scheduleNamesOdd = new ArrayList<>();
+    public ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+    public ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+    public ArrayList<String> scheduleTypeOdd = new ArrayList<>();
+
+    public ArrayList<String> scheduleNamesEven = new ArrayList<>();
+    public ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+    public ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+    public ArrayList<String> scheduleTypeEven = new ArrayList<>();
+
 
     //vars
     public String instituteNameTranslited;
@@ -90,6 +106,8 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 buttonClicked = 1;
+                groupIDBackup = Global.groupID;
+                instituteIDBackup = Global.instituteID;
                 getInstitutesAndGroups();
             }
         });
@@ -123,8 +141,9 @@ public class Settings extends Fragment {
         chooseInstitute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo: parse institutes and groups via ArrayLists, add SharedPreferences
                 buttonClicked = 0;
+                groupIDBackup = Global.groupID;
+                instituteIDBackup = Global.instituteID;
                 getInstitutesAndGroups();
             }
         });
@@ -197,10 +216,10 @@ public class Settings extends Fragment {
                 .setItems(Global.institutesString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Global.instituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
-                        convertInstToString(Global.instituteID);
+                        localInstituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
+                        convertInstToString(localInstituteID);
                         instituteViewer.setText(instituteNameTranslited);
-                        sortGroups(Global.groups, Global.institutes, String.valueOf(Global.instituteID));
+                        sortGroups(Global.groups, Global.institutes, String.valueOf(localInstituteID));
                         Global.groupsSolo = false;
                         Global.settingsDialogResume= 0;
                         instituteDialog.dismiss();
@@ -255,45 +274,52 @@ public class Settings extends Fragment {
             builder.setItems(Global.groupsStringTranslited, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    Global global = new Global();
+                    ConvertStrings converter = new ConvertStrings();
                     showProgressDialog();
                     Global.settingsDialogResume = 0;
+                    Global.instituteID = localInstituteID;
                     Global.groupID = Global.groupsString[which];
-                    ConvertStrings converter = new ConvertStrings();
                     converter.translitInput = Global.groupID;
                     converter.translitGroups();
                     groupViewer.setText(converter.translitOutput);
                     scheduleClear();
-                    Global global = new Global();
                     global.getScheduleEven(new DisposableObserver<Even>() {
                         @Override
                         public void onNext(@NonNull Even even) {
                             Log.i("Schedule", even.getName().toString());
-                            Global.scheduleNamesEven.add(even.getName().toString());
+                            scheduleNamesEven.add(even.getName().toString());
                             if (even.getRoom() == null) {
-                                Global.scheduleRoomsEven.add("―");
+                                scheduleRoomsEven.add("―");
                             } else {
-                                Global.scheduleRoomsEven.add(even.getRoom().toString());
+                                scheduleRoomsEven.add(even.getRoom().toString());
                             }
                             if (even.getTeacher() == null) {
-                                Global.scheduleTeachersEven.add("―");
+                                scheduleTeachersEven.add("―");
                             } else {
-                                Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                                scheduleTeachersEven.add(even.getTeacher().toString());
                             }
                             if (even.getType() == null) {
-                                Global.scheduleTypeEven.add("―");
+                                scheduleTypeEven.add("―");
                             } else {
-                                Global.scheduleTypeEven.add(even.getType().toString());
+                                scheduleTypeEven.add(even.getType().toString());
                             }
                         }
 
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
+                            Global.groupID = groupIDBackup;
+                            Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
+                            Global.scheduleNamesEven = scheduleNamesEven;
+                            Global.scheduleRoomsEven = scheduleRoomsEven;
+                            Global.scheduleTeachersEven = scheduleTeachersEven;
+                            Global.scheduleTypeEven = scheduleTypeEven;
                             progressDialog.dismiss();
                         }
                     });
@@ -302,33 +328,39 @@ public class Settings extends Fragment {
                         @Override
                         public void onNext(@NonNull Odd odd) {
                             Log.i("Schedule", odd.getName().toString());
-                            Global.scheduleNamesOdd.add(odd.getName().toString());
+                            scheduleNamesOdd.add(odd.getName().toString());
                             if (odd.getRoom() == null) {
-                                Global.scheduleRoomsOdd.add("―");
+                                scheduleRoomsOdd.add("―");
                             } else {
-                                Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                                scheduleRoomsOdd.add(odd.getRoom().toString());
                             }
                             if (odd.getTeacher() == null) {
-                                Global.scheduleTeachersOdd.add("―");
+                                scheduleTeachersOdd.add("―");
                             } else {
-                                Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                scheduleTeachersOdd.add(odd.getTeacher().toString());
                             }
                             if (odd.getType() == null) {
-                                Global.scheduleTypeOdd.add("―");
+                                scheduleTypeOdd.add("―");
                             } else {
-                                Global.scheduleTypeOdd.add(odd.getType().toString());
+                                scheduleTypeOdd.add(odd.getType().toString());
                             }
                         }
 
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
+                            Global.groupID = groupIDBackup;
+                            Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
                             progressDialog.dismiss();
+                            Global.scheduleNamesOdd = scheduleNamesOdd;
+                            Global.scheduleRoomsOdd = scheduleRoomsOdd;
+                            Global.scheduleTeachersOdd = scheduleTeachersOdd;
+                            Global.scheduleTypeOdd = scheduleTypeOdd;
                         }
                     });
                 }
@@ -355,35 +387,14 @@ public class Settings extends Fragment {
     }
 
     public void scheduleClear(){
-        Global.scheduleNamesOdd.clear();
-        Global.scheduleNamesEven.clear();
-        Global.scheduleTeachersOdd.clear();
-        Global.scheduleTeachersEven.clear();
-        Global.scheduleRoomsOdd.clear();
-        Global.scheduleRoomsEven.clear();
-        Global.scheduleTypeOdd.clear();
-        Global.scheduleTypeEven.clear();
-    }
-
-    public static boolean hasConnection(final Context context)
-    {
-        ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        wifiInfo = cm.getActiveNetworkInfo();
-        if (wifiInfo != null && wifiInfo.isConnected())
-        {
-            return true;
-        }
-        return false;
+        scheduleNamesOdd.clear();
+        scheduleNamesEven.clear();
+        scheduleTeachersOdd.clear();
+        scheduleTeachersEven.clear();
+        scheduleRoomsOdd.clear();
+        scheduleRoomsEven.clear();
+        scheduleTypeOdd.clear();
+        scheduleTypeEven.clear();
     }
 
     public void aboutMessage(){
@@ -428,7 +439,7 @@ public class Settings extends Fragment {
     public void showProgressDialog(){
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
-        progressDialog.setMessage("Идет загрузка расписания");
+        progressDialog.setMessage("Идет загрузка данных");
         progressDialog.setTitle("Загрузка");
         progressDialog.show();
     }
