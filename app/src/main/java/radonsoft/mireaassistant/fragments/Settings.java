@@ -41,6 +41,7 @@ public class Settings extends Fragment {
     AlertDialog.Builder builder;
     AlertDialog instituteDialog;
     AlertDialog groupDialog;
+    AlertDialog aboutDialog;
 
     FrameLayout chooseGroup;
     FrameLayout chooseInstitute;
@@ -232,6 +233,12 @@ public class Settings extends Fragment {
                         Global.settingsDialogResume = 0;
                     } });
         instituteDialog = builder.create();
+        instituteDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                Global.settingsDialogResume = 0;
+            }
+        });
         instituteDialog.show();
     }
 
@@ -314,13 +321,11 @@ public class Settings extends Fragment {
                             Log.e("Schedule", error.toString(), error);
                             Global.groupID = groupIDBackup;
                             Global.instituteID = instituteIDBackup;
-                            TimeManager.TEST.add(Global.scheduleNamesOddStringBackup[0]);
                             progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
-
                             progressDialog.dismiss();
                         }
                     });
@@ -354,6 +359,8 @@ public class Settings extends Fragment {
                             Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
                             global.restoreSchedule();
+                            Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
+                            toast.show();
                         }
 
                         @Override
@@ -365,6 +372,12 @@ public class Settings extends Fragment {
                 }
             });
             groupDialog = builder.create();
+            groupDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    Global.settingsDialogResume = 0;
+                }
+            });
             groupDialog.show();
         }
     }
@@ -398,18 +411,25 @@ public class Settings extends Fragment {
 
     public void aboutMessage(){
         if (getActivity() != null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
+            Global.settingsDialogResume= 3;
+            builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
             builder.setTitle(getString(R.string.about_title));
             builder.setMessage(getString(R.string.about_content));
             builder.setPositiveButton(getString(R.string.about_close),
                     new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int id) {
-
+                            Global.settingsDialogResume= 0;
                             dialog.cancel();
                         }
                     });
-            AlertDialog alert = builder.create();
-            alert.show();
+            aboutDialog = builder.create();
+            aboutDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                @Override
+                public void onDismiss(DialogInterface dialogInterface) {
+                    Global.settingsDialogResume = 0;
+                }
+            });
+            aboutDialog.show();
         }
     }
 
@@ -465,10 +485,14 @@ public class Settings extends Fragment {
                 case 2:
                     showGroupChooseDialog();
                     break;
+                case 3:
+                    aboutMessage();
+                    break;
                 default:
                     try {
                         instituteDialog.dismiss();
                         groupDialog.dismiss();
+                        aboutDialog.dismiss();
                     } catch (NullPointerException e){
 
                     }
