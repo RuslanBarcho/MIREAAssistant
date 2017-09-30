@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
+import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
@@ -64,7 +66,6 @@ public class Settings extends Fragment {
     public ArrayList<String> scheduleRoomsEven = new ArrayList<>();
     public ArrayList<String> scheduleTeachersEven = new ArrayList<>();
     public ArrayList<String> scheduleTypeEven = new ArrayList<>();
-
 
     //vars
     public String instituteNameTranslited;
@@ -283,26 +284,28 @@ public class Settings extends Fragment {
                     converter.translitInput = Global.groupID;
                     converter.translitGroups();
                     groupViewer.setText(converter.translitOutput);
+                    Global.scheduleNamesOddStringBackup = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+                    global.backupSchedule();
                     scheduleClear();
                     global.getScheduleEven(new DisposableObserver<Even>() {
                         @Override
                         public void onNext(@NonNull Even even) {
                             Log.i("Schedule", even.getName().toString());
-                            scheduleNamesEven.add(even.getName().toString());
+                            Global.scheduleNamesEven.add(even.getName().toString());
                             if (even.getRoom() == null) {
-                                scheduleRoomsEven.add("―");
+                                Global.scheduleRoomsEven.add("―");
                             } else {
-                                scheduleRoomsEven.add(even.getRoom().toString());
+                                Global.scheduleRoomsEven.add(even.getRoom().toString());
                             }
                             if (even.getTeacher() == null) {
-                                scheduleTeachersEven.add("―");
+                                Global.scheduleTeachersEven.add("―");
                             } else {
-                                scheduleTeachersEven.add(even.getTeacher().toString());
+                                Global.scheduleTeachersEven.add(even.getTeacher().toString());
                             }
                             if (even.getType() == null) {
-                                scheduleTypeEven.add("―");
+                                Global.scheduleTypeEven.add("―");
                             } else {
-                                scheduleTypeEven.add(even.getType().toString());
+                                Global.scheduleTypeEven.add(even.getType().toString());
                             }
                         }
 
@@ -311,15 +314,13 @@ public class Settings extends Fragment {
                             Log.e("Schedule", error.toString(), error);
                             Global.groupID = groupIDBackup;
                             Global.instituteID = instituteIDBackup;
+                            TimeManager.TEST.add(Global.scheduleNamesOddStringBackup[0]);
                             progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
-                            Global.scheduleNamesEven = scheduleNamesEven;
-                            Global.scheduleRoomsEven = scheduleRoomsEven;
-                            Global.scheduleTeachersEven = scheduleTeachersEven;
-                            Global.scheduleTypeEven = scheduleTypeEven;
+
                             progressDialog.dismiss();
                         }
                     });
@@ -328,21 +329,21 @@ public class Settings extends Fragment {
                         @Override
                         public void onNext(@NonNull Odd odd) {
                             Log.i("Schedule", odd.getName().toString());
-                            scheduleNamesOdd.add(odd.getName().toString());
+                            Global.scheduleNamesOdd.add(odd.getName().toString());
                             if (odd.getRoom() == null) {
-                                scheduleRoomsOdd.add("―");
+                                Global.scheduleRoomsOdd.add("―");
                             } else {
-                                scheduleRoomsOdd.add(odd.getRoom().toString());
+                                Global.scheduleRoomsOdd.add(odd.getRoom().toString());
                             }
                             if (odd.getTeacher() == null) {
-                                scheduleTeachersOdd.add("―");
+                                Global.scheduleTeachersOdd.add("―");
                             } else {
-                                scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
                             }
                             if (odd.getType() == null) {
-                                scheduleTypeOdd.add("―");
+                                Global.scheduleTypeOdd.add("―");
                             } else {
-                                scheduleTypeOdd.add(odd.getType().toString());
+                                Global.scheduleTypeOdd.add(odd.getType().toString());
                             }
                         }
 
@@ -352,15 +353,13 @@ public class Settings extends Fragment {
                             Global.groupID = groupIDBackup;
                             Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
+                            global.restoreSchedule();
                         }
 
                         @Override
                         public void onComplete() {
                             progressDialog.dismiss();
-                            Global.scheduleNamesOdd = scheduleNamesOdd;
-                            Global.scheduleRoomsOdd = scheduleRoomsOdd;
-                            Global.scheduleTeachersOdd = scheduleTeachersOdd;
-                            Global.scheduleTypeOdd = scheduleTypeOdd;
+
                         }
                     });
                 }
@@ -387,14 +386,14 @@ public class Settings extends Fragment {
     }
 
     public void scheduleClear(){
-        scheduleNamesOdd.clear();
-        scheduleNamesEven.clear();
-        scheduleTeachersOdd.clear();
-        scheduleTeachersEven.clear();
-        scheduleRoomsOdd.clear();
-        scheduleRoomsEven.clear();
-        scheduleTypeOdd.clear();
-        scheduleTypeEven.clear();
+        Global.scheduleNamesOdd.clear();
+        Global.scheduleNamesEven.clear();
+        Global.scheduleTeachersOdd.clear();
+        Global.scheduleTeachersEven.clear();
+        Global.scheduleRoomsOdd.clear();
+        Global.scheduleRoomsEven.clear();
+        Global.scheduleTypeOdd.clear();
+        Global.scheduleTypeEven.clear();
     }
 
     public void aboutMessage(){

@@ -55,6 +55,16 @@ public class Global {
     public static String[] scheduleTeachersEvenString;
     public static String[] scheduleTypeEvenString;
 
+    public static String[] scheduleNamesOddStringBackup;
+    public static String[] scheduleRoomsOddStringBackup;
+    public static String[] scheduleTeachersOddStringBackup;
+    public static String[] scheduleTypeOddStringBackup;
+
+    public static String[] scheduleNamesEvenStringBackup;
+    public static String[] scheduleRoomsEvenStringBackup;
+    public static String[] scheduleTeachersEvenStringBackup;
+    public static String[] scheduleTypeEvenStringBackup;
+
     public static ArrayList<String> institutes = new ArrayList<>();
     public static ArrayList<String> institutesCompiled = new ArrayList<>();
     public static ArrayList<String> institutesTranslited = new ArrayList<>();
@@ -65,6 +75,32 @@ public class Global {
     public static ArrayList<String> groupsTranslited = new ArrayList<>();
     public static String[] groupsString;
     public static String[] groupsStringTranslited;
+
+    public void restoreSchedule(){
+        for ( int i = 0; i < scheduleNamesOddString.length; i++){
+            scheduleNamesOdd.add(scheduleNamesOddStringBackup[i]);
+            scheduleRoomsOdd.add(scheduleRoomsOddStringBackup[i]);
+            scheduleTeachersOdd.add(scheduleTeachersOddStringBackup[i]);
+            scheduleTypeOdd.add(scheduleTypeOddStringBackup[i]);
+
+            scheduleNamesEven.add(scheduleNamesEvenStringBackup[i]);
+            scheduleRoomsEven.add(scheduleRoomsEvenStringBackup[i]);
+            scheduleTeachersEven.add(scheduleTeachersEvenStringBackup[i]);
+            scheduleTypeEven.add(scheduleTypeEvenStringBackup[i]);
+        }
+    }
+
+    public void backupSchedule(){
+        Global.scheduleNamesOddStringBackup = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
+        Global.scheduleRoomsOddStringBackup = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
+        Global.scheduleTeachersOddStringBackup = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
+        Global.scheduleTypeOddStringBackup = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
+
+        Global.scheduleNamesEvenStringBackup = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
+        Global.scheduleRoomsEvenStringBackup = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
+        Global.scheduleTeachersEvenStringBackup = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
+        Global.scheduleTypeEvenStringBackup = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
+    }
 
     public int term(){
         String construct;
