@@ -98,8 +98,6 @@ public class VRAccess extends Fragment {
             @Override
             public void onClick(View v) {
                 Global global = new Global();
-                global.restoreSchedule();
-                output.setText(String.valueOf(Global.scheduleNamesEven));
             }
         });
         return mRootView;

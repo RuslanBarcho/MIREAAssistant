@@ -54,7 +54,7 @@ public class Schedule extends Fragment {
     public ArrayList<String> institutes = new ArrayList<>();
     public ArrayList<String> institutesCompiled = new ArrayList<>();
     public ArrayList<String> institutesTranslited = new ArrayList<>();
-    public String instituteNameTranslited;
+
     public String[] institutesString;
     public String[] institutesStringIntegers;
     public ArrayList<String> groups = new ArrayList<>();
@@ -155,16 +155,8 @@ public class Schedule extends Fragment {
 
     public void setSchedule(){
         if (Global.weekNumber % 2 == 0){
-            Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
-            Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
-            Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
-            Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
             sortContentByTodayEven(today);
         } else{
-            Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-            Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
-            Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
-            Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
             sortContentByTodayOdd(today);
         }
     }
@@ -315,14 +307,6 @@ public class Schedule extends Fragment {
                     .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Global.scheduleNamesOdd.clear();
-                            Global.scheduleNamesEven.clear();
-                            Global.scheduleTeachersOdd.clear();
-                            Global.scheduleTeachersEven.clear();
-                            Global.scheduleRoomsOdd.clear();
-                            Global.scheduleRoomsEven.clear();
-                            Global.scheduleTypeOdd.clear();
-                            Global.scheduleTypeEven.clear();
                             Global.loginID = 3;
                             Global.groupID = groupsString[which];
                             getAndSortSchedule();
@@ -334,27 +318,36 @@ public class Schedule extends Fragment {
     }
 
     public void getAndSortSchedule(){
+        ArrayList<String> scheduleNamesOdd = new ArrayList<>();
+        ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+        ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+        ArrayList<String> scheduleTypeOdd = new ArrayList<>();
+
+        ArrayList<String> scheduleNamesEven = new ArrayList<>();
+        ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+        ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+        ArrayList<String> scheduleTypeEven = new ArrayList<>();
+
         Global global = new Global();
-        global.backupSchedule();
         global.getScheduleEven(new DisposableObserver<Even>() {
             @Override
             public void onNext(@NonNull Even even) {
                 Log.i("Schedule", even.getName().toString());
-                Global.scheduleNamesEven.add(even.getName().toString());
+                scheduleNamesEven.add(even.getName().toString());
                 if (even.getRoom() == null) {
-                    Global.scheduleRoomsEven.add("―");
+                    scheduleRoomsEven.add("―");
                 } else {
-                    Global.scheduleRoomsEven.add(even.getRoom().toString());
+                    scheduleRoomsEven.add(even.getRoom().toString());
                 }
                 if (even.getTeacher() == null) {
-                    Global.scheduleTeachersEven.add("―");
+                    scheduleTeachersEven.add("―");
                 } else {
-                    Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                    scheduleTeachersEven.add(even.getTeacher().toString());
                 }
                 if (even.getType() == null) {
-                    Global.scheduleTypeEven.add("―");
+                    scheduleTypeEven.add("―");
                 } else {
-                    Global.scheduleTypeEven.add(even.getType().toString());
+                    scheduleTypeEven.add(even.getType().toString());
                 }
             }
 
@@ -372,11 +365,11 @@ public class Schedule extends Fragment {
             @Override
             public void onComplete() {
                 ma.getWeekNumber();
+                Global.scheduleNamesEvenString = scheduleNamesEven.toArray(new String[scheduleNamesEven.size()]);
+                Global.scheduleRoomsEvenString = scheduleRoomsEven.toArray(new String[scheduleRoomsEven.size()]);
+                Global.scheduleTeachersEvenString = scheduleTeachersEven.toArray(new String[scheduleTeachersEven.size()]);
+                Global.scheduleTypeEvenString = scheduleTypeEven.toArray(new String[scheduleTypeEven.size()]);
                 if (Global.weekNumber % 2 == 0) {
-                    Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
-                    Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
-                    Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
-                    Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
                     sortContentByTodayEven(today);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
@@ -393,21 +386,21 @@ public class Schedule extends Fragment {
             @Override
             public void onNext(@NonNull Odd odd) {
                 Log.i("Schedule", odd.getName().toString());
-                Global.scheduleNamesOdd.add(odd.getName().toString());
+                scheduleNamesOdd.add(odd.getName().toString());
                 if (odd.getRoom() == null) {
-                    Global.scheduleRoomsOdd.add("―");
+                    scheduleRoomsOdd.add("―");
                 } else {
-                    Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                    scheduleRoomsOdd.add(odd.getRoom().toString());
                 }
                 if (odd.getTeacher() == null) {
-                    Global.scheduleTeachersOdd.add("―");
+                    scheduleTeachersOdd.add("―");
                 } else {
-                    Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                    scheduleTeachersOdd.add(odd.getTeacher().toString());
                 }
                 if (odd.getType() == null) {
-                    Global.scheduleTypeOdd.add("―");
+                    scheduleTypeOdd.add("―");
                 } else {
-                    Global.scheduleTypeOdd.add(odd.getType().toString());
+                    scheduleTypeOdd.add(odd.getType().toString());
                 }
             }
 
@@ -425,11 +418,11 @@ public class Schedule extends Fragment {
             @Override
             public void onComplete() {
                 ma.getWeekNumber();
+                Global.scheduleNamesOddString = scheduleNamesOdd.toArray(new String[scheduleNamesOdd.size()]);
+                Global.scheduleRoomsOddString = scheduleRoomsOdd.toArray(new String[scheduleRoomsOdd.size()]);
+                Global.scheduleTeachersOddString = scheduleTeachersOdd.toArray(new String[scheduleTeachersOdd.size()]);
+                Global.scheduleTypeOddString = scheduleTypeOdd.toArray(new String[scheduleTypeOdd.size()]);
                 if (Global.weekNumber % 2 != 0) {
-                    Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-                    Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
-                    Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
-                    Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
                     sortContentByTodayOdd(today);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
@@ -619,8 +612,6 @@ public class Schedule extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //setToday();
-        //daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{
@@ -630,8 +621,6 @@ public class Schedule extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        //setToday();
-        //daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{

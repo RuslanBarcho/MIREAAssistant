@@ -111,20 +111,53 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void saveValues(){
+        ArrayList<String> scheduleNamesOdd = new ArrayList<>();
+        ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+        ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+        ArrayList<String> scheduleTypeOdd = new ArrayList<>();
+
+        ArrayList<String> scheduleNamesEven = new ArrayList<>();
+        ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+        ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+        ArrayList<String> scheduleTypeEven = new ArrayList<>();
+
+        for ( int i = 0; i < Global.scheduleNamesOddString.length; i++){
+            scheduleNamesOdd.add(Global.scheduleNamesOddString[i]);
+            scheduleRoomsOdd.add(Global.scheduleRoomsOddString[i]);
+            scheduleTeachersOdd.add(Global.scheduleTeachersOddString[i]);
+            scheduleTypeOdd.add(Global.scheduleTypeOddString[i]);
+
+            scheduleNamesEven.add(Global.scheduleNamesEvenString[i]);
+            scheduleRoomsEven.add(Global.scheduleRoomsEvenString[i]);
+            scheduleTeachersEven.add(Global.scheduleTeachersEvenString[i]);
+            scheduleTypeEven.add(Global.scheduleTypeEvenString[i]);
+        }
+
         saveInt(Global.instituteID, "INSTITUTE_ID");
         saveInt(Global.loginID, "LOGIN_STATUS");
         saveString(Global.groupID, "GROUP_ID");
-        saveArray(Global.scheduleNamesOdd, "SCHEDULE_NAME_ODD");
-        saveArray(Global.scheduleNamesEven, "SCHEDULE_NAME_EVEN");
-        saveArray(Global.scheduleRoomsOdd, "SCHEDULE_ROOM_ODD");
-        saveArray(Global.scheduleTeachersOdd, "SCHEDULE_TEACHER_ODD");
-        saveArray(Global.scheduleRoomsEven, "SCHEDULE_ROOM_EVEN");
-        saveArray(Global.scheduleTeachersEven, "SCHEDULE_TEACHER_EVEN");
-        saveArray(Global.scheduleTypeEven, "SCHEDULE_TYPE_EVEN");
-        saveArray(Global.scheduleTypeOdd, "SCHEDULE_TYPE_ODD");
+
+        saveArray(scheduleNamesOdd, "SCHEDULE_NAME_ODD");
+        saveArray(scheduleNamesEven, "SCHEDULE_NAME_EVEN");
+        saveArray(scheduleRoomsOdd, "SCHEDULE_ROOM_ODD");
+        saveArray(scheduleTeachersOdd, "SCHEDULE_TEACHER_ODD");
+        saveArray(scheduleRoomsEven, "SCHEDULE_ROOM_EVEN");
+        saveArray(scheduleTeachersEven, "SCHEDULE_TEACHER_EVEN");
+        saveArray(scheduleTypeEven, "SCHEDULE_TYPE_EVEN");
+        saveArray(scheduleTypeOdd, "SCHEDULE_TYPE_ODD");
     }
 
     public void getValues(){
+        ArrayList<String> scheduleNamesOdd;
+        ArrayList<String> scheduleRoomsOdd;
+        ArrayList<String> scheduleTeachersOdd;
+        ArrayList<String> scheduleTypeOdd;
+
+        ArrayList<String> scheduleNamesEven;
+        ArrayList<String> scheduleRoomsEven;
+        ArrayList<String> scheduleTeachersEven;
+        ArrayList<String> scheduleTypeEven;
+
         Global.loginID = sp.getInt("LOGIN_STATUS", 0);
         if (Global.loginID == 0){
 
@@ -135,31 +168,31 @@ public class MainActivity extends AppCompatActivity
             Global.groupID = sp.getString("GROUP_ID", "");
 
             String json = sp.getString("SCHEDULE_NAME_ODD", null);
-            Global.scheduleNamesOdd = gson.fromJson(json, type);
+            scheduleNamesOdd = gson.fromJson(json, type);
             String jsonOne = sp.getString("SCHEDULE_NAME_EVEN", null);
-            Global.scheduleNamesEven = gson.fromJson(jsonOne, type);
+            scheduleNamesEven = gson.fromJson(jsonOne, type);
             String jsonTwo = sp.getString("SCHEDULE_ROOM_ODD", null);
-            Global.scheduleRoomsOdd = gson.fromJson(jsonTwo, type);
+            scheduleRoomsOdd = gson.fromJson(jsonTwo, type);
             String jsonThree = sp.getString("SCHEDULE_ROOM_EVEN", null);
-            Global.scheduleRoomsEven = gson.fromJson(jsonThree, type);
+            scheduleRoomsEven = gson.fromJson(jsonThree, type);
             String jsonFour = sp.getString("SCHEDULE_TEACHER_ODD", null);
-            Global.scheduleTeachersOdd = gson.fromJson(jsonFour, type);
+            scheduleTeachersOdd = gson.fromJson(jsonFour, type);
             String jsonFive = sp.getString("SCHEDULE_TEACHER_EVEN", null);
-            Global.scheduleTeachersEven = gson.fromJson(jsonFive, type);
+            scheduleTeachersEven = gson.fromJson(jsonFive, type);
             String jsonSix = sp.getString("SCHEDULE_TYPE_ODD", null);
-            Global.scheduleTypeOdd = gson.fromJson(jsonSix, type);
+            scheduleTypeOdd = gson.fromJson(jsonSix, type);
             String jsonSeven = sp.getString("SCHEDULE_TYPE_EVEN", null);
-            Global.scheduleTypeEven = gson.fromJson(jsonSeven, type);
+            scheduleTypeEven = gson.fromJson(jsonSeven, type);
 
-            Global.scheduleNamesOddString = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-            Global.scheduleRoomsOddString = Global.scheduleRoomsOdd.toArray(new String[Global.scheduleRoomsOdd.size()]);
-            Global.scheduleTeachersOddString = Global.scheduleTeachersOdd.toArray(new String[Global.scheduleTeachersOdd.size()]);
-            Global.scheduleTypeOddString = Global.scheduleTypeOdd.toArray(new String[Global.scheduleTypeOdd.size()]);
+            Global.scheduleNamesOddString = scheduleNamesOdd.toArray(new String[scheduleNamesOdd.size()]);
+            Global.scheduleRoomsOddString = scheduleRoomsOdd.toArray(new String[scheduleRoomsOdd.size()]);
+            Global.scheduleTeachersOddString = scheduleTeachersOdd.toArray(new String[scheduleTeachersOdd.size()]);
+            Global.scheduleTypeOddString = scheduleTypeOdd.toArray(new String[scheduleTypeOdd.size()]);
 
-            Global.scheduleNamesEvenString = Global.scheduleNamesEven.toArray(new String[Global.scheduleNamesEven.size()]);
-            Global.scheduleRoomsEvenString = Global.scheduleRoomsEven.toArray(new String[Global.scheduleRoomsEven.size()]);
-            Global.scheduleTeachersEvenString = Global.scheduleTeachersEven.toArray(new String[Global.scheduleTeachersEven.size()]);
-            Global.scheduleTypeEvenString = Global.scheduleTypeEven.toArray(new String[Global.scheduleTypeEven.size()]);
+            Global.scheduleNamesEvenString = scheduleNamesEven.toArray(new String[scheduleNamesEven.size()]);
+            Global.scheduleRoomsEvenString = scheduleRoomsEven.toArray(new String[scheduleRoomsEven.size()]);
+            Global.scheduleTeachersEvenString = scheduleTeachersEven.toArray(new String[scheduleTeachersEven.size()]);
+            Global.scheduleTypeEvenString = scheduleTypeEven.toArray(new String[scheduleTypeEven.size()]);
         }
     }
 
@@ -192,8 +225,8 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ftrans = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_schedule) {
             ftrans.replace(R.id.container, schedule);
-        } else if (id == R.id.nav_VR_access) {
-           ftrans.replace(R.id.container, vraccess);
+       // } else if (id == R.id.nav_VR_access) {
+        //   ftrans.replace(R.id.container, vraccess);
         } //else if (id == R.id.nav_professors) {
        //     ftrans.replace(R.id.container, professors);
         //}

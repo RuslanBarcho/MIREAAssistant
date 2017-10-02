@@ -53,16 +53,6 @@ public class Settings extends Fragment {
     private int instituteIDBackup;
     private int localInstituteID;
 
-    public ArrayList<String> scheduleNamesOdd = new ArrayList<>();
-    public ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
-    public ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
-    public ArrayList<String> scheduleTypeOdd = new ArrayList<>();
-
-    public ArrayList<String> scheduleNamesEven = new ArrayList<>();
-    public ArrayList<String> scheduleRoomsEven = new ArrayList<>();
-    public ArrayList<String> scheduleTeachersEven = new ArrayList<>();
-    public ArrayList<String> scheduleTypeEven = new ArrayList<>();
-
     //vars
     public String instituteNameTranslited;
 
@@ -87,11 +77,7 @@ public class Settings extends Fragment {
 
         convertInstToString(Global.instituteID);
         instituteViewer.setText(instituteNameTranslited);
-
-        ConvertStrings converter = new ConvertStrings();
-        converter.translitInput = Global.groupID;
-        converter.translitGroups();
-        groupViewer.setText(converter.translitOutput);
+        setGroupToView();
 
         if (Global.weekNumber % 2 == 0){
             weekViewer.setText("Четная");
@@ -151,8 +137,13 @@ public class Settings extends Fragment {
                 aboutMessage();
             }
         });
-
             return mRootView;
+    }
+    public void setGroupToView(){
+        ConvertStrings converter = new ConvertStrings();
+        converter.translitInput = Global.groupID;
+        converter.translitGroups();
+        groupViewer.setText(converter.translitOutput);
     }
 
     public void getInstitutesAndGroups(){
@@ -277,6 +268,16 @@ public class Settings extends Fragment {
             builder.setItems(Global.groupsStringTranslited, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    ArrayList<String> scheduleNamesOdd = new ArrayList<>();
+                    ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+                    ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+                    ArrayList<String> scheduleTypeOdd = new ArrayList<>();
+
+                    ArrayList<String> scheduleNamesEven = new ArrayList<>();
+                    ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+                    ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+                    ArrayList<String> scheduleTypeEven = new ArrayList<>();
+
                     Global global = new Global();
                     ConvertStrings converter = new ConvertStrings();
                     showProgressDialog();
@@ -286,9 +287,6 @@ public class Settings extends Fragment {
                     converter.translitInput = Global.groupID;
                     converter.translitGroups();
                     groupViewer.setText(converter.translitOutput);
-                    Global.scheduleNamesOddStringBackup = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
-                    global.backupSchedule();
-                    localScheduleClear();
                     global.getScheduleEven(new DisposableObserver<Even>() {
                         @Override
                         public void onNext(@NonNull Even even) {
@@ -314,17 +312,15 @@ public class Settings extends Fragment {
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
-                            Global.groupID = groupIDBackup;
-                            Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
                         }
 
                         @Override
                         public void onComplete() {
-                            Global.scheduleNamesEven = scheduleNamesEven;
-                            Global.scheduleRoomsEven = scheduleRoomsEven;
-                            Global.scheduleTeachersEven = scheduleTeachersEven;
-                            Global.scheduleTypeEven = scheduleTypeEven;
+                            Global.scheduleNamesEvenString = scheduleNamesEven.toArray(new String[scheduleNamesEven.size()]);
+                            Global.scheduleRoomsEvenString = scheduleRoomsEven.toArray(new String[scheduleRoomsEven.size()]);
+                            Global.scheduleTeachersEvenString = scheduleTeachersEven.toArray(new String[scheduleTeachersEven.size()]);
+                            Global.scheduleTypeEvenString = scheduleTypeEven.toArray(new String[scheduleTypeEven.size()]);
                             progressDialog.dismiss();
                         }
                     });
@@ -356,21 +352,19 @@ public class Settings extends Fragment {
                             Log.e("Schedule", error.toString(), error);
                             Global.groupID = groupIDBackup;
                             Global.instituteID = instituteIDBackup;
+                            setGroupToView();
                             progressDialog.dismiss();
-                            scheduleClear();
-                            global.restoreSchedule();
                             Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                             toast.show();
                         }
 
                         @Override
                         public void onComplete() {
-                            Global.scheduleNamesOdd = scheduleNamesOdd;
-                            Global.scheduleRoomsOdd = scheduleRoomsOdd;
-                            Global.scheduleTeachersOdd = scheduleTeachersOdd;
-                            Global.scheduleTypeOdd = scheduleTypeOdd;
+                            Global.scheduleNamesOddString = scheduleNamesOdd.toArray(new String[scheduleNamesOdd.size()]);
+                            Global.scheduleRoomsOddString = scheduleRoomsOdd.toArray(new String[scheduleRoomsOdd.size()]);
+                            Global.scheduleTeachersOddString = scheduleTeachersOdd.toArray(new String[scheduleTeachersOdd.size()]);
+                            Global.scheduleTypeOddString = scheduleTypeOdd.toArray(new String[scheduleTypeOdd.size()]);
                             progressDialog.dismiss();
-
                         }
                     });
                 }
@@ -400,28 +394,6 @@ public class Settings extends Fragment {
         Global.groupsCompiled.clear();
         Global.groups.clear();
         Global.groupsTranslited.clear();
-    }
-
-    public void scheduleClear(){
-        Global.scheduleNamesOdd.clear();
-        Global.scheduleNamesEven.clear();
-        Global.scheduleTeachersOdd.clear();
-        Global.scheduleTeachersEven.clear();
-        Global.scheduleRoomsOdd.clear();
-        Global.scheduleRoomsEven.clear();
-        Global.scheduleTypeOdd.clear();
-        Global.scheduleTypeEven.clear();
-    }
-
-    public void localScheduleClear(){
-        scheduleNamesOdd.clear();
-        scheduleNamesEven.clear();
-        scheduleTeachersOdd.clear();
-        scheduleTeachersEven.clear();
-        scheduleRoomsOdd.clear();
-        scheduleRoomsEven.clear();
-        scheduleTypeOdd.clear();
-        scheduleTypeEven.clear();
     }
 
     public void aboutMessage(){
