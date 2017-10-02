@@ -77,7 +77,7 @@ public class Global {
     public static String[] groupsStringTranslited;
 
     public void restoreSchedule(){
-        for ( int i = 0; i < scheduleNamesOddString.length; i++){
+        for ( int i = 0; i < scheduleNamesOddStringBackup.length; i++){
             scheduleNamesOdd.add(scheduleNamesOddStringBackup[i]);
             scheduleRoomsOdd.add(scheduleRoomsOddStringBackup[i]);
             scheduleTeachersOdd.add(scheduleTeachersOddStringBackup[i]);

@@ -10,11 +10,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.StringJoiner;
-
-import javax.microedition.khronos.opengles.GL11ExtensionPack;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -25,7 +20,6 @@ import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.forms.ScheduleForm;
 import radonsoft.mireaassistant.helpers.Global;
-import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.schedule.Odd;
 import radonsoft.mireaassistant.model.schedule.Response;
@@ -103,7 +97,9 @@ public class VRAccess extends Fragment {
         getInstitutesBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                output.setText(String.valueOf(Global.scheduleNamesOdd));
+                Global global = new Global();
+                global.restoreSchedule();
+                output.setText(String.valueOf(Global.scheduleNamesEven));
             }
         });
         return mRootView;

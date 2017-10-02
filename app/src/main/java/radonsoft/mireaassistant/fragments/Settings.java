@@ -2,10 +2,7 @@ package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,7 +18,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.StringJoiner;
 
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
@@ -29,7 +25,6 @@ import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
-import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
@@ -293,26 +288,26 @@ public class Settings extends Fragment {
                     groupViewer.setText(converter.translitOutput);
                     Global.scheduleNamesOddStringBackup = Global.scheduleNamesOdd.toArray(new String[Global.scheduleNamesOdd.size()]);
                     global.backupSchedule();
-                    scheduleClear();
+                    localScheduleClear();
                     global.getScheduleEven(new DisposableObserver<Even>() {
                         @Override
                         public void onNext(@NonNull Even even) {
                             Log.i("Schedule", even.getName().toString());
-                            Global.scheduleNamesEven.add(even.getName().toString());
+                            scheduleNamesEven.add(even.getName().toString());
                             if (even.getRoom() == null) {
-                                Global.scheduleRoomsEven.add("―");
+                                scheduleRoomsEven.add("―");
                             } else {
-                                Global.scheduleRoomsEven.add(even.getRoom().toString());
+                                scheduleRoomsEven.add(even.getRoom().toString());
                             }
                             if (even.getTeacher() == null) {
-                                Global.scheduleTeachersEven.add("―");
+                                scheduleTeachersEven.add("―");
                             } else {
-                                Global.scheduleTeachersEven.add(even.getTeacher().toString());
+                                scheduleTeachersEven.add(even.getTeacher().toString());
                             }
                             if (even.getType() == null) {
-                                Global.scheduleTypeEven.add("―");
+                                scheduleTypeEven.add("―");
                             } else {
-                                Global.scheduleTypeEven.add(even.getType().toString());
+                                scheduleTypeEven.add(even.getType().toString());
                             }
                         }
 
@@ -326,6 +321,10 @@ public class Settings extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            Global.scheduleNamesEven = scheduleNamesEven;
+                            Global.scheduleRoomsEven = scheduleRoomsEven;
+                            Global.scheduleTeachersEven = scheduleTeachersEven;
+                            Global.scheduleTypeEven = scheduleTypeEven;
                             progressDialog.dismiss();
                         }
                     });
@@ -334,21 +333,21 @@ public class Settings extends Fragment {
                         @Override
                         public void onNext(@NonNull Odd odd) {
                             Log.i("Schedule", odd.getName().toString());
-                            Global.scheduleNamesOdd.add(odd.getName().toString());
+                            scheduleNamesOdd.add(odd.getName().toString());
                             if (odd.getRoom() == null) {
-                                Global.scheduleRoomsOdd.add("―");
+                                scheduleRoomsOdd.add("―");
                             } else {
-                                Global.scheduleRoomsOdd.add(odd.getRoom().toString());
+                                scheduleRoomsOdd.add(odd.getRoom().toString());
                             }
                             if (odd.getTeacher() == null) {
-                                Global.scheduleTeachersOdd.add("―");
+                                scheduleTeachersOdd.add("―");
                             } else {
-                                Global.scheduleTeachersOdd.add(odd.getTeacher().toString());
+                                scheduleTeachersOdd.add(odd.getTeacher().toString());
                             }
                             if (odd.getType() == null) {
-                                Global.scheduleTypeOdd.add("―");
+                                scheduleTypeOdd.add("―");
                             } else {
-                                Global.scheduleTypeOdd.add(odd.getType().toString());
+                                scheduleTypeOdd.add(odd.getType().toString());
                             }
                         }
 
@@ -358,6 +357,7 @@ public class Settings extends Fragment {
                             Global.groupID = groupIDBackup;
                             Global.instituteID = instituteIDBackup;
                             progressDialog.dismiss();
+                            scheduleClear();
                             global.restoreSchedule();
                             Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                             toast.show();
@@ -365,6 +365,10 @@ public class Settings extends Fragment {
 
                         @Override
                         public void onComplete() {
+                            Global.scheduleNamesOdd = scheduleNamesOdd;
+                            Global.scheduleRoomsOdd = scheduleRoomsOdd;
+                            Global.scheduleTeachersOdd = scheduleTeachersOdd;
+                            Global.scheduleTypeOdd = scheduleTypeOdd;
                             progressDialog.dismiss();
 
                         }
@@ -407,6 +411,17 @@ public class Settings extends Fragment {
         Global.scheduleRoomsEven.clear();
         Global.scheduleTypeOdd.clear();
         Global.scheduleTypeEven.clear();
+    }
+
+    public void localScheduleClear(){
+        scheduleNamesOdd.clear();
+        scheduleNamesEven.clear();
+        scheduleTeachersOdd.clear();
+        scheduleTeachersEven.clear();
+        scheduleRoomsOdd.clear();
+        scheduleRoomsEven.clear();
+        scheduleTypeOdd.clear();
+        scheduleTypeEven.clear();
     }
 
     public void aboutMessage(){

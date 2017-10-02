@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -254,7 +253,7 @@ public class Schedule extends Fragment {
                     public int compare(String s1, String s2) {
                         return s1.compareToIgnoreCase(s2);
                     }
-                        });
+                });
                 for (i = 0; i < institutesCompiled.size(); i++){
                     stringConverter.instituteNumber = institutesCompiled.get(i);
                     stringConverter.convertInstitutes();
@@ -336,6 +335,7 @@ public class Schedule extends Fragment {
 
     public void getAndSortSchedule(){
         Global global = new Global();
+        global.backupSchedule();
         global.getScheduleEven(new DisposableObserver<Even>() {
             @Override
             public void onNext(@NonNull Even even) {
@@ -447,7 +447,7 @@ public class Schedule extends Fragment {
     public void errorMessage(){
         if (getActivity() != null){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme)
-                .setCancelable(false);
+                    .setCancelable(false);
             builder.setTitle(getString(R.string.error_title));
             builder.setMessage(getString(R.string.error_body));
             builder.setPositiveButton(getString(R.string.error_try_again),
