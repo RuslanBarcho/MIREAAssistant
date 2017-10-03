@@ -33,7 +33,11 @@ public class Global {
     public static int weekNumber;
 
     public static int instituteID;
+
     public static String groupID;
+    public static String groupIDBackup;
+    public static int localInstituteID;
+    public static int instituteIDBackup;
 
     public static String[] scheduleNamesOddString;
     public static String[] scheduleRoomsOddString;

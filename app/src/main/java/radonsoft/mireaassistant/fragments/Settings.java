@@ -12,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,7 +31,7 @@ import radonsoft.mireaassistant.model.schedule.Even;
 import radonsoft.mireaassistant.model.schedule.Odd;
 
 public class Settings extends Fragment {
-
+    View aboutWindow;
     View mRootView;
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
@@ -48,10 +49,6 @@ public class Settings extends Fragment {
     MainActivity ma;
 
     private int buttonClicked;
-
-    private String groupIDBackup;
-    private int instituteIDBackup;
-    private int localInstituteID;
 
     //vars
     public String instituteNameTranslited;
@@ -89,8 +86,8 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 buttonClicked = 1;
-                groupIDBackup = Global.groupID;
-                instituteIDBackup = Global.instituteID;
+                Global.groupIDBackup = Global.groupID;
+                Global.instituteIDBackup = Global.instituteID;
                 getInstitutesAndGroups();
             }
         });
@@ -125,8 +122,8 @@ public class Settings extends Fragment {
             @Override
             public void onClick(View v) {
                 buttonClicked = 0;
-                groupIDBackup = Global.groupID;
-                instituteIDBackup = Global.instituteID;
+                Global.groupIDBackup = Global.groupID;
+                Global.instituteIDBackup = Global.instituteID;
                 getInstitutesAndGroups();
             }
         });
@@ -204,10 +201,10 @@ public class Settings extends Fragment {
                 .setItems(Global.institutesString, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        localInstituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
-                        convertInstToString(localInstituteID);
+                        Global.localInstituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
+                        convertInstToString(Global.localInstituteID);
                         instituteViewer.setText(instituteNameTranslited);
-                        sortGroups(Global.groups, Global.institutes, String.valueOf(localInstituteID));
+                        sortGroups(Global.groups, Global.institutes, String.valueOf(Global.localInstituteID));
                         Global.groupsSolo = false;
                         instituteDialog.dismiss();
                         Global.settingsDialogResume = 2;
@@ -282,7 +279,7 @@ public class Settings extends Fragment {
                     ConvertStrings converter = new ConvertStrings();
                     showProgressDialog();
                     Global.settingsDialogResume = 0;
-                    Global.instituteID = localInstituteID;
+                    Global.instituteID = Global.localInstituteID;
                     Global.groupID = Global.groupsString[which];
                     converter.translitInput = Global.groupID;
                     converter.translitGroups();
@@ -350,8 +347,8 @@ public class Settings extends Fragment {
                         @Override
                         public void onError(@NonNull Throwable error) {
                             Log.e("Schedule", error.toString(), error);
-                            Global.groupID = groupIDBackup;
-                            Global.instituteID = instituteIDBackup;
+                            Global.groupID = Global.groupIDBackup;
+                            Global.instituteID = Global.instituteIDBackup;
                             setGroupToView();
                             progressDialog.dismiss();
                             Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
@@ -399,9 +396,10 @@ public class Settings extends Fragment {
     public void aboutMessage(){
         if (getActivity() != null){
             Global.settingsDialogResume= 3;
+            aboutWindow = getActivity().getLayoutInflater().inflate(R.layout.about_window, null);
             builder = new AlertDialog.Builder(getActivity(), R.style.ErrorDialogTheme);
-            builder.setTitle(getString(R.string.about_title));
-            builder.setMessage(getString(R.string.about_content));
+            builder.setTitle(getString(R.string.about_version));
+            builder.setView(aboutWindow);
             builder.setPositiveButton(getString(R.string.about_close),
                     new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dialog, int id) {
@@ -467,13 +465,19 @@ public class Settings extends Fragment {
         if (getActivity() != null){
             switch (Global.settingsDialogResume){
                 case 1:
-                    showInstituteChooseDialog();
+                    if (instituteDialog == null){
+                        showInstituteChooseDialog();
+                    }
                     break;
                 case 2:
-                    showGroupChooseDialog();
+                    if (groupDialog == null){
+                        showGroupChooseDialog();
+                    }
                     break;
                 case 3:
-                    aboutMessage();
+                    if (aboutDialog == null){
+                        aboutMessage();
+                    }
                     break;
                 default:
 
