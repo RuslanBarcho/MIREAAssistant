@@ -98,6 +98,7 @@ public class VRAccess extends Fragment {
             @Override
             public void onClick(View v) {
                 Global global = new Global();
+                output.setText(String.valueOf(Global.settingsDialogResume));
             }
         });
         return mRootView;

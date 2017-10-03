@@ -209,8 +209,8 @@ public class Settings extends Fragment {
                         instituteViewer.setText(instituteNameTranslited);
                         sortGroups(Global.groups, Global.institutes, String.valueOf(localInstituteID));
                         Global.groupsSolo = false;
-                        Global.settingsDialogResume= 0;
                         instituteDialog.dismiss();
+                        Global.settingsDialogResume = 2;
                         showGroupChooseDialog();
                     }
                 })
@@ -219,9 +219,9 @@ public class Settings extends Fragment {
                         Global.settingsDialogResume = 0;
                     } });
         instituteDialog = builder.create();
-        instituteDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        instituteDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialogInterface) {
+            public void onCancel(DialogInterface dialogInterface) {
                 Global.settingsDialogResume = 0;
             }
         });
@@ -476,13 +476,7 @@ public class Settings extends Fragment {
                     aboutMessage();
                     break;
                 default:
-                    try {
-                        instituteDialog.dismiss();
-                        groupDialog.dismiss();
-                        aboutDialog.dismiss();
-                    } catch (NullPointerException e){
 
-                    }
                     break;
             }
         }
@@ -491,11 +485,6 @@ public class Settings extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        try {
-            instituteDialog.dismiss();
-            groupDialog.dismiss();
-        } catch (NullPointerException e){
 
-        }
     }
 }

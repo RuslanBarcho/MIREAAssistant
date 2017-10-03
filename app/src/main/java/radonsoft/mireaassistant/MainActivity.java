@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction ftrans = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_schedule) {
             ftrans.replace(R.id.container, schedule);
-       // } else if (id == R.id.nav_VR_access) {
+        //} else if (id == R.id.nav_VR_access) {
         //   ftrans.replace(R.id.container, vraccess);
         } //else if (id == R.id.nav_professors) {
        //     ftrans.replace(R.id.container, professors);
@@ -268,8 +268,4 @@ public class MainActivity extends AppCompatActivity
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
-
-
-
-
 }
