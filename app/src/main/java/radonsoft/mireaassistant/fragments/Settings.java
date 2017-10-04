@@ -350,6 +350,8 @@ public class Settings extends Fragment {
                             Global.groupID = Global.groupIDBackup;
                             Global.instituteID = Global.instituteIDBackup;
                             setGroupToView();
+                            convertInstToString(Global.instituteID);
+                            instituteViewer.setText(instituteNameTranslited);
                             progressDialog.dismiss();
                             Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                             toast.show();

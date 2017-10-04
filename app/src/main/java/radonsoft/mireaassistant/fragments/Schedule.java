@@ -43,7 +43,6 @@ public class Schedule extends Fragment {
     View mRootView;
     private Spinner daySelecter;
     private Spinner weekSelecter;
-    private TextView test;
     private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
     private TextView classRoomOne, classRoomTwo, classRoomThree, classRoomFour, classRoomFive, classRoomSix;
     private TextView classTeacherOne, classTeacherTwo, classTeacherThree, classTeacherFour, classTeacherFive, classTeacherSix;
@@ -86,7 +85,6 @@ public class Schedule extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swiperefresh);
         daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
         weekSelecter = (Spinner) mRootView.findViewById(R.id.spinner1);
-        //test = (TextView) mRootView.findViewById(R.id.textView48);
         days = getResources().getStringArray(R.array.schedule_days);
         weeks = getResources().getStringArray(R.array.schedule_weeks);
 
@@ -307,7 +305,6 @@ public class Schedule extends Fragment {
                     .setItems(groupsStringTranslited, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Global.loginID = 3;
                             Global.groupID = groupsString[which];
                             getAndSortSchedule();
                         }
@@ -407,6 +404,9 @@ public class Schedule extends Fragment {
             @Override
             public void onError(@NonNull Throwable error) {
                 Log.e("Schedule", error.toString(), error);
+                if (Global.loginID == 0){
+                    errorMessage();
+                }
                 if (optionBar){
                     Toast toast = Toast.makeText(getActivity(), getString(R.string.error_body),Toast.LENGTH_SHORT);
                     toast.show();
@@ -422,6 +422,9 @@ public class Schedule extends Fragment {
                 Global.scheduleRoomsOddString = scheduleRoomsOdd.toArray(new String[scheduleRoomsOdd.size()]);
                 Global.scheduleTeachersOddString = scheduleTeachersOdd.toArray(new String[scheduleTeachersOdd.size()]);
                 Global.scheduleTypeOddString = scheduleTypeOdd.toArray(new String[scheduleTypeOdd.size()]);
+                if (Global.loginID == 0){
+                    Global.loginID = 3;
+                }
                 if (Global.weekNumber % 2 != 0) {
                     sortContentByTodayOdd(today);
                     checkNull = 6;
