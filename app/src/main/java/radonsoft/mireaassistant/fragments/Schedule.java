@@ -43,6 +43,7 @@ public class Schedule extends Fragment {
     View mRootView;
     private Spinner daySelecter;
     private Spinner weekSelecter;
+    
     private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
     private TextView classRoomOne, classRoomTwo, classRoomThree, classRoomFour, classRoomFive, classRoomSix;
     private TextView classTeacherOne, classTeacherTwo, classTeacherThree, classTeacherFour, classTeacherFive, classTeacherSix;
@@ -370,7 +371,7 @@ public class Schedule extends Fragment {
                     sortContentByTodayEven(today);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
-                    if (optionBar){
+                    if (optionBar & getActivity() != null){
                         Toast toast = Toast.makeText(getActivity(), getString(R.string.refreshed),Toast.LENGTH_SHORT);
                         toast.show();
                         optionBar = false;
@@ -624,6 +625,7 @@ public class Schedule extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        mSwipeRefreshLayout.setEnabled(true);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{
@@ -634,6 +636,8 @@ public class Schedule extends Fragment {
     public void onPause() {
         super.onPause();
         AllClear();
+        mSwipeRefreshLayout.setEnabled(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
     @Override
     public void onStop() {
