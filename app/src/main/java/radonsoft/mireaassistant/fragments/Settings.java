@@ -448,8 +448,9 @@ public class Settings extends Fragment {
     public void showProgressDialog(){
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMax(100);
-        progressDialog.setMessage("Идет загрузка данных");
-        progressDialog.setTitle("Загрузка");
+        progressDialog.setMessage(getString(R.string.data_loading));
+        progressDialog.setTitle(getString(R.string.data_loading_title));
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 

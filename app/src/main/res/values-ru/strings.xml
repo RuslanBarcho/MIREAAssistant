@@ -17,6 +17,9 @@
     <string name="about_body">Версия: 1.0</string>
     <string name="about_close">Закрыть</string>
 
+    <string name="data_loading">Загрузка данных</string>
+    <string name="data_loading_title">Загрузка</string>
+
     <string-array name="schedule_days">
         <item>Понедельник</item>
         <item>Вторник</item>
