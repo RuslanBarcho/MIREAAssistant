@@ -144,6 +144,7 @@ public class Settings extends Fragment {
     }
 
     public void getInstitutesAndGroups(){
+        showProgressDialog();
         AllClear();
         ConvertStrings stringConverter = new ConvertStrings();
         Global global = new Global();
@@ -161,10 +162,12 @@ public class Settings extends Fragment {
             @Override
             public void onError(@NonNull Throwable error) {
                 Log.e("Schedule", error.toString(), error);
+                progressDialog.dismiss();
                 errorMessage();
             }
             @Override
             public void onComplete() {
+                progressDialog.dismiss();
                 switch (buttonClicked){
                     case 0:
                         int i;
