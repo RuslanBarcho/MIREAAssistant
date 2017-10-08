@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="app_name">MIREA Assistant</string>
     <string name="action_settings">Настройки</string>
     <string name="schedule">Расписание</string>
@@ -14,11 +17,22 @@
     <string name="error_try_again">Повторное соединение</string>
 
     <string name="about_title">О программе</string>
-    <string name="about_body">Версия: 1.0</string>
+    <string name="about_body">Версия: 1.1</string>
     <string name="about_close">Закрыть</string>
 
     <string name="data_loading">Загрузка данных</string>
     <string name="data_loading_title">Загрузка</string>
+
+    <string name="about_version">MIREA Assistant 1.1</string>
+    <string name="about_content_one">Проект разработан для предоставления студентам различной информации об университете в удобном виде.</string>
+    <string name="about_content_two">Если расписание вашей группы/института отсутствует или не совпадает с действительным, обратитесь к авторам проекта.</string>
+    <string name="about_content_site">Сайт:</string>
+    <string name="about_content_site_link">http://mirea.feed4rz.ru/</string>
+    <string name="about_content_authors">Авторы:</string>
+    <string name="about_content_vinter">Ruslan Vinter (mobile)</string>
+    <string name="about_content_vinter_link">https://vk.com/r_vinter</string>
+    <string name="about_content_feed4rz">feed4rz (WEB)</string>
+    <string name="about_content_feed4rz_link">https://vk.com/id312615911</string>
 
     <string-array name="schedule_days">
         <item>Понедельник</item>

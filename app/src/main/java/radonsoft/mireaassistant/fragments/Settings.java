@@ -33,6 +33,7 @@ import radonsoft.mireaassistant.model.schedule.Odd;
 public class Settings extends Fragment {
     View aboutWindow;
     View mRootView;
+
     ProgressDialog progressDialog;
     AlertDialog.Builder builder;
     AlertDialog instituteDialog;
@@ -197,35 +198,38 @@ public class Settings extends Fragment {
     }
 
     public void showInstituteChooseDialog(){
-        Global.settingsDialogResume= 1;
-        builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(getString(R.string.choose_institute))
-                //.setCancelable(false)
-                .setItems(Global.institutesString, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Global.localInstituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
-                        convertInstToString(Global.localInstituteID);
-                        instituteViewer.setText(instituteNameTranslited);
-                        sortGroups(Global.groups, Global.institutes, String.valueOf(Global.localInstituteID));
-                        Global.groupsSolo = false;
-                        instituteDialog.dismiss();
-                        Global.settingsDialogResume = 2;
-                        showGroupChooseDialog();
-                    }
-                })
-                .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Global.settingsDialogResume = 0;
-                    } });
-        instituteDialog = builder.create();
-        instituteDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                Global.settingsDialogResume = 0;
-            }
-        });
-        instituteDialog.show();
+        if (getActivity() != null) {
+            Global.settingsDialogResume = 1;
+            builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(getString(R.string.choose_institute))
+                    //.setCancelable(false)
+                    .setItems(Global.institutesString, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Global.localInstituteID = Integer.valueOf(Global.institutesStringIntegers[which]);
+                            convertInstToString(Global.localInstituteID);
+                            instituteViewer.setText(instituteNameTranslited);
+                            sortGroups(Global.groups, Global.institutes, String.valueOf(Global.localInstituteID));
+                            Global.groupsSolo = false;
+                            instituteDialog.dismiss();
+                            Global.settingsDialogResume = 2;
+                            showGroupChooseDialog();
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.about_close), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            Global.settingsDialogResume = 0;
+                        }
+                    });
+            instituteDialog = builder.create();
+            instituteDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialogInterface) {
+                    Global.settingsDialogResume = 0;
+                }
+            });
+            instituteDialog.show();
+        }
     }
 
     public void sortGroups(ArrayList<String> toSort, ArrayList<String> fullInstitutesList, String instituteID){
@@ -496,5 +500,16 @@ public class Settings extends Fragment {
     public void onStop() {
         super.onStop();
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (progressDialog != null){
+            progressDialog.dismiss();
+        }
+        if (instituteDialog != null){
+            instituteDialog.dismiss();
+        }
     }
 }

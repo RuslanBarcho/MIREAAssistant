@@ -1,6 +1,7 @@
 package radonsoft.mireaassistant.fragments;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,7 @@ public class Schedule extends Fragment {
     //Views
     LinearLayout mainlayout;
     View mRootView;
+    ProgressDialog progressDialog;
     private Spinner daySelecter;
     private Spinner weekSelecter;
     
@@ -218,6 +220,7 @@ public class Schedule extends Fragment {
 
     public void getInstitutesAndGroups(){
         AllClear();
+        showProgressDialog();
         ConvertStrings stringConverter = new ConvertStrings();
         Global global = new Global();
         global.getGroupsAndInsts(new DisposableObserver<Group>() {
@@ -234,6 +237,7 @@ public class Schedule extends Fragment {
             @Override
             public void onError(@NonNull Throwable error) {
                 Log.e("Schedule", error.toString(), error);
+                progressDialog.dismiss();
                 errorMessage();
             }
             @Override
@@ -252,6 +256,7 @@ public class Schedule extends Fragment {
                 }
                 institutesStringIntegers = institutesCompiled.toArray(new String[institutesCompiled.size()]);
                 institutesString = institutesTranslited.toArray(new String[institutesTranslited.size()]);
+                progressDialog.dismiss();
                 showInstituteChooseDialog();
             }
         });
@@ -316,6 +321,9 @@ public class Schedule extends Fragment {
     }
 
     public void getAndSortSchedule(){
+        if (Global.loginID == 0){
+            showProgressDialog();
+        }
         ArrayList<String> scheduleNamesOdd = new ArrayList<>();
         ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
         ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
@@ -406,6 +414,7 @@ public class Schedule extends Fragment {
             public void onError(@NonNull Throwable error) {
                 Log.e("Schedule", error.toString(), error);
                 if (Global.loginID == 0){
+                    progressDialog.dismiss();
                     errorMessage();
                 }
                 if (optionBar){
@@ -424,6 +433,7 @@ public class Schedule extends Fragment {
                 Global.scheduleTeachersOddString = scheduleTeachersOdd.toArray(new String[scheduleTeachersOdd.size()]);
                 Global.scheduleTypeOddString = scheduleTypeOdd.toArray(new String[scheduleTypeOdd.size()]);
                 if (Global.loginID == 0){
+                    progressDialog.dismiss();
                     Global.loginID = 3;
                 }
                 if (Global.weekNumber % 2 != 0) {
@@ -598,6 +608,15 @@ public class Schedule extends Fragment {
         Global.groupsCompiled.clear();
         Global.groups.clear();
         Global.groupsTranslited.clear();
+    }
+
+    public void showProgressDialog(){
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMax(100);
+        progressDialog.setMessage(getString(R.string.data_loading));
+        progressDialog.setTitle(getString(R.string.data_loading_title));
+        progressDialog.setCancelable(false);
+        progressDialog.show();
     }
 
     public void startTimers(){

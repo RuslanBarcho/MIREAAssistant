@@ -14,7 +14,7 @@
     <string name="choose_week">Week type (Identify - long press)</string>
 
     <string name="about_title">About</string>
-    <string name="about_body">Version: 1.0</string>
+    <string name="about_body">Version: 1.1</string>
     <string name="about_close">Close</string>
 
     <string name="data_loading">Downloading data</string>
@@ -23,7 +23,7 @@
     <string name="error_title">Error</string>
     <string name="error_body">No connection to the server</string>
     <string name="error_try_again">Try again</string>
-    <string name="about_version">MIREA Assistant 1.0</string>
+    <string name="about_version">MIREA Assistant 1.1</string>
     <string name="about_content_one">Проект разработан для предоставления студентам различной информации об университете в удобном виде.</string>
     <string name="about_content_two">Если расписание вашей группы/института отсутствует или не совпадает с действительным, обратитесь к авторам проекта.</string>
     <string name="about_content_site">Сайт:</string>
