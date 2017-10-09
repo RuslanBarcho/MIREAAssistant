@@ -61,6 +61,19 @@ public class Global {
     public static String[] groupsString;
     public static String[] groupsStringTranslited;
 
+    public int yearWeekNum(){
+        GregorianCalendar gc = new GregorianCalendar();
+        int day = 0;
+        gc.add(Calendar.DATE, day);
+        int todayWeek =  gc.get(Calendar.WEEK_OF_YEAR) - 1;
+        String term = String.valueOf(term());
+        term = term.substring(2,3);
+        if (Integer.valueOf(term) == 2){
+            GregorianCalendar sep = new GregorianCalendar();
+        }
+        return Integer.valueOf(term);
+    }
+
     public int term(){
         String construct;
         GregorianCalendar calendar = new GregorianCalendar();

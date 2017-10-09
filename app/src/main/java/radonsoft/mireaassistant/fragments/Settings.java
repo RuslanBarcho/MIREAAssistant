@@ -12,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +56,7 @@ public class Settings extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Global global = new Global();
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -77,11 +77,7 @@ public class Settings extends Fragment {
         instituteViewer.setText(instituteNameTranslited);
         setGroupToView();
 
-        if (Global.weekNumber % 2 == 0){
-            weekViewer.setText("Четная");
-        } else{
-            weekViewer.setText("Нечетная");
-        }
+        setWeekToView();
 
         chooseGroup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,12 +92,12 @@ public class Settings extends Fragment {
         chooseWeekType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (weekViewer.getText().equals("Четная")) {
+                if (Global.weekNumber % 2 == 0) {
                     Global.weekNumber = Global.weekNumber +1;
-                    weekViewer.setText("Нечетная");
+                    weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
                 } else {
                     Global.weekNumber = Global.weekNumber -1;
-                    weekViewer.setText("Четная");
+                    weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
                 }
             }
         });
@@ -111,9 +107,9 @@ public class Settings extends Fragment {
             public boolean onLongClick(View v) {
                 ma.getWeekNumber();
                 if (Global.weekNumber % 2 == 0){
-                    weekViewer.setText("Четная");
+                    weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
                 } else{
-                    weekViewer.setText("Нечетная");
+                    weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
                 }
                 return true;
             }
@@ -135,8 +131,18 @@ public class Settings extends Fragment {
                 aboutMessage();
             }
         });
+
             return mRootView;
     }
+    public void setWeekToView(){
+        Global global = new Global();
+        if (Global.weekNumber % 2 == 0){
+            weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)" );
+        } else{
+            weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+        }
+    }
+
     public void setGroupToView(){
         ConvertStrings converter = new ConvertStrings();
         converter.translitInput = Global.groupID;
