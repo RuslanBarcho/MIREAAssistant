@@ -204,6 +204,11 @@ public class MainActivity extends AppCompatActivity
         int day = 0;
         gc.add(Calendar.DATE, day);
         Global.weekNumber = gc.get(Calendar.WEEK_OF_YEAR) - 1;
+        Calendar calendar = Calendar.getInstance();
+        int today = (calendar.get(Calendar.DAY_OF_WEEK));
+        if (today == 1){
+            Global.weekNumber = Global.weekNumber + 1;
+        }
     }
 
     //Title
