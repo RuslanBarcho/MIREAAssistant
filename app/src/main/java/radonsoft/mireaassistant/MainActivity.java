@@ -254,12 +254,16 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        saveValues();
+        if (Global.loginID != 0){
+            saveValues();
+        }
     }
     @Override
     protected void onPause(){
         super.onPause();
-        saveValues();
+        if (Global.loginID != 0){
+            saveValues();
+        }
     }
     @Override
     protected void onStart() {
