@@ -382,11 +382,8 @@ public class Settings extends Fragment {
                 }
             });
             groupDialog = builder.create();
-            groupDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialogInterface) {
-                    Global.settingsDialogResume = 0;
-                }
+            groupDialog.setOnCancelListener((DialogInterface d) ->{
+                Global.settingsDialogResume = 0;
             });
             groupDialog.show();
         }
@@ -516,6 +513,9 @@ public class Settings extends Fragment {
         }
         if (instituteDialog != null){
             instituteDialog.dismiss();
+        }
+        if (groupDialog != null){
+            groupDialog.dismiss();
         }
     }
 }
