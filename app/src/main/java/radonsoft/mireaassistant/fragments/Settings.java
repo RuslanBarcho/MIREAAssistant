@@ -94,10 +94,10 @@ public class Settings extends Fragment {
             public void onClick(View v) {
                 if (Global.weekNumber % 2 == 0) {
                     Global.weekNumber = Global.weekNumber +1;
-                    weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+                    weekViewer.setText("Нечетная");
                 } else {
                     Global.weekNumber = Global.weekNumber -1;
-                    weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+                    weekViewer.setText("Четная");
                 }
             }
         });
@@ -107,9 +107,9 @@ public class Settings extends Fragment {
             public boolean onLongClick(View v) {
                 ma.getWeekNumber();
                 if (Global.weekNumber % 2 == 0){
-                    weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+                    weekViewer.setText("Четная");
                 } else{
-                    weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+                    weekViewer.setText("Нечетная");
                 }
                 return true;
             }
@@ -137,9 +137,9 @@ public class Settings extends Fragment {
     public void setWeekToView(){
         Global global = new Global();
         if (Global.weekNumber % 2 == 0){
-            weekViewer.setText("Четная (идет " + String.valueOf(Global.weekNumber) + " неделя)" );
+            weekViewer.setText("Четная" );
         } else{
-            weekViewer.setText("Нечетная (идет " + String.valueOf(Global.weekNumber) + " неделя)");
+            weekViewer.setText("Нечетная");
         }
     }
 
