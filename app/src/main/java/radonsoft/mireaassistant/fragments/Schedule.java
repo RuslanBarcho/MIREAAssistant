@@ -133,6 +133,7 @@ public class Schedule extends Fragment {
                 R.color.refresh_progress_2,
                 R.color.refresh_progress_3
         );
+        //code for refresh widget
         mSwipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -143,7 +144,7 @@ public class Schedule extends Fragment {
                     }
                 }
         );
-
+        //setting fragment identificator
         ma.fragmentID = 1;
         daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
@@ -627,9 +628,12 @@ public class Schedule extends Fragment {
         manager.setTime();
         manager.createDates();
 
-        if (manager.interval(TimeManager.setToday, TimeManager.firstClassStart)){
-            timer.schedule(task, TimeManager.firstClassStartDate);
+        switch (manager.getCurrentClass()){
+            case 0:
+                timer.schedule(task, TimeManager.firstClassStartDate);
+                break;
         }
+
     }
 
     @Override
