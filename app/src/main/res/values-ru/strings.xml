@@ -17,13 +17,13 @@
     <string name="error_try_again">Повторное соединение</string>
 
     <string name="about_title">О программе</string>
-    <string name="about_body">Версия: 1.1</string>
+    <string name="about_body">Версия: 1.2</string>
     <string name="about_close">Закрыть</string>
 
     <string name="data_loading">Загрузка данных</string>
     <string name="data_loading_title">Загрузка</string>
 
-    <string name="about_version">MIREA Assistant 1.1</string>
+    <string name="about_version">MIREA Assistant 1.2</string>
     <string name="about_content_one">Проект разработан для предоставления студентам различной информации об университете в удобном виде.</string>
     <string name="about_content_two">Если расписание вашей группы/института отсутствует или не совпадает с действительным, обратитесь к авторам проекта.</string>
     <string name="about_content_site">Сайт:</string>
