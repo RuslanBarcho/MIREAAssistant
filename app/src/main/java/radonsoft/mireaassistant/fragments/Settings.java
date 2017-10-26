@@ -245,12 +245,23 @@ public class Settings extends Fragment {
                 Global.groupsCompiled.add(toSort.get(i));
             }
         }
+        Collections.sort(Global.groupsCompiled, String::compareToIgnoreCase);
+
         Collections.sort(Global.groupsCompiled, new Comparator<String>() {
-            @Override
-            public int compare(String s1, String s2) {
-                return s1.compareToIgnoreCase(s2);
+            public int compare(String o1, String o2) {
+                return extractInt(o1) - extractInt(o2);
+            }
+
+            int extractInt(String s) {
+                String num = s.replaceAll("\\D", "");
+                if (num != null){
+                    num = num.substring(num.length()-2, num.length());
+                }
+                // return 0 if no digits found
+                return num.isEmpty() ? 0 : Integer.parseInt(num);
             }
         });
+
         ConvertStrings transliter = new ConvertStrings();
         for (i = 0; i<Global.groupsCompiled.size(); i++){
             transliter.translitInput =Global.groupsCompiled.get(i);

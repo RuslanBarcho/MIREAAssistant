@@ -377,6 +377,7 @@ public class Schedule extends Fragment {
                 Global.scheduleTeachersEvenString = scheduleTeachersEven.toArray(new String[scheduleTeachersEven.size()]);
                 Global.scheduleTypeEvenString = scheduleTypeEven.toArray(new String[scheduleTypeEven.size()]);
                 if (Global.weekNumber % 2 == 0) {
+                    weekSelecter.setSelection(0);
                     sortContentByTodayEven(today);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
@@ -438,6 +439,7 @@ public class Schedule extends Fragment {
                     Global.loginID = 3;
                 }
                 if (Global.weekNumber % 2 != 0) {
+                    weekSelecter.setSelection(1);
                     sortContentByTodayOdd(today);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
