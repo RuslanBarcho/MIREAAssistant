@@ -1,5 +1,7 @@
 package radonsoft.mireaassistant.helpers;
 
+import android.annotation.SuppressLint;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -61,19 +63,6 @@ public class Global {
     public static String[] groupsString;
     public static String[] groupsStringTranslited;
 
-    public int yearWeekNum(){
-        GregorianCalendar gc = new GregorianCalendar();
-        int day = 0;
-        gc.add(Calendar.DATE, day);
-        int todayWeek =  gc.get(Calendar.WEEK_OF_YEAR) - 1;
-        String term = String.valueOf(term());
-        term = term.substring(2,3);
-        if (Integer.valueOf(term) == 2){
-            GregorianCalendar sep = new GregorianCalendar();
-        }
-        return Integer.valueOf(term);
-    }
-
     public int term(){
         String construct;
         GregorianCalendar calendar = new GregorianCalendar();
@@ -91,6 +80,7 @@ public class Global {
         return Integer.valueOf(construct);
     }
 
+    @SuppressLint("CheckResult")
     public void getScheduleOdd(Observer<Odd> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
                 .getScheduleName(new ScheduleForm(term(), instituteID, groupID))
@@ -118,6 +108,7 @@ public class Global {
 //                });
     }
 
+    @SuppressLint("CheckResult")
     public void getGroupsAndInsts(Observer<Group> observer){
         NetworkSingleton.getRetrofit().create(InstitutesService.class)
                 .getInstitutes()
@@ -130,6 +121,7 @@ public class Global {
                 .subscribeWith(observer);
     }
 
+    @SuppressLint("CheckResult")
     public void getScheduleEven(Observer<Even> observer) {
         NetworkSingleton.getRetrofit().create(ScheduleService.class)
                 .getScheduleName(new ScheduleForm(term(), instituteID, groupID))

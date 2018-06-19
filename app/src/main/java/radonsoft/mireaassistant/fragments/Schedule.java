@@ -87,15 +87,16 @@ public class Schedule extends Fragment {
         //Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //initialize elements
-        mSwipeRefreshLayout = (SwipeRefreshLayout) mRootView.findViewById(R.id.swiperefresh);
-        daySelecter = (Spinner) mRootView.findViewById(R.id.spinner);
-        weekSelecter = (Spinner) mRootView.findViewById(R.id.spinner1);
+        mSwipeRefreshLayout = mRootView.findViewById(R.id.swiperefresh);
+        daySelecter = mRootView.findViewById(R.id.spinner);
+        weekSelecter = mRootView.findViewById(R.id.spinner1);
         days = getResources().getStringArray(R.array.schedule_days);
         weeks = getResources().getStringArray(R.array.schedule_weeks);
 
-        mainlayout = (LinearLayout) mRootView.findViewById(R.id.mainLayout);
+        mainlayout = mRootView.findViewById(R.id.mainLayout);
 
         recyclerView = mRootView.findViewById(R.id.recycler);
+        recyclerView.setHasFixedSize(true);
 
         //set content
         addItemsOnSpinner(days, daySelecter);
