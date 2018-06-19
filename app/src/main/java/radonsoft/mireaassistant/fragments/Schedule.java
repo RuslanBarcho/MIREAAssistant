@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +35,7 @@ import radonsoft.mireaassistant.MainActivity;
 import radonsoft.mireaassistant.R;
 import radonsoft.mireaassistant.helpers.ConvertStrings;
 import radonsoft.mireaassistant.helpers.Global;
+import radonsoft.mireaassistant.helpers.RecyclerViewAdapter;
 import radonsoft.mireaassistant.helpers.TimeManager;
 import radonsoft.mireaassistant.model.Group;
 import radonsoft.mireaassistant.model.schedule.Even;
@@ -45,10 +48,6 @@ public class Schedule extends Fragment {
     ProgressDialog progressDialog;
     private Spinner daySelecter;
     private Spinner weekSelecter;
-    
-    private TextView classNameOne, classNameTwo, classNameThree, classNameFour, classNameFive , classNameSix;
-    private TextView classRoomOne, classRoomTwo, classRoomThree, classRoomFour, classRoomFive, classRoomSix;
-    private TextView classTeacherOne, classTeacherTwo, classTeacherThree, classTeacherFour, classTeacherFive, classTeacherSix;
 
     private int today;
     private int checkNull;
@@ -64,6 +63,9 @@ public class Schedule extends Fragment {
     public ArrayList<String> groupsTranslited = new ArrayList<>();
     public String[] groupsString;
     public String[] groupsStringTranslited;
+
+    RecyclerView recyclerView;
+    RecyclerViewAdapter adapter;
 
     public SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -93,26 +95,8 @@ public class Schedule extends Fragment {
 
         mainlayout = (LinearLayout) mRootView.findViewById(R.id.mainLayout);
 
-        classNameOne = (TextView) mRootView.findViewById(R.id.textView48);
-        classNameTwo = (TextView) mRootView.findViewById(R.id.textView53);
-        classNameThree = (TextView) mRootView.findViewById(R.id.textView58);
-        classNameFour = (TextView) mRootView.findViewById(R.id.textView43);
-        classNameFive = (TextView) mRootView.findViewById(R.id.textView33);
-        classNameSix = (TextView) mRootView.findViewById(R.id.textView38);
+        recyclerView = mRootView.findViewById(R.id.recycler);
 
-        classRoomOne = (TextView) mRootView.findViewById(R.id.textView49);
-        classRoomTwo = (TextView) mRootView.findViewById(R.id.textView54);
-        classRoomThree = (TextView) mRootView.findViewById(R.id.textView61);
-        classRoomFour = (TextView) mRootView.findViewById(R.id.textView44);
-        classRoomFive = (TextView) mRootView.findViewById(R.id.textView34);
-        classRoomSix = (TextView) mRootView.findViewById(R.id.textView39);
-
-        classTeacherOne = (TextView) mRootView.findViewById(R.id.textView50);
-        classTeacherTwo = (TextView) mRootView.findViewById(R.id.textView55);
-        classTeacherThree = (TextView) mRootView.findViewById(R.id.textView62);
-        classTeacherFour = (TextView) mRootView.findViewById(R.id.textView45);
-        classTeacherFive = (TextView) mRootView.findViewById(R.id.textView35);
-        classTeacherSix = (TextView) mRootView.findViewById(R.id.textView40);
         //set content
         addItemsOnSpinner(days, daySelecter);
         addWeeksOnSpinner(weeks, weekSelecter);
@@ -146,20 +130,26 @@ public class Schedule extends Fragment {
         );
         //setting fragment identificator
         ma.fragmentID = 1;
+
         daySelecter.setSelection(today);
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{
             weekSelecter.setSelection(1);
         }
+
         return mRootView;
     }
 
     public void setSchedule(){
         if (Global.weekNumber % 2 == 0){
-            sortContentByTodayEven(today);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new RecyclerViewAdapter(today, true);
+            recyclerView.setAdapter(adapter);
         } else{
-            sortContentByTodayOdd(today);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            adapter = new RecyclerViewAdapter(today, false);
+            recyclerView.setAdapter(adapter);
         }
     }
 
@@ -174,9 +164,9 @@ public class Schedule extends Fragment {
                 today = selectedItemPosition;
                 if (checkNull == 6) {
                     if (Global.weekNumber % 2 == 0){
-                        sortContentByTodayEven(today);
+                        setSchedule();
                     } else{
-                        sortContentByTodayOdd(today);
+                        setSchedule();
                     }
                 }
             }
@@ -378,7 +368,9 @@ public class Schedule extends Fragment {
                 Global.scheduleTypeEvenString = scheduleTypeEven.toArray(new String[scheduleTypeEven.size()]);
                 if (Global.weekNumber % 2 == 0) {
                     weekSelecter.setSelection(0);
-                    sortContentByTodayEven(today);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new RecyclerViewAdapter(today, true);
+                    recyclerView.setAdapter(adapter);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
                     if (optionBar & getActivity() != null){
@@ -440,7 +432,9 @@ public class Schedule extends Fragment {
                 }
                 if (Global.weekNumber % 2 != 0) {
                     weekSelecter.setSelection(1);
-                    sortContentByTodayOdd(today);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                    adapter = new RecyclerViewAdapter(today, false);
+                    recyclerView.setAdapter(adapter);
                     checkNull = 6;
                     mainlayout.setVisibility(View.VISIBLE);
                     if (optionBar){
@@ -495,104 +489,6 @@ public class Schedule extends Fragment {
                     break;
             }
             field.setText(className[number] + ", " + type);
-        }
-    }
-
-    public void setContentOdd(int first, int second, int third, int fourth, int fifth, int sixth){
-        setName(classNameOne, Global.scheduleNamesOddString, Global.scheduleTypeOddString, first);
-        setName(classNameTwo, Global.scheduleNamesOddString, Global.scheduleTypeOddString, second);
-        setName(classNameThree, Global.scheduleNamesOddString, Global.scheduleTypeOddString, third);
-        setName(classNameFour, Global.scheduleNamesOddString, Global.scheduleTypeOddString, fourth);
-        setName(classNameFive, Global.scheduleNamesOddString, Global.scheduleTypeOddString, fifth);
-        setName(classNameSix, Global.scheduleNamesOddString, Global.scheduleTypeOddString, sixth);
-
-        classRoomOne.setText(Global.scheduleRoomsOddString[first]);
-        classRoomTwo.setText(Global.scheduleRoomsOddString[second]);
-        classRoomThree.setText(Global.scheduleRoomsOddString[third]);
-        classRoomFour.setText(Global.scheduleRoomsOddString[fourth]);
-        classRoomFive.setText(Global.scheduleRoomsOddString[fifth]);
-        classRoomSix.setText(Global.scheduleRoomsOddString[sixth]);
-
-        classTeacherOne.setText(Global.scheduleTeachersOddString[first]);
-        classTeacherTwo.setText(Global.scheduleTeachersOddString[second]);
-        classTeacherThree.setText(Global.scheduleTeachersOddString[third]);
-        classTeacherFour.setText(Global.scheduleTeachersOddString[fourth]);
-        classTeacherFive.setText(Global.scheduleTeachersOddString[fifth]);
-        classTeacherSix.setText(Global.scheduleTeachersOddString[sixth]);
-    }
-
-    public void sortContentByTodayOdd(int day){
-        switch (day){
-            case 0:
-                setContentOdd(0,1,2,3,4,5);
-                break;
-            case 1:
-                setContentOdd(6,7,8,9,10,11);
-                break;
-            case 2:
-                setContentOdd(12,13,14,15,16,17);
-                break;
-            case 3:
-                setContentOdd(18,19,20,21,22,23);
-                break;
-            case 4:
-                setContentOdd(24,25,26,27,28,29);
-                break;
-            case 5:
-                setContentOdd(30,31,32,33,34,35);
-                break;
-            default:
-                setContentOdd(0,1,2,3,4,5);
-                break;
-        }
-    }
-
-    public void setContentEven(int first, int second, int third, int fourth, int fifth, int sixth){
-        setName(classNameOne, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, first);
-        setName(classNameTwo, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, second);
-        setName(classNameThree, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, third);
-        setName(classNameFour, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, fourth);
-        setName(classNameFive, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, fifth);
-        setName(classNameSix, Global.scheduleNamesEvenString, Global.scheduleTypeEvenString, sixth);
-
-        classRoomOne.setText(Global.scheduleRoomsEvenString[first]);
-        classRoomTwo.setText(Global.scheduleRoomsEvenString[second]);
-        classRoomThree.setText(Global.scheduleRoomsEvenString[third]);
-        classRoomFour.setText(Global.scheduleRoomsEvenString[fourth]);
-        classRoomFive.setText(Global.scheduleRoomsEvenString[fifth]);
-        classRoomSix.setText(Global.scheduleRoomsEvenString[sixth]);
-
-        classTeacherOne.setText(Global.scheduleTeachersEvenString[first]);
-        classTeacherTwo.setText(Global.scheduleTeachersEvenString[second]);
-        classTeacherThree.setText(Global.scheduleTeachersEvenString[third]);
-        classTeacherFour.setText(Global.scheduleTeachersEvenString[fourth]);
-        classTeacherFive.setText(Global.scheduleTeachersEvenString[fifth]);
-        classTeacherSix.setText(Global.scheduleTeachersEvenString[sixth]);
-    }
-
-    public void sortContentByTodayEven(int day){
-        switch (day){
-            case 0:
-                setContentEven(0,1,2,3,4,5);
-                break;
-            case 1:
-                setContentEven(6,7,8,9,10,11);
-                break;
-            case 2:
-                setContentEven(12,13,14,15,16,17);
-                break;
-            case 3:
-                setContentEven(18,19,20,21,22,23);
-                break;
-            case 4:
-                setContentEven(24,25,26,27,28,29);
-                break;
-            case 5:
-                setContentEven(30,31,32,33,34,35);
-                break;
-            default:
-                setContentEven(0,1,2,3,4,5);
-                break;
         }
     }
 

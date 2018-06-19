@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    app:cardCornerRadius="0dp">
+
+    <RelativeLayout
+        android:id="@+id/item_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="#ffffff">
+
+        <LinearLayout
+            android:id="@+id/item_separator"
+            android:layout_width="3dp"
+            android:layout_height="match_parent"
+            android:layout_alignBottom="@+id/item_professor"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/item_endtime"
+            android:layout_toRightOf="@+id/item_begintime"
+            android:background="@drawable/drawable_background_grey_dark"
+            android:orientation="horizontal" />
+
+        <TextView
+            android:id="@+id/item_begintime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="5dp"
+            android:text="09:00"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#555555"
+            android:textSize="19dp" />
+
+        <TextView
+            android:id="@+id/item_endtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/item_separator"
+            android:layout_alignLeft="@+id/item_begintime"
+            android:layout_alignStart="@+id/item_begintime"
+            android:text="10:30"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#555555"
+            android:textSize="19dp" />
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="2dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/item_separator"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/item_class"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/item_name"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/item_separator"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/item_professor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentEnd="true"
+            android:layout_alignStart="@id/item_class"
+            android:layout_below="@+id/item_class"
+            android:layout_marginEnd="2dp"
+            android:layout_marginRight="5dp"
+            android:layout_toEndOf="@+id/item_separator"
+            android:layout_toRightOf="@+id/item_separator"
+            android:gravity="top"
+            android:paddingBottom="5dp"
+            android:text="Small Text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>
