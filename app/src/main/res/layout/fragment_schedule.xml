@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/swiperefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -12,42 +12,161 @@
         android:gravity="start|end"
         android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="5dp"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="8dp"
-            android:background="#ffffff"
-            android:elevation="4dp"
-            android:gravity="center_horizontal"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
+                android:layout_marginRight="8dp"
                 android:layout_weight="2"
-                android:gravity="center_horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp" />
+                android:gravity="center_vertical|fill_vertical"
+                android:text="Понедельник"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
 
-            <Spinner
-                android:id="@+id/spinner1"
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="7dp"
-                android:layout_weight="2"
-                android:foregroundGravity="right"
-                android:gravity="center_horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp" />
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_blue_bubble"
+                android:minHeight="40dip"
+                android:minWidth="10dp"
+                android:text="Четная"
+                android:textColor="@android:color/white" />
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
+    <co.ceryle.radiorealbutton.RadioRealButtonGroup
+        android:id="@+id/days"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:elevation="5dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        app:rrbg_animateDrawables_enter="overshoot"
+        app:rrbg_animateTexts_enter="overshoot"
+        app:rrbg_backgroundColor="@color/colorPrimary"
+        app:rrbg_dividerSize="1dp"
+        app:rrbg_selectorColor="#2760F1"
+        app:rrbg_selectorFullSize="true"
+        app:rrbg_selectorRadius="20dp"
+        app:rrbg_selectorSize="6dp">
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="ПН"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="ВТ"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="СР"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="ЧТ"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="ПТ"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+        <co.ceryle.radiorealbutton.RadioRealButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:rrb_backgroundColor="@color/colorPrimary"
+            app:rrb_ripple="false"
+            app:rrb_text="СБ"
+            app:rrb_textColor="#2760F1"
+            app:rrb_textColorTo="@color/colorPrimary"
+            app:rrb_textSize="16sp" />
+
+    </co.ceryle.radiorealbutton.RadioRealButtonGroup>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_weight="2"
+        android:gravity="center_horizontal"
+        android:paddingBottom="10dp"
+        android:visibility="gone"
+        android:paddingTop="10dp" />
+
+    <Spinner
+        android:id="@+id/spinner1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="7dp"
+        android:layout_weight="2"
+        android:foregroundGravity="right"
+        android:gravity="center_horizontal"
+        android:paddingBottom="10dp"
+        android:visibility="gone"
+        android:paddingTop="10dp" />
+
+
+    </LinearLayout>
 </android.support.v4.widget.SwipeRefreshLayout>

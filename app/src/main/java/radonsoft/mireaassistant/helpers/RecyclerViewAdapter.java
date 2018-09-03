@@ -44,12 +44,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             switch(position){
                 case 0: {
                     holder.beginTime.setText("9:00");
-                    holder.beginTime.setText("10:30");
+                    holder.endTime.setText("10:30");
                 }
                 break;
                 case 1: {
                     holder.beginTime.setText("10:40");
-                    holder.beginTime.setText("12:10");
+                    holder.endTime.setText("12:10");
+                }
+                break;
+                case 2: {
+                    holder.beginTime.setText("13:00");
+                    holder.endTime.setText("14:30");
                 }
                 break;
             }

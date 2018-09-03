@@ -18,7 +18,6 @@ public class Professors extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_professors, container, false);
-        ((MainActivity) getActivity()).setActionBarTitle("Professors");
 
         return mRootView;
     }

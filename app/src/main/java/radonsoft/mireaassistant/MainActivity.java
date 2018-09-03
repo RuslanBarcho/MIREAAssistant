@@ -54,15 +54,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         getValues();
         //Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         //Fragment changer and set default
         FragmentTransaction ftrans = getSupportFragmentManager().beginTransaction();
         ftrans.replace(R.id.container, schedule);
         //Drawer
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
         //return fragment after rotation
@@ -211,14 +209,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    //Title
-    public void setActionBarTitle(String title) {
-        getSupportActionBar().setTitle(title);
-    }
-
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {

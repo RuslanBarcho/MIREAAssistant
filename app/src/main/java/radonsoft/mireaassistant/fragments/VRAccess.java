@@ -56,7 +56,6 @@ public class VRAccess extends Fragment {
         // Inflate the layout for this fragment
         ma = new MainActivity();
         mRootView = inflater.inflate(R.layout.fragment_vraccess, container, false);
-        ((MainActivity) getActivity()).setActionBarTitle("Access to VR lab");
 
         getGroupsBtn = (Button) mRootView.findViewById(R.id.button);
         getInstitutesBtn = (Button) mRootView.findViewById(R.id.button2);

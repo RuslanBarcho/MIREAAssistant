@@ -60,7 +60,6 @@ public class Settings extends Fragment {
         setHasOptionsMenu(true);
         // Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_settings, container, false);
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.action_settings));
         chooseGroup = (FrameLayout) mRootView.findViewById(R.id.frameLayout);
         chooseInstitute = (FrameLayout) mRootView.findViewById(R.id.frameLayout2);
         chooseWeekType = (FrameLayout) mRootView.findViewById(R.id.frameLayout3);

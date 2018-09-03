@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00b5ad</color>
-    <color name="colorPrimaryDark">#008f89</color>
-    <color name="colorAccent">#00b5ad</color>
+    <color name="colorPrimary">#f7f7f7</color>
+    <color name="colorPrimaryDark">#F7F7F7</color>
+    <color name="colorAccent">#000000</color>
+    <color name="colorAction">#000000</color>
     <color name="colorTransparent">#00ffffff</color>
 
     <color name="colorUnobtrusiveGrey">#727272</color>
@@ -11,8 +12,8 @@
     <color name="colorShadowOne">#004643</color>
     <color name="colorSemiTransparent">#caa5a5a5</color>
 
-    <color name="refresh_progress_1">@color/colorPrimary</color>
-    <color name="refresh_progress_2">@color/colorPrimaryDark</color>
-    <color name="refresh_progress_3">#006661</color>
+    <color name="refresh_progress_1">#2760F1</color>
+    <color name="refresh_progress_2">#2784F1</color>
+    <color name="refresh_progress_3">#2760F1</color>
 
 </resources>

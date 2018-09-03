@@ -29,6 +29,8 @@ import java.util.Comparator;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import co.ceryle.radiorealbutton.RadioRealButton;
+import co.ceryle.radiorealbutton.RadioRealButtonGroup;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableObserver;
 import radonsoft.mireaassistant.MainActivity;
@@ -64,6 +66,8 @@ public class Schedule extends Fragment {
     public String[] groupsString;
     public String[] groupsStringTranslited;
 
+    RadioRealButtonGroup daysGroup;
+
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
 
@@ -72,6 +76,7 @@ public class Schedule extends Fragment {
     private boolean optionBar = false;
 
     MainActivity ma;
+
     String[] days = {"Monday", "Tuesday", "Wednesday","Thursday","Friday","Saturday"};
     String[] weeks = {"Even", "Odd"};
 
@@ -83,7 +88,6 @@ public class Schedule extends Fragment {
         setRetainInstance(true);
         //initialize activity
         ma = new MainActivity();
-        ((MainActivity) getActivity()).setActionBarTitle(getString(R.string.schedule));
         //Inflate the layout for this fragment
         mRootView = inflater.inflate(R.layout.fragment_schedule, container, false);
         //initialize elements
@@ -98,10 +102,23 @@ public class Schedule extends Fragment {
         recyclerView = mRootView.findViewById(R.id.recycler);
         recyclerView.setHasFixedSize(true);
 
+        daysGroup = mRootView.findViewById(R.id.days);
+
         //set content
         addItemsOnSpinner(days, daySelecter);
         addWeeksOnSpinner(weeks, weekSelecter);
+
         setToday();
+
+        daysGroup.setPosition(today);
+
+        daysGroup.setOnPositionChangedListener((button, position, t) -> {
+            today = position;
+            if (checkNull == 6) {
+                setSchedule();
+            }
+        });
+
         //start dialog if it's first app running
         AllClear();
         if (Global.loginID == 0){
@@ -112,27 +129,27 @@ public class Schedule extends Fragment {
             checkNull = 6;
             setSchedule();
         }
+
         //after content set things
         mSwipeRefreshLayout.setColorSchemeResources(
                 R.color.refresh_progress_1,
                 R.color.refresh_progress_2,
                 R.color.refresh_progress_3
         );
+
         //code for refresh widget
         mSwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        mSwipeRefreshLayout.setRefreshing(true);
-                        getAndSortSchedule();
-                        optionBar = true;
-                    }
+                () -> {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                    getAndSortSchedule();
+                    optionBar = true;
                 }
         );
+
         //setting fragment identificator
         ma.fragmentID = 1;
 
-        daySelecter.setSelection(today);
+
         if (Global.weekNumber % 2 == 0){
             weekSelecter.setSelection(0);
         } else{
@@ -213,7 +230,7 @@ public class Schedule extends Fragment {
     public void getInstitutesAndGroups(){
         AllClear();
         showProgressDialog();
-        ConvertStrings stringConverter = new ConvertStrings();
+        final ConvertStrings stringConverter = new ConvertStrings();
         Global global = new Global();
         global.getGroupsAndInsts(new DisposableObserver<Group>() {
             @Override
@@ -316,15 +333,15 @@ public class Schedule extends Fragment {
         if (Global.loginID == 0){
             showProgressDialog();
         }
-        ArrayList<String> scheduleNamesOdd = new ArrayList<>();
-        ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
-        ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
-        ArrayList<String> scheduleTypeOdd = new ArrayList<>();
+        final ArrayList<String> scheduleNamesOdd = new ArrayList<>();
+        final ArrayList<String> scheduleRoomsOdd = new ArrayList<>();
+        final ArrayList<String> scheduleTeachersOdd = new ArrayList<>();
+        final ArrayList<String> scheduleTypeOdd = new ArrayList<>();
 
-        ArrayList<String> scheduleNamesEven = new ArrayList<>();
-        ArrayList<String> scheduleRoomsEven = new ArrayList<>();
-        ArrayList<String> scheduleTeachersEven = new ArrayList<>();
-        ArrayList<String> scheduleTypeEven = new ArrayList<>();
+        final ArrayList<String> scheduleNamesEven = new ArrayList<>();
+        final ArrayList<String> scheduleRoomsEven = new ArrayList<>();
+        final ArrayList<String> scheduleTeachersEven = new ArrayList<>();
+        final ArrayList<String> scheduleTypeEven = new ArrayList<>();
 
         Global global = new Global();
         global.getScheduleEven(new DisposableObserver<Even>() {
@@ -456,11 +473,9 @@ public class Schedule extends Fragment {
             builder.setTitle(getString(R.string.error_title));
             builder.setMessage(getString(R.string.error_body));
             builder.setPositiveButton(getString(R.string.error_try_again),
-                    new DialogInterface.OnClickListener(){
-                        public void onClick(DialogInterface dialog, int id) {
-                            getInstitutesAndGroups();
-                            dialog.cancel();
-                        }
+                    (dialog, id) -> {
+                        getInstitutesAndGroups();
+                        dialog.cancel();
                     });
             AlertDialog alert = builder.create();
             alert.show();
@@ -532,7 +547,6 @@ public class Schedule extends Fragment {
                 timer.schedule(task, TimeManager.firstClassStartDate);
                 break;
         }
-
     }
 
     @Override
